@@ -56,7 +56,7 @@ const Home: NextPage<Props> = (props) => {
             <IoMdSettings size="50px" cursor="pointer" />
           </div>
           <h1 className={styles.title}>
-            <a href="">{props.clocks.Item.NewValue}</a>
+            <a href="">{props.clocks.NewValue}</a>
           </h1>
           {isAnalog ? (
             <AnalogClock {...options} />

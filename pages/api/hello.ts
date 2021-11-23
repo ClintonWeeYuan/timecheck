@@ -1,15 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import type { NextApiRequest, NextApiResponse } from "next";
+import mitt from "next/dist/shared/lib/mitt";
 import db from "../../db.js";
 
-// type Data = {
-//   name: string;
-// };
+type Data = {
+  clockId: string;
+  NewValue: number;
+};
 
 export default async function handleRequest(
   req: NextApiRequest,
-  res: { json: (arg0: DocumentClient.AttributeMap | undefined) => void }
+  res: NextApiResponse<Data>
 ) {
   if (req.method === "GET") {
     const params = {
@@ -22,7 +24,10 @@ export default async function handleRequest(
       if (err) {
         console.log("Error", err);
       } else {
-        res.json(data);
+        if (data.Item) {
+          const stuff = data.Item as Data;
+          res.json(stuff);
+        }
       }
     });
   }
