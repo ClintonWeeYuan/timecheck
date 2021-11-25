@@ -1,0 +1,40 @@
+.main {
+  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.time {
+  height: 100vh;
+  flex: 1 1 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings {
+  align-self: flex-end;
+  margin-right: 20px;
+}
+
+.clock {
+  margin-bottom: 20px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .time {
+    height: 70vh;
+  }
+
+  .clock {
+    margin-bottom: 0;
+    height: 300px;
+  }
+}

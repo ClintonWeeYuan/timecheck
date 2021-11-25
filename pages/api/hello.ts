@@ -1,36 +1,49 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import mitt from "next/dist/shared/lib/mitt";
-import db from "../../db.js";
+import db from "../../db";
+import { GetItemCommand, GetItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 type Data = {
   clockId: string;
   NewValue: number;
 };
 
+type Error = {
+  error: string;
+};
+
 export default async function handleRequest(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   if (req.method === "GET") {
     const params = {
       TableName: "clocks",
       Key: {
-        clockId: "First Clock",
+        clockId: { S: "First Clock" },
       },
+      ProjectionExpression: "NewValue",
     };
-    db.get(params, (err, data) => {
-      if (err) {
-        console.log("Error", err);
-      } else {
-        if (data.Item) {
-          const stuff = data.Item as Data;
-          res.json(stuff);
-        }
-      }
-    });
+
+    // try {
+    //   const stuff = await db.get(params).promise();
+    //   res.json(stuff.Item as Data);
+    // } catch (err) {
+    //   console.log(err);
+    //   res.status(400).json({ error: "Invalid Clock Id" });
+    // }
+
+    try {
+      const { Item } = await db.send(new GetItemCommand(params));
+      res.send(Item ? Item.NewValue.N : {});
+    } catch (err) {
+      console.log(err);
+      res.statusCode = 500;
+    }
   }
+
+  return res;
 }
 
 // export default function handler(

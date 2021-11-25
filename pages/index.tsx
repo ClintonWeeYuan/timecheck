@@ -3,45 +3,15 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import db from "../db";
-import Clock from "react-live-clock";
-import { useEffect, useState } from "react";
-import AnalogClock from "analog-clock-react";
-import { IoMdSettings } from "react-icons/io";
+import MainClock from "../components/MainClock/MainClock";
+import Taskbar from "../components/Taskbar/Taskbar";
+import { Grid } from "semantic-ui-react";
 
 interface Props {
   clocks: any;
 }
 
-let options = {
-  width: "400px",
-  border: true,
-  borderColor: "#000000",
-  baseColor: "#7c93b2",
-  centerColor: "#459cff",
-  centerBorderColor: "#ffffff",
-  handColors: {
-    second: "#d81c7a",
-    minute: "#ffffff",
-    hour: "#ffffff",
-  },
-};
-
 const Home: NextPage<Props> = (props) => {
-  const [isAnalog, setIsAnalog] = useState(false);
-  const [value, setValue] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => setValue(new Date()), 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  function handleClick() {
-    setIsAnalog(!isAnalog);
-  }
-
   return (
     <div className={styles.container}>
       <Head>
@@ -50,42 +20,26 @@ const Home: NextPage<Props> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <div className={styles.time}>
-          <div className={styles.settings}>
-            <IoMdSettings size="50px" cursor="pointer" />
-          </div>
-          <h1 className={styles.title}>
-            <a href="">{props.clocks.NewValue}</a>
-          </h1>
-          {isAnalog ? (
-            <AnalogClock {...options} />
-          ) : (
-            <Clock
-              format={"h:mm:ssa"}
-              style={{ fontSize: "10vw", color: "grey" }}
-              ticking={true}
-            />
-          )}
-        </div>
+      <Grid stackable columns={2} className={styles.main}>
+        <Grid.Column width={12}>
+          <MainClock />
+        </Grid.Column>
 
-        <div className={styles.description}>
-          <button onClick={handleClick}>Switch Clock</button>
-          <h1>Exam</h1>
-          <h3>Do Paper 1 and Paper 2</h3>
-        </div>
-      </main>
+        <Grid.Column width={4}>
+          <Taskbar />
+        </Grid.Column>
+      </Grid>
     </div>
   );
 };
 
 export async function getStaticProps() {
   const res = await fetch("http://localhost:3000/api/hello", { method: "GET" });
-  let clocks = await res.json();
+  const clocks = await res.json();
 
   return {
     props: {
-      clocks,
+      clocks: clocks,
     },
   };
 }
