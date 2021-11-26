@@ -1,18 +1,26 @@
 .description {
-  flex: 1 1 30%;
   height: 100vh;
-  border-left: 2px dotted blueviolet;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+}
+
+.setTime {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
 }
 
 @media (max-width: 900px) {
   .description {
-    height: 30vh;
-    border-top: 1px dotted blueviolet;
-    border-left: none;
+    height: 40vh;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .setTime {
+    flex-direction: row;
+    width: 70vw;
+    justify-content: space-between;
   }
 }

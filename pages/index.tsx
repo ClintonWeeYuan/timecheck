@@ -20,7 +20,7 @@ const Home: NextPage<Props> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Grid stackable columns={2} className={styles.main}>
+      <Grid stackable divided columns={2} className={styles.main}>
         <Grid.Column width={12}>
           <MainClock />
         </Grid.Column>

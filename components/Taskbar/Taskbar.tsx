@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import styles from "./Taskbar.module.css";
-import { Input, Divider } from "semantic-ui-react";
+import { Input, Divider, Segment } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
 import Countdown from "../Countdown/Countdown";
 import "react-time-picker/dist/TimePicker.css";
@@ -48,25 +48,35 @@ const Taskbar: NextPage = () => {
   });
 
   return (
-    <div className={styles.description}>
-      <Input transparent placeholder="Task" size="massive" />
-      <Divider horizontal>Time Remaining</Divider>
-      <Countdown hours={hours} minutes={minutes} seconds={seconds} />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <TimePicker
-          label="Start"
-          onChange={setStartTime}
-          value={startTime}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        <TimePicker
-          label="End"
-          onChange={setEndTime}
-          value={endTime}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-    </div>
+    <Segment
+      textAlign="center"
+      basic
+      vertical
+      padded="very"
+      className={styles.description}
+    >
+      <div className={styles.description}>
+        <Input transparent placeholder="Task" size="massive" />
+        <Divider horizontal>Time Remaining</Divider>
+        <Countdown hours={hours} minutes={minutes} seconds={seconds} />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <div className={styles.setTime}>
+            <TimePicker
+              label="Start"
+              onChange={setStartTime}
+              value={startTime}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <TimePicker
+              label="End"
+              onChange={setEndTime}
+              value={endTime}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </div>
+        </LocalizationProvider>
+      </div>
+    </Segment>
   );
 };
 
