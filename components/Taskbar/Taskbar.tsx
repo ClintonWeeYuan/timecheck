@@ -18,17 +18,26 @@ const Taskbar: NextPage = () => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
-  const [startTime, setStartTime] = useState(new Date("2014-08-18T21:11:54"));
-  const [endTime, setEndTime] = useState(new Date("2014-08-18T21:11:54"));
+  const [startTime, setStartTime] = useState(Date.now());
+  const [endTime, setEndTime] = useState(Date.now());
   const time = useTime();
-  const newTime = updateTime();
+  let timeLeft;
+  let duration;
 
   useEffect(() => {
-    const countDate = new Date("November 27, 2021 23:00:00").getTime();
-    const gap = countDate - time;
-    setSeconds(Math.floor((gap % (60 * 1000)) / 1000));
-    setMinutes(Math.floor((gap % (60 * 60 * 1000)) / (60 * 1000)));
-    setHours(Math.floor(gap / (60 * 60 * 1000)));
+    timeLeft = endTime - time;
+    duration = endTime - startTime;
+    console.log("timeleft:" + timeLeft);
+    console.log("duration" + duration);
+    if (timeLeft >= duration) {
+      setSeconds(Math.floor((duration % (60 * 1000)) / 1000));
+      setMinutes(Math.floor((duration % (60 * 60 * 1000)) / (60 * 1000)));
+      setHours(Math.floor(duration / (60 * 60 * 1000)));
+    } else {
+      setSeconds(Math.floor((timeLeft % (60 * 1000)) / 1000));
+      setMinutes(Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000)));
+      setHours(Math.floor(timeLeft / (60 * 60 * 1000)));
+    }
   }, [time]);
 
   return (
@@ -47,13 +56,17 @@ const Taskbar: NextPage = () => {
           <div className={styles.setTime}>
             <TimePicker
               label="Start"
-              onChange={setStartTime}
+              onChange={(newValue) => {
+                setStartTime(newValue);
+              }}
               value={startTime}
               renderInput={(params) => <TextField {...params} />}
             />
             <TimePicker
               label="End"
-              onChange={setEndTime}
+              onChange={(newValue) => {
+                setEndTime(newValue);
+              }}
               value={endTime}
               renderInput={(params) => <TextField {...params} />}
             />
