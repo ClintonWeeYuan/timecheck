@@ -12,6 +12,7 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import { startOfToday } from "date-fns";
+import { useTime, updateTime } from "../TimeProvider/TimeProvider";
 
 const Taskbar: NextPage = () => {
   const [hours, setHours] = useState<number>(0);
@@ -19,33 +20,16 @@ const Taskbar: NextPage = () => {
   const [seconds, setSeconds] = useState<number>(0);
   const [startTime, setStartTime] = useState(new Date("2014-08-18T21:11:54"));
   const [endTime, setEndTime] = useState(new Date("2014-08-18T21:11:54"));
-
-  const countdown = () => {
-    //const countDate = new Date("November 25, 2021 23:00:00").getTime();
-    let interval = setInterval(() => {
-      const gap = endTime.getTime() - startTime.getTime();
-
-      const second = 1000;
-      const minute = second * 60;
-      const hour = minute * 60;
-
-      const textHours = Math.floor(gap / hour);
-      const textMinutes = Math.floor((gap % hour) / minute);
-      const textSeconds = Math.floor((gap % minute) / second);
-
-      if (gap < 0) {
-        clearInterval(interval.current);
-      } else {
-        setHours(textHours);
-        setMinutes(textMinutes);
-        setSeconds(textSeconds);
-      }
-    });
-  };
+  const time = useTime();
+  const newTime = updateTime();
 
   useEffect(() => {
-    countdown();
-  });
+    const countDate = new Date("November 27, 2021 23:00:00").getTime();
+    const gap = countDate - time;
+    setSeconds(Math.floor((gap % (60 * 1000)) / 1000));
+    setMinutes(Math.floor((gap % (60 * 60 * 1000)) / (60 * 1000)));
+    setHours(Math.floor(gap / (60 * 60 * 1000)));
+  }, [time]);
 
   return (
     <Segment

@@ -2,21 +2,21 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import AnalogClock from "analog-clock-react";
 import { IoMdSettings } from "react-icons/io";
-import Grid from "@mui/material/Grid";
-import { style } from "@mui/system";
 import Clock from "react-live-clock";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
+import { useTime, updateTime } from "../TimeProvider/TimeProvider";
 
 const MainClock: NextPage = () => {
   const [isAnalog, setIsAnalog] = useState(false);
-  const [value, setValue] = useState(new Date());
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
   const [buttonSize, setButtonSize] = useState("massive");
+  const time = useTime();
+  const newTime = updateTime();
 
   useEffect(() => {
-    const interval = setInterval(() => setValue(new Date()), 1000);
+    const interval = setInterval(() => newTime());
 
     return () => {
       clearInterval(interval);
@@ -38,6 +38,7 @@ const MainClock: NextPage = () => {
   });
 
   let options = {
+    useCustomTime: true,
     width: analogSize,
     border: true,
     borderColor: "#000000",
@@ -49,10 +50,14 @@ const MainClock: NextPage = () => {
       minute: "#ffffff",
       hour: "#ffffff",
     },
+    seconds: Math.floor((time % (60 * 1000)) / 1000),
+    minutes: Math.floor((time % (60 * 60 * 1000)) / (60 * 1000)),
+    hours: Math.floor(time / (60 * 60 * 1000)),
   };
 
   function handleClick() {
     setIsAnalog(!isAnalog);
+    newTime();
   }
 
   return (
@@ -66,6 +71,7 @@ const MainClock: NextPage = () => {
             <AnalogClock {...options} />
           ) : (
             <Clock
+              date={time}
               format={"h:mm:ssa"}
               style={{ fontSize: digitalSize, color: "grey" }}
               ticking={true}
