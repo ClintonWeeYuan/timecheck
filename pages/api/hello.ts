@@ -26,14 +26,6 @@ export default async function handleRequest(
       ProjectionExpression: "NewValue",
     };
 
-    // try {
-    //   const stuff = await db.get(params).promise();
-    //   res.json(stuff.Item as Data);
-    // } catch (err) {
-    //   console.log(err);
-    //   res.status(400).json({ error: "Invalid Clock Id" });
-    // }
-
     try {
       const { Item } = await db.send(new GetItemCommand(params));
       res.send(Item ? Item.NewValue.N : {});

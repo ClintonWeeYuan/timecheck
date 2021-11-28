@@ -12,23 +12,24 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import { startOfToday } from "date-fns";
-import { useTime, updateTime } from "../TimeProvider/TimeProvider";
+import { useTime } from "../TimeProvider/TimeProvider";
+import toDate from "date-fns/toDate";
 
 const Taskbar: NextPage = () => {
+  const time: any = useTime();
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
-  const [startTime, setStartTime] = useState(Date.now());
-  const [endTime, setEndTime] = useState(Date.now());
-  const time = useTime();
-  let timeLeft;
-  let duration;
+  const [startTime, setStartTime] = useState<number>(time);
+  const [endTime, setEndTime] = useState<number>(time);
+
+  let timeLeft: number;
+  let duration: number;
 
   useEffect(() => {
     timeLeft = endTime - time;
     duration = endTime - startTime;
-    console.log("timeleft:" + timeLeft);
-    console.log("duration" + duration);
+
     if (timeLeft >= duration) {
       setSeconds(Math.floor((duration % (60 * 1000)) / 1000));
       setMinutes(Math.floor((duration % (60 * 60 * 1000)) / (60 * 1000)));
@@ -54,18 +55,19 @@ const Taskbar: NextPage = () => {
         <Countdown hours={hours} minutes={minutes} seconds={seconds} />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <div className={styles.setTime}>
+            {/*There is a problem here where the time picker will contain a random number of extra seconds. I therefore had to manually elminate these extra seconds through calculations of the newValue*/}
             <TimePicker
               label="Start"
-              onChange={(newValue) => {
-                setStartTime(newValue);
+              onChange={(newValue: any) => {
+                setStartTime(newValue - (newValue % (1000 * 60)) + 1000);
               }}
               value={startTime}
               renderInput={(params) => <TextField {...params} />}
             />
             <TimePicker
               label="End"
-              onChange={(newValue) => {
-                setEndTime(newValue);
+              onChange={(newValue: any) => {
+                setEndTime(newValue - (newValue % (1000 * 60)) + 1000);
               }}
               value={endTime}
               renderInput={(params) => <TextField {...params} />}
@@ -73,6 +75,7 @@ const Taskbar: NextPage = () => {
           </div>
         </LocalizationProvider>
       </div>
+      <p></p>
     </Segment>
   );
 };

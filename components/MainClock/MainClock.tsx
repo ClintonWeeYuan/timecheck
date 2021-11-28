@@ -6,18 +6,26 @@ import Clock from "react-live-clock";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
 import { useTime, updateTime } from "../TimeProvider/TimeProvider";
+import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 
-const MainClock: NextPage = () => {
+interface Props {
+  time: any;
+}
+
+const MainClock: NextPage<Props> = (props) => {
   const [isAnalog, setIsAnalog] = useState(false);
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
-  const [buttonSize, setButtonSize] = useState("massive");
-  const time = useTime();
-  const newTime = updateTime();
+  const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
+    "massive"
+  );
+  const time: any = useTime();
+  const newTime: any = updateTime();
+
+  //Update clock time, by adding 1 second each second
 
   useEffect(() => {
-    const interval = setInterval(() => newTime());
-
+    const interval = setInterval(() => newTime(), 1000);
     return () => {
       clearInterval(interval);
     };
@@ -57,7 +65,6 @@ const MainClock: NextPage = () => {
 
   function handleClick() {
     setIsAnalog(!isAnalog);
-    newTime();
   }
 
   return (
