@@ -14,7 +14,7 @@ export function useTime() {
   return useContext(TimeContext);
 }
 
-export function updateTime() {
+export function useUpdateTime() {
   return useContext(TimeUpdateContext);
 }
 

@@ -5,7 +5,7 @@ import { IoMdSettings } from "react-icons/io";
 import Clock from "react-live-clock";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
-import { useTime, updateTime } from "../TimeProvider/TimeProvider";
+import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 
 interface Props {
@@ -20,7 +20,7 @@ const MainClock: NextPage<Props> = (props) => {
     "massive"
   );
   const time: any = useTime();
-  const newTime: any = updateTime();
+  const newTime: any = useUpdateTime();
 
   //Update clock time, by adding 1 second each second
 
