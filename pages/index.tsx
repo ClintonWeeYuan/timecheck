@@ -6,9 +6,10 @@ import db from "../db";
 import MainClock from "../components/MainClock/MainClock";
 import Taskbar from "../components/Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
+import FormModal from "../components/FormModal/FormModal";
 
 interface Props {
-  clocks: any;
+  time: Date;
 }
 
 const Home: NextPage<Props> = (props) => {
@@ -26,6 +27,7 @@ const Home: NextPage<Props> = (props) => {
 
         <Grid.Column width={4}>
           <Taskbar />
+          <FormModal />
         </Grid.Column>
       </Grid>
     </div>
