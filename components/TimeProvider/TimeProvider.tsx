@@ -7,7 +7,7 @@ const TimeContext = React.createContext({});
 const TimeUpdateContext = React.createContext({});
 
 interface Props {
-  time: number | undefined;
+  time: number;
 }
 
 export function useTime() {
