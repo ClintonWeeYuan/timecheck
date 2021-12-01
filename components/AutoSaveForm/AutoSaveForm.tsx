@@ -1,46 +1,11 @@
 import { NextPage } from "next";
 import { Form, Button } from "semantic-ui-react";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 
-function AutoSave({
-  taskName,
-  startTime,
-  endTime,
-  taskId,
-}: {
-  taskName: string | undefined;
-  startTime: Date;
-  endTime: Date;
-  taskId: string;
-}) {
-  const debouncedSave = useCallback(
-    debounce(async ({ taskName, startTime, endTime, taskId }) => {
-      const res = await fetch("/api/task", {
-        method: "PUT",
-        body: JSON.stringify({
-          taskId: taskId,
-          taskName: taskName,
-          startTime: startTime.getTime().toString(),
-          endTime: endTime.getTime().toString(),
-        }),
-      });
-      const data = await res.json();
-      console.log(res.ok);
-    }, 4000),
-    []
-  );
-
-  useEffect(() => {
-    if ({ taskName }) {
-      debouncedSave({ taskName, startTime, endTime, taskId });
-    }
-  });
-  return null;
-}
 const AutoSaveForm: NextPage = () => {
-  const [taskName, setTask] = useState();
+  const [taskName, setTask] = useState<string>();
   const [taskId, setTaskId] = useState(
     Math.floor(Math.random() * 1000).toString()
   );
@@ -56,9 +21,33 @@ const AutoSaveForm: NextPage = () => {
     setEndTime(newTimeValue);
   }
 
-  function changeTask(e: { target: { value: any } }) {
+  function changeTask(e: React.ChangeEvent<HTMLInputElement>) {
     setTask(e.target.value);
   }
+
+  const debouncedSave = useCallback(
+    debounce(async ({ taskName, startTime, endTime, taskId }) => {
+      const res = await fetch("/api/task", {
+        method: "PUT",
+        body: JSON.stringify({
+          taskId: taskId,
+          taskName: taskName,
+          startTime: startTime.getTime().toString(),
+          endTime: endTime.getTime().toString(),
+        }),
+      });
+
+      const data = await res.json();
+      console.log(res.ok);
+    }, 4000),
+    []
+  );
+
+  useEffect(() => {
+    if ({ taskName }) {
+      debouncedSave({ taskName, startTime, endTime, taskId });
+    }
+  });
 
   return (
     <>
@@ -87,12 +76,6 @@ const AutoSaveForm: NextPage = () => {
 
         <Button type="submit">Submit</Button>
       </Form>
-      <AutoSave
-        taskName={taskName}
-        startTime={startTime}
-        endTime={endTime}
-        taskId={taskId}
-      />
     </>
   );
 };

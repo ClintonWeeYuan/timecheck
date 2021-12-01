@@ -11,9 +11,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
-import { startOfToday } from "date-fns";
 import { useTime } from "../TimeProvider/TimeProvider";
-import toDate from "date-fns/toDate";
 
 const Taskbar: NextPage = () => {
   const time: any = useTime();
@@ -75,7 +73,6 @@ const Taskbar: NextPage = () => {
           </div>
         </LocalizationProvider>
       </div>
-      <p></p>
     </Segment>
   );
 };

@@ -7,7 +7,7 @@ const TimeContext = React.createContext({});
 const TimeUpdateContext = React.createContext({});
 
 interface Props {
-  children: any;
+  time: number | undefined;
 }
 
 export function useTime() {
@@ -19,10 +19,12 @@ export function useUpdateTime() {
 }
 
 export const TimeProvider: NextPage<Props> = (props) => {
-  const [time, setTime] = useState(props.children.props.time);
+  const [time, setTime] = useState(props.time);
+
+  let offset = time ? time - Date.now() : 0;
 
   function updateTime() {
-    setTime((prev: number) => prev + 1000);
+    setTime(Date.now() + offset);
   }
 
   return (

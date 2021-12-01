@@ -9,7 +9,7 @@ import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 
 interface Props {
-  time: any;
+  time: number | undefined;
 }
 
 const MainClock: NextPage<Props> = (props) => {

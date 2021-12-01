@@ -13,18 +13,16 @@ export default async function handleRequest(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const { taskId } = JSON.parse(req.body);
-
     const params = {
       TableName: "tasks",
       Key: {
-        taskId: { S: taskId },
+        taskId: { S: "294" },
       },
-      ProjectionExpression: "startTime",
+      ProjectionExpression: "startTime, endTime, taskName",
     };
 
     try {
-      const { Item } = await db.send(new GetItemCommand(params));
+      const Item = await db.send(new GetItemCommand(params));
       res.send(Item);
     } catch (err) {
       console.log(err);
