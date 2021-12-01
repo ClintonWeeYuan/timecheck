@@ -6,9 +6,11 @@ import { DynamoDBClient, ListTablesOutput } from "@aws-sdk/client-dynamodb";
 // });
 
 const db = new DynamoDBClient({
-  accessKeyId: process.env.TIMECHECK_ACCESS_KEY_ID,
-  secretAccessKey: process.env.TIMECHECK_SECRET_ACCESS_KEY,
   region: "us-east-2",
+  credentials: {
+    accessKeyId: process.env.TIMECHECK_ACCESS_KEY_ID,
+    secretAccessKey: process.env.TIMECHECK_SECRET_ACCESS_KEY,
+  },
 });
 
 export default db;
