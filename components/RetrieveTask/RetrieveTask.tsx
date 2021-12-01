@@ -5,7 +5,7 @@ import { useState } from "react";
 const RetrieveTask: NextPage = () => {
   const [taskId, setTaskId] = useState("");
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setTaskId(e.target.value);
   }
 
