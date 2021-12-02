@@ -57,19 +57,4 @@ const Home: NextPage<Props> = (props) => {
   );
 };
 
-//Here, makes call to server to get the time, and insert that into props, which will be obtained by the context Time Provider.
-
-// export async function getServerSideProps() {
-//   const res = await fetch("http://timecheck.vercel.app/api/time", {
-//     method: "GET",
-//   });
-//   const time = await res.json();
-
-//   return {
-//     props: {
-//       time: time,
-//     },
-//   };
-// }
-
 export default Home;

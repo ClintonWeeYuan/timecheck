@@ -27,7 +27,7 @@ const AutoSaveForm: NextPage = () => {
 
   const debouncedSave = useCallback(
     debounce(async ({ taskName, startTime, endTime, taskId }) => {
-      const res = await fetch("/api/task", {
+      const res = await fetch("/api/tasks", {
         method: "PUT",
         body: JSON.stringify({
           taskId: taskId,

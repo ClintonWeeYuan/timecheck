@@ -1,29 +1,44 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../db";
+import db from "../../../db";
 import {
   GetItemCommand,
   PutItemCommand,
   PutItemCommandOutput,
   UpdateItemCommand,
   UpdateItemCommandOutput,
+  ScanCommand,
 } from "@aws-sdk/client-dynamodb";
 
 export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // if (req.method === "GET") {
+  //   const params = {
+  //     TableName: "tasks",
+  //     Key: {
+  //       taskId: { S: "294" },
+  //     },
+  //     ProjectionExpression: "startTime, endTime, taskName",
+  //   };
+
+  //   try {
+  //     const Item = await db.send(new GetItemCommand(params));
+  //     res.send(Item);
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.statusCode = 500;
+  //   }
+
   if (req.method === "GET") {
     const params = {
       TableName: "tasks",
-      Key: {
-        taskId: { S: "294" },
-      },
-      ProjectionExpression: "startTime, endTime, taskName",
     };
 
     try {
-      const Item = await db.send(new GetItemCommand(params));
-      res.send(Item);
+      const Item = await db.send(new ScanCommand(params));
+      res.send(Item.Items);
+      console.log("Request completed");
     } catch (err) {
       console.log(err);
       res.statusCode = 500;
