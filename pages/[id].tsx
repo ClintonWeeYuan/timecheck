@@ -59,7 +59,11 @@ const Details: NextPage<Props> = (props) => {
           </Grid.Column>
 
           <Grid.Column width={4}>
-            <Taskbar taskName={props.task.taskName.S} />
+            <Taskbar
+              taskName={props.task.taskName.S}
+              startTime={props.task.startTime.N}
+              endTime={props.task.endTime.N}
+            />
             <RetrieveTask />
             <FormModal />
           </Grid.Column>

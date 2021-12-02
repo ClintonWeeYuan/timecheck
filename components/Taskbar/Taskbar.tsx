@@ -15,6 +15,8 @@ import { useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
   taskName?: string;
+  startTime?: string;
+  endTime?: string;
 }
 
 const Taskbar: NextPage<Props> = (props) => {
@@ -22,8 +24,12 @@ const Taskbar: NextPage<Props> = (props) => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
-  const [startTime, setStartTime] = useState<number>(time);
-  const [endTime, setEndTime] = useState<number>(time);
+  const [startTime, setStartTime] = useState<number>(
+    props.startTime ? parseInt(props.startTime) : time
+  );
+  const [endTime, setEndTime] = useState<number>(
+    props.endTime ? parseInt(props.endTime) : time
+  );
 
   let timeLeft: number;
   let duration: number;
