@@ -1,6 +1,20 @@
 import { NextPage } from "next";
 
-const Details: NextPage = (props) => {
+interface Props {
+  task: {
+    endTime: {
+      N: "string";
+    };
+    startTime: {
+      N: "string";
+    };
+    taskName: {
+      S: "string";
+    };
+  };
+}
+
+const Details: NextPage<Props> = (props) => {
   return (
     <div>
       <h1>{props.task.taskName.S}</h1>
@@ -14,7 +28,7 @@ export const getStaticPaths = async () => {
   });
   const data = await res.json();
 
-  const paths = data.map((task) => {
+  const paths = data.map((task: { taskId: { S: string } }) => {
     return { params: { id: task.taskId.S } };
   });
   return {

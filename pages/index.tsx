@@ -1,8 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import db from "../db";
 import MainClock from "../components/MainClock/MainClock";
 import Taskbar from "../components/Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
