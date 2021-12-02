@@ -1,4 +1,3 @@
-import { tabsListUnstyledClasses } from "@mui/base";
 import { NextPage } from "next";
 
 const Details: NextPage = (props) => {
