@@ -7,6 +7,7 @@ export default async function handleRequest(
   res: NextApiResponse
 ) {
   const { taskId } = req.query;
+
   if (req.method === "GET") {
     const params: GetItemCommandInput = {
       TableName: "tasks",

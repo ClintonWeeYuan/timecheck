@@ -1,4 +1,9 @@
-import { NextPage } from "next";
+import { NextPage, GetStaticPaths, GetStaticProps } from "next";
+import { ParsedUrlQuery } from "querystring";
+
+interface IParams extends ParsedUrlQuery {
+  id: string;
+}
 
 interface Props {
   task: {
@@ -22,7 +27,7 @@ const Details: NextPage<Props> = (props) => {
   );
 };
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch("https://timecheck.vercel.app/api/tasks", {
     method: "GET",
   });
@@ -37,8 +42,8 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (context) => {
-  const id = context.params.id;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id } = context.params as IParams;
   const res = await fetch(`https://timecheck.vercel.app/api/tasks/${id}`);
   const data = await res.json();
 
