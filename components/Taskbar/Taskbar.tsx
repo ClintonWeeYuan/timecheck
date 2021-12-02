@@ -13,7 +13,11 @@ import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import { useTime } from "../TimeProvider/TimeProvider";
 
-const Taskbar: NextPage = () => {
+interface Props {
+  taskName: string;
+}
+
+const Taskbar: NextPage<Props> = (props) => {
   const time: any = useTime();
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
@@ -48,12 +52,13 @@ const Taskbar: NextPage = () => {
       className={styles.description}
     >
       <div className={styles.description}>
-        <Input transparent placeholder="Task" size="massive" />
+        <Input transparent placeholder="Task" size="massive">
+          {props.taskName}
+        </Input>
         <Divider horizontal>Time Remaining</Divider>
         <Countdown hours={hours} minutes={minutes} seconds={seconds} />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <div className={styles.setTime}>
-            {/*There is a problem here where the time picker will contain a random number of extra seconds. I therefore had to manually elminate these extra seconds through calculations of the newValue*/}
             <TimePicker
               label="Start"
               onChange={(newValue: any) => {

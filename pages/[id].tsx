@@ -6,6 +6,14 @@ import {
   GetItemCommandInput,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
+import MainClock from "../components/MainClock/MainClock";
+import Taskbar from "../components/Taskbar/Taskbar";
+import { Grid } from "semantic-ui-react";
+import FormModal from "../components/FormModal/FormModal";
+import RetrieveTask from "../components/RetrieveTask/RetrieveTask";
+import { TimeProvider } from "../components/TimeProvider/TimeProvider";
+import styles from "../styles/Home.module.css";
+import { useEffect, useState } from "react";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
@@ -26,23 +34,42 @@ interface Props {
 }
 
 const Details: NextPage<Props> = (props) => {
+  const [time, setTime] = useState<number>(Date.now());
+  useEffect(() => {
+    async function getTime() {
+      try {
+        const res = await fetch(`${process.env.HOST}api/time`, {
+          method: "GET",
+        });
+        const newTime = await res.json();
+        setTime(newTime);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    getTime();
+  }, []);
   return (
-    <div>
-      <h1>{props.task.taskName.S}</h1>
+    <div className={styles.container}>
+      <TimeProvider time={time}>
+        <Grid stackable divided columns={2} className={styles.main}>
+          <Grid.Column width={12}>
+            <MainClock time={time} />
+          </Grid.Column>
+
+          <Grid.Column width={4}>
+            <Taskbar taskName={props.task.taskName.S} />
+            <RetrieveTask />
+            <FormModal />
+          </Grid.Column>
+        </Grid>
+      </TimeProvider>
     </div>
   );
 };
 
 export const getStaticPaths = async () => {
-  // const res = await fetch(`http://localhost:3000/api/tasks`, {
-  //   method: "GET",
-  // });
-  // const data = await res.json();
-
-  // const paths = data.map((task: { taskId: { S: string } }) => {
-  //   return { params: { id: task.taskId.S } };
-  // });
-
   let paths;
   const params = {
     TableName: "tasks",
@@ -68,8 +95,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   let data;
   const { id } = context.params as IParams;
-  // const res = await fetch(`http://localhost:3000/api/tasks/${id}`);
-  // const data = await res.json();
+
   const params: GetItemCommandInput = {
     TableName: "tasks",
     Key: {
