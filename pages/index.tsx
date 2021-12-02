@@ -18,7 +18,7 @@ const Home: NextPage<Props> = (props) => {
   useEffect(() => {
     async function getTime() {
       try {
-        const res = await fetch("https://timecheck.vercel.app/api/time", {
+        const res = await fetch(`${process.env.HOST}api/time`, {
           method: "GET",
         });
         const newTime = await res.json();
