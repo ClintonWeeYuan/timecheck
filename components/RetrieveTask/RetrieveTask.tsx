@@ -13,7 +13,7 @@ const RetrieveTask: NextPage = () => {
   return (
     <Segment textAlign="center" basic vertical>
       <Input placeholder="Task Id" value={taskId} onChange={handleChange} />
-      <Link href="/123">
+      <Link href={`/${taskId}`}>
         <Button>Get Id</Button>
       </Link>
     </Segment>

@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
-  taskName: string;
+  taskName?: string;
 }
 
 const Taskbar: NextPage<Props> = (props) => {
