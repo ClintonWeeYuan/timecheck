@@ -110,9 +110,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   try {
     const Item = await db.send(new GetItemCommand(params));
-    console.log(Item);
     data = Item.Item;
-    console.log(data);
   } catch (err) {
     console.log(err);
   }

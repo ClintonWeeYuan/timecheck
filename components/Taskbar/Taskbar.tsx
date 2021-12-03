@@ -19,6 +19,10 @@ interface Props {
   endTime?: string;
 }
 
+function roundSeconds(number: number) {
+  return number - (number % (1000 * 60)) + 1000;
+}
+
 const Taskbar: NextPage<Props> = (props) => {
   const time: any = useTime();
   const [hours, setHours] = useState<number>(0);
@@ -68,7 +72,7 @@ const Taskbar: NextPage<Props> = (props) => {
             <TimePicker
               label="Start"
               onChange={(newValue: any) => {
-                setStartTime(newValue - (newValue % (1000 * 60)) + 1000);
+                setStartTime(roundSeconds(newValue));
               }}
               value={startTime}
               renderInput={(params) => <TextField {...params} />}
@@ -76,7 +80,7 @@ const Taskbar: NextPage<Props> = (props) => {
             <TimePicker
               label="End"
               onChange={(newValue: any) => {
-                setEndTime(newValue - (newValue % (1000 * 60)) + 1000);
+                setEndTime(roundSeconds(newValue));
               }}
               value={endTime}
               renderInput={(params) => <TextField {...params} />}

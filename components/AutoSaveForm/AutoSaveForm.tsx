@@ -25,6 +25,10 @@ const AutoSaveForm: NextPage = () => {
     setTask(e.target.value);
   }
 
+  function roundSeconds(number: number) {
+    return number - (number % (1000 * 60)) + 1000;
+  }
+
   const debouncedSave = useCallback(
     debounce(async ({ taskName, startTime, endTime, taskId }) => {
       const res = await fetch("/api/tasks", {
@@ -32,13 +36,12 @@ const AutoSaveForm: NextPage = () => {
         body: JSON.stringify({
           taskId: taskId,
           taskName: taskName,
-          startTime: startTime.getTime().toString(),
-          endTime: endTime.getTime().toString(),
+          startTime: roundSeconds(startTime.getTime()).toString(),
+          endTime: roundSeconds(endTime.getTime()).toString(),
         }),
       });
 
       const data = await res.json();
-      console.log(res.ok);
     }, 4000),
     []
   );
