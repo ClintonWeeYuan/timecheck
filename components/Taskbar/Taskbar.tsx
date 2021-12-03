@@ -41,8 +41,6 @@ const Taskbar: NextPage<Props> = (props) => {
   useEffect(() => {
     timeLeft = endTime - time;
     duration = endTime - startTime;
-    console.log("end time:" + endTime);
-    console.log("time now" + time);
 
     if (timeLeft >= duration) {
       setSeconds(Math.floor((duration % (60 * 1000)) / 1000));
