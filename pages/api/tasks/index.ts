@@ -48,32 +48,34 @@ export default async function handleRequest(
       res.statusCode = 500;
     }
     return;
-  } else if (req.method === "PUT") {
-    const { taskId, taskName, startTime, endTime } = JSON.parse(req.body);
-    const params = {
-      TableName: "tasks",
-      Key: {
-        taskId: { S: taskId },
-      },
-      UpdateExpression: "set taskName = :n, startTime = :s, endTime = :e",
-      ExpressionAttributeValues: {
-        ":n": { S: taskName },
-        ":s": { N: startTime },
-        ":e": { N: endTime },
-      },
-      ReturnValues: "ALL_NEW",
-    };
-
-    try {
-      const Item: UpdateItemCommandOutput = await db.send(
-        new UpdateItemCommand(params)
-      );
-      res.send(Item.Attributes ? Item.Attributes.taskId.S : {});
-    } catch (err) {
-      console.log(err);
-      res.statusCode = 500;
-    }
   }
+
+  // else if (req.method === "PUT") {
+  //   const { taskId, taskName, startTime, endTime } = JSON.parse(req.body);
+  //   const params = {
+  //     TableName: "tasks",
+  //     Key: {
+  //       taskId: { S: taskId },
+  //     },
+  //     UpdateExpression: "set taskName = :n, startTime = :s, endTime = :e",
+  //     ExpressionAttributeValues: {
+  //       ":n": { S: taskName },
+  //       ":s": { N: startTime },
+  //       ":e": { N: endTime },
+  //     },
+  //     ReturnValues: "ALL_NEW",
+  //   };
+
+  //   try {
+  //     const Item: UpdateItemCommandOutput = await db.send(
+  //       new UpdateItemCommand(params)
+  //     );
+  //     res.send(Item.Attributes ? Item.Attributes.taskId.S : {});
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.statusCode = 500;
+  //   }
+  // }
 
   return res;
 }
