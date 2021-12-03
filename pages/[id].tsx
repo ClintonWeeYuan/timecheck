@@ -1,4 +1,4 @@
-import { NextPage, GetStaticPaths, GetStaticProps } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import db from "../db";
 import {
@@ -73,51 +73,16 @@ const Details: NextPage<Props> = (props) => {
   );
 };
 
-export const getStaticPaths = async () => {
-  let paths;
-  const params = {
-    TableName: "tasks",
-  };
-  try {
-    const Item = await db.send(new ScanCommand(params));
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
 
-    if (typeof Item.Items !== "undefined") {
-      paths = Item.Items.map((task) => {
-        return { params: { id: task.taskId.S } };
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
+  const res = await fetch(`${process.env.HOST}api/tasks/${id}`, {
+    method: "GET",
+  });
+  const task = await res.json();
 
   return {
-    paths: paths,
-    fallback: false,
+    props: { task: task },
   };
 };
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  let data;
-  const { id } = context.params as IParams;
-
-  const params: GetItemCommandInput = {
-    TableName: "tasks",
-    Key: {
-      taskId: { S: id },
-    },
-    ProjectionExpression: "startTime, endTime, taskName",
-  };
-
-  try {
-    const Item = await db.send(new GetItemCommand(params));
-    data = Item.Item;
-  } catch (err) {
-    console.log(err);
-  }
-
-  return {
-    props: { task: data },
-  };
-};
-
 export default Details;
