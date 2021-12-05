@@ -1,26 +1,26 @@
 import { NextPage } from "next";
 import styles from "./Countdown.module.css";
 type Props = {
-  hours: number;
-  minutes: number;
-  seconds: number;
+  hours: string;
+  minutes: string;
+  seconds: string;
 };
 
-const Countdown: NextPage<Props> = ({ hours, minutes, seconds }) => {
+const Countdown: NextPage<Props> = (props) => {
   return (
     <div className={styles.countdown}>
       <section>
-        <p>{hours}</p>
+        <p>{props.hours}</p>
         <small>Hours</small>
       </section>
       <span>:</span>
       <section>
-        <p>{minutes}</p>
+        <p>{props.minutes}</p>
         <small>Minutes</small>
       </section>
       <span>:</span>
       <section>
-        <p>{seconds}</p>
+        <p>{props.seconds}</p>
         <small>Seconds</small>
       </section>
     </div>
