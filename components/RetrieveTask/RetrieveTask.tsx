@@ -4,16 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 
 const RetrieveTask: NextPage = () => {
-  const [taskId, setTaskId] = useState("");
+  const [eventId, setEventId] = useState("");
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTaskId(e.target.value);
+    setEventId(e.target.value);
   }
 
   return (
     <Segment textAlign="center" basic vertical>
-      <Input placeholder="Task Id" value={taskId} onChange={handleChange} />
-      <Link href={`/${taskId}`}>
+      <Input placeholder="Event Id" value={eventId} onChange={handleChange} />
+      <Link href={`/${eventId}`}>
         <Button>Get Id</Button>
       </Link>
     </Segment>

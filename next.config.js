@@ -11,9 +11,9 @@ module.exports = (phase) => {
   const isProd = phase === PHASE_PRODUCTION_BUILD;
 
   const env = {
-    HOST: (() => {
-      if (isDev) return "http://localhost:3000/";
-      if (isProd) return "https://timecheck.vercel.app/";
+    APP_URL: (() => {
+      if (isDev) return "http://localhost:3000";
+      if (isProd) return "https://timecheck.vercel.app";
     })(),
   };
   return {

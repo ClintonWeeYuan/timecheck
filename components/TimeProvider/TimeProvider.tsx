@@ -3,8 +3,8 @@ import { NextPage } from "next";
 import React from "react";
 import { useState, useContext } from "react";
 
-const TimeContext = React.createContext({});
-const TimeUpdateContext = React.createContext({});
+const TimeContext = React.createContext(Date.now());
+const TimeUpdateContext = React.createContext(() => {});
 
 interface Props {
   time: number;

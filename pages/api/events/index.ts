@@ -12,7 +12,7 @@ export default async function handleRequest(
 ) {
   if (req.method === "GET") {
     const params = {
-      TableName: "tasks",
+      TableName: "events",
     };
 
     try {
@@ -24,12 +24,12 @@ export default async function handleRequest(
       res.statusCode = 500;
     }
   } else if (req.method === "POST") {
-    const { taskId, taskName, startTime, endTime } = JSON.parse(req.body);
+    const { eventId, eventName, startTime, endTime } = JSON.parse(req.body);
     const params = {
-      TableName: "tasks",
+      TableName: "events",
       Item: {
-        taskId: { S: taskId },
-        taskName: { S: taskName },
+        eventId: { S: eventId },
+        eventName: { S: eventName },
         startTime: { N: startTime },
         endTime: { N: endTime },
       },

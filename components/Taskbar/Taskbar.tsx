@@ -14,9 +14,9 @@ import TextField from "@mui/material/TextField";
 import { useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
-  taskName?: string;
-  startTime?: string;
-  endTime?: string;
+  eventName?: string | undefined;
+  startTime?: number;
+  endTime?: number;
 }
 
 function roundSeconds(number: number) {
@@ -24,16 +24,12 @@ function roundSeconds(number: number) {
 }
 
 const Taskbar: NextPage<Props> = (props) => {
-  const time: any = useTime();
+  const time: number = useTime();
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
-  const [startTime, setStartTime] = useState<number>(
-    props.startTime ? parseInt(props.startTime) : time
-  );
-  const [endTime, setEndTime] = useState<number>(
-    props.endTime ? parseInt(props.endTime) : time
-  );
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [endTime, setEndTime] = useState<number>(Date.now());
 
   let timeLeft: number;
   let duration: number;
@@ -67,7 +63,7 @@ const Taskbar: NextPage<Props> = (props) => {
     >
       <div className={styles.description}>
         <Input transparent placeholder="Task" size="massive">
-          {props.taskName}
+          {props.eventName}
         </Input>
         <Divider horizontal>Time Remaining</Divider>
         <Countdown hours={hours} minutes={minutes} seconds={seconds} />

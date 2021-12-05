@@ -19,8 +19,8 @@ const MainClock: NextPage<Props> = (props) => {
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
     "massive"
   );
-  const time: any = useTime();
-  const newTime: any = useUpdateTime();
+  const time = useTime();
+  const newTime = useUpdateTime();
 
   //Update clock time, by adding 1 second each second
 

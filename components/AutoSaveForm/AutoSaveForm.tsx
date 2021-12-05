@@ -6,14 +6,13 @@ import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
 
 const AutoSaveForm: NextPage = () => {
-  const [taskName, setTask] = useState<string>();
-  const [taskId, setTaskId] = useState(
+  const [eventName, setEvent] = useState<string>();
+  const [eventId, seteventId] = useState(
     Math.floor(Math.random() * 1000).toString()
   );
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [isSaving, setIsSaving] = useState(false);
-  const [isWriting, setIsWriting] = useState(false);
 
   function changeStartTimeValue(newTimeValue: Date) {
     setStartTime(newTimeValue);
@@ -24,8 +23,8 @@ const AutoSaveForm: NextPage = () => {
     setEndTime(newTimeValue);
   }
 
-  function changeTask(e: React.ChangeEvent<HTMLInputElement>) {
-    setTask(e.target.value);
+  function changeEvent(e: React.ChangeEvent<HTMLInputElement>) {
+    setEvent(e.target.value);
   }
 
   function roundSeconds(number: number) {
@@ -33,14 +32,14 @@ const AutoSaveForm: NextPage = () => {
   }
 
   const debouncedSave = useCallback(
-    debounce(async ({ taskName, startTime, endTime, taskId }) => {
+    debounce(async ({ eventName, startTime, endTime, eventId }) => {
       try {
         setIsSaving(true);
-        const res = await fetch(`/api/tasks/${taskId}`, {
+        const res = await fetch(`/api/events/${eventId}`, {
           method: "PUT",
           body: JSON.stringify({
-            taskId: taskId,
-            taskName: taskName,
+            eventId: eventId,
+            eventName: eventName,
             startTime: roundSeconds(startTime.getTime()).toString(),
             endTime: roundSeconds(endTime.getTime()).toString(),
           }),
@@ -54,26 +53,26 @@ const AutoSaveForm: NextPage = () => {
   );
 
   useEffect(() => {
-    if ({ taskName } !== null) {
-      debouncedSave({ taskName, startTime, endTime, taskId });
+    if ({ eventName } !== null) {
+      debouncedSave({ eventName, startTime, endTime, eventId });
     }
-  }, [taskName]);
+  }, [eventName]);
 
   return (
     <>
       <Form>
         <Form.Input
           fluid
-          label="Name of Task"
-          placeholder="Task"
-          value={taskName}
-          onChange={changeTask}
+          label="Name of Event"
+          placeholder="Event"
+          value={eventName}
+          onChange={changeEvent}
         />
         <div className={styles.autosave_details}>
           <Dimmer active={isSaving} inverted>
             <Loader>Saving</Loader>
           </Dimmer>
-          <span>Your id is {taskId}</span>
+          <span>Your id is {eventId}</span>
         </div>
         <h4>Start Time</h4>
         <TimeInput

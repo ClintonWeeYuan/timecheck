@@ -1,18 +1,6 @@
 import { NextPage, GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
-import db from "../db";
-import {
-  GetItemCommand,
-  GetItemCommandInput,
-  ScanCommand,
-} from "@aws-sdk/client-dynamodb";
-import MainClock from "../components/MainClock/MainClock";
-import Taskbar from "../components/Taskbar/Taskbar";
-import { Grid } from "semantic-ui-react";
-import FormModal from "../components/FormModal/FormModal";
-import RetrieveTask from "../components/RetrieveTask/RetrieveTask";
-import { TimeProvider } from "../components/TimeProvider/TimeProvider";
-import styles from "../styles/Home.module.css";
+import MainPage from "../components/MainPage/MainPage";
 import { useEffect, useState } from "react";
 
 interface IParams extends ParsedUrlQuery {
@@ -20,14 +8,14 @@ interface IParams extends ParsedUrlQuery {
 }
 
 interface Props {
-  task: {
+  event: {
     endTime: {
       N: "string";
     };
     startTime: {
       N: "string";
     };
-    taskName: {
+    eventName: {
       S: "string";
     };
   };
@@ -35,10 +23,11 @@ interface Props {
 
 const Details: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+  console.log(props.event.eventName);
   useEffect(() => {
     async function getTime() {
       try {
-        const res = await fetch(`${process.env.HOST}api/time`, {
+        const res = await fetch(`${process.env.APP_URL}/api/time`, {
           method: "GET",
         });
         const newTime = await res.json();
@@ -51,38 +40,25 @@ const Details: NextPage<Props> = (props) => {
     getTime();
   }, []);
   return (
-    <div className={styles.container}>
-      <TimeProvider time={time}>
-        <Grid stackable divided columns={2} className={styles.main}>
-          <Grid.Column width={12}>
-            <MainClock time={time} />
-          </Grid.Column>
-
-          <Grid.Column width={4}>
-            <Taskbar
-              taskName={props.task.taskName.S}
-              startTime={props.task.startTime.N}
-              endTime={props.task.endTime.N}
-            />
-            <RetrieveTask />
-            <FormModal />
-          </Grid.Column>
-        </Grid>
-      </TimeProvider>
-    </div>
+    <MainPage
+      time={time}
+      eventName={props.event.eventName.S}
+      endTime={props.event.endTime.N}
+      startTime={props.event.startTime.N}
+    />
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
 
-  const res = await fetch(`${process.env.HOST}api/tasks/${id}`, {
+  const res = await fetch(`${process.env.APP_URL}/api/events/${id}`, {
     method: "GET",
   });
-  const task = await res.json();
+  const event = await res.json();
 
   return {
-    props: { task: task },
+    props: { event: event },
   };
 };
 export default Details;
