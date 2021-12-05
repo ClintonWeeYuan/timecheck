@@ -43,7 +43,7 @@ const MainPage: NextPage<Props> = (props) => {
           </Grid.Column>
 
           <Grid.Column width={4}>
-            {props.startTime ? (
+            {props.startTime && props.endTime ? (
               <Taskbar
                 startTime={parseInt(props.startTime)}
                 endTime={parseInt(props.endTime)}
