@@ -11,12 +11,12 @@ const FormModal: NextPage = () => {
       <Modal
         closeIcon
         open={open}
-        trigger={<Button>Add Task</Button>}
+        trigger={<Button>Add Event</Button>}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         centered={true}
       >
-        <Header icon="archive" content="Schedule a Task" />
+        <Header icon="archive" content="Schedule an Event" />
         <Modal.Content>
           <AutoSaveForm />
         </Modal.Content>

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
-import { Form, Button, Loader, Dimmer } from "semantic-ui-react";
-import React, { useState, useEffect, useCallback } from "react";
+import { Form, Button, Loader, Dimmer, TextArea, Ref } from "semantic-ui-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
@@ -29,6 +29,16 @@ const AutoSaveForm: NextPage = () => {
 
   function roundSeconds(number: number) {
     return number - (number % (1000 * 60)) + 1000;
+  }
+
+  const [copySuccess, setCopySuccess] = useState("");
+  const textAreaRef = useRef<HTMLInputElement>(null);
+
+  function handleCopy(e: React.MouseEvent<HTMLButtonElement>) {
+    if (textAreaRef.current !== null) {
+      textAreaRef.current.select();
+      document.execCommand("copy");
+    }
   }
 
   const debouncedSave = useCallback(
@@ -72,7 +82,13 @@ const AutoSaveForm: NextPage = () => {
           <Dimmer active={isSaving} inverted>
             <Loader>Saving</Loader>
           </Dimmer>
-          <span>Your id is {eventId}</span>
+          <Button onClick={handleCopy}>Copy Link</Button>
+          <Ref innerRef={textAreaRef}>
+            <TextArea
+              placeholder="Your Link"
+              value={`${process.env.APP_URL}/${eventId}`}
+            />
+          </Ref>
         </div>
         <h4>Start Time</h4>
         <TimeInput
