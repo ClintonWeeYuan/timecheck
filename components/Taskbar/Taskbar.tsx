@@ -42,13 +42,13 @@ const Taskbar: NextPage<Props> = (props) => {
       return Math.floor((time % (60 * 1000)) / 1000 + 100);
     }
     function calculateMinutes(time: number) {
-      return Math.floor((duration % (60 * 60 * 1000)) / (60 * 1000) + 100);
+      return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
     }
     function calculateHours(time: number) {
-      return Math.floor(duration / (60 * 60 * 1000) + 100);
+      return Math.floor(time / (60 * 60 * 1000) + 100);
     }
 
-    if (timeLeft >= duration) {
+    if (timeLeft >= duration && duration > 0) {
       setSeconds(calculateSeconds(duration).toString().slice(-2));
       setMinutes(calculateMinutes(duration).toString().slice(-2));
       setHours(calculateHours(duration).toString().slice(-2));
