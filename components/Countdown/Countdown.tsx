@@ -6,21 +6,21 @@ type Props = {
   seconds: string;
 };
 
-const Countdown: NextPage<Props> = (props) => {
+const Countdown: NextPage<Props> = ({ hours, minutes, seconds }) => {
   return (
     <div className={styles.countdown}>
       <section>
-        <p>{props.hours}</p>
+        <p>{hours}</p>
         <small>Hours</small>
       </section>
       <span>:</span>
       <section>
-        <p>{props.minutes}</p>
+        <p>{minutes}</p>
         <small>Minutes</small>
       </section>
       <span>:</span>
       <section>
-        <p>{props.seconds}</p>
+        <p>{seconds}</p>
         <small>Seconds</small>
       </section>
     </div>
