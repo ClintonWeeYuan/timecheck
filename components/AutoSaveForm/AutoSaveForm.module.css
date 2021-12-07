@@ -1,5 +1,6 @@
 .autosave_details {
-  width: 12vw;
+  width: 60%;
+  height: 50px;
   display: flex;
   justify-content: space-between;
 }
