@@ -8,6 +8,7 @@ import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
+import CountdownSetter from "../CountdownSetter/CountdownSetter";
 
 interface Props {
   eventName?: string;
@@ -18,6 +19,19 @@ interface Props {
 
 const MainPage: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+  const [hours, setHours] = useState<string>("00");
+  const [minutes, setMinutes] = useState<string>("00");
+  const [seconds, setSeconds] = useState<string>("00");
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [endTime, setEndTime] = useState<number>(Date.now());
+
+  function changeStartTime(value: number) {
+    setStartTime(value);
+  }
+
+  function changeEndTime(value: number) {
+    setEndTime(value);
+  }
 
   useEffect(() => {
     async function getTime() {
@@ -34,12 +48,57 @@ const MainPage: NextPage<Props> = (props) => {
 
     getTime();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime((prev) => prev + 1000), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  let timeLeft: number;
+  let duration: number;
+
+  useEffect(() => {
+    timeLeft = endTime - time;
+    duration = endTime - startTime;
+
+    function calculateSeconds(time: number) {
+      return Math.floor((time % (60 * 1000)) / 1000 + 100);
+    }
+    function calculateMinutes(time: number) {
+      return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
+    }
+    function calculateHours(time: number) {
+      return Math.floor(time / (60 * 60 * 1000) + 100);
+    }
+
+    if (timeLeft >= duration && duration > 0) {
+      setSeconds(calculateSeconds(duration).toString().slice(-2));
+      setMinutes(calculateMinutes(duration).toString().slice(-2));
+      setHours(calculateHours(duration).toString().slice(-2));
+    } else if (timeLeft < 0 || duration < 0) {
+      setSeconds("00");
+      setMinutes("00");
+      setHours("00");
+    } else {
+      setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
+      setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
+      setHours(calculateHours(timeLeft).toString().slice(-2));
+    }
+  }, [time]);
+
   return (
     <div className={styles.container}>
       <TimeProvider time={props.time}>
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
-            <MainClock time={props.time} />
+            <MainClock
+              time={props.time}
+              hours={hours}
+              minutes={minutes}
+              seconds={seconds}
+            />
           </Grid.Column>
 
           <Grid.Column width={4}>
@@ -48,10 +107,19 @@ const MainPage: NextPage<Props> = (props) => {
                 startTime={parseInt(props.startTime)}
                 endTime={parseInt(props.endTime)}
                 eventName={props.eventName}
+                hours={hours}
+                minutes={minutes}
+                seconds={seconds}
               />
             ) : (
-              <Taskbar />
+              <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
+            {hours}
+            {minutes}
+            <CountdownSetter
+              changeEndTime={changeEndTime}
+              changeStartTime={changeStartTime}
+            />
             <RetrieveTask />
             <FormModal />
           </Grid.Column>

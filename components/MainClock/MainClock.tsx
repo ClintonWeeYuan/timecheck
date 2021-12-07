@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AnalogClock from "analog-clock-react";
 import { IoMdSettings } from "react-icons/io";
 import Clock from "react-live-clock";
+import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
 import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
@@ -10,10 +11,14 @@ import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 
 interface Props {
   time: number | undefined;
+  hours: string;
+  minutes: string;
+  seconds: string;
 }
 
 const MainClock: NextPage<Props> = (props) => {
-  const [isAnalog, setIsAnalog] = useState(false);
+  const clockTypes = ["digital", "analog", "countdown"];
+  const [clockType, setClockType] = useState(clockTypes[0]);
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
@@ -64,7 +69,13 @@ const MainClock: NextPage<Props> = (props) => {
   };
 
   function handleClick() {
-    setIsAnalog(!isAnalog);
+    let index = clockTypes.indexOf(clockType);
+
+    if (index === 2) {
+      setClockType(clockTypes[0]);
+    } else {
+      setClockType(clockTypes[index + 1]);
+    }
   }
 
   return (
@@ -74,14 +85,20 @@ const MainClock: NextPage<Props> = (props) => {
           <IoMdSettings size="50px" cursor="pointer" />
         </div>
         <div className={styles.clock}>
-          {isAnalog ? (
+          {clockType === "analog" ? (
             <AnalogClock {...options} />
-          ) : (
+          ) : clockType === "digital" ? (
             <Clock
               date={time}
               format={"h:mm:ssa"}
               style={{ fontSize: digitalSize, color: "grey" }}
               ticking={true}
+            />
+          ) : (
+            <Countdown
+              hours={props.hours}
+              minutes={props.minutes}
+              seconds={props.seconds}
             />
           )}
         </div>
@@ -92,8 +109,8 @@ const MainClock: NextPage<Props> = (props) => {
           color="yellow"
           size={buttonSize}
         >
-          <Icon name={isAnalog ? "clock" : "draft2digital"} />
-          {isAnalog ? "Analog" : "Digital"}
+          <Icon name={clockType === "analog" ? "clock" : "draft2digital"} />
+          {clockType === "analog" ? "Analog" : "Digital"}
         </Button>
       </div>
     </div>
