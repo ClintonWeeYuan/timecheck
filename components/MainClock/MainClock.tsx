@@ -8,6 +8,7 @@ import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
 import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
+import Settings from "../Settings/Settings";
 
 interface Props {
   time: number | undefined;
@@ -82,7 +83,8 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          <IoMdSettings size="50px" cursor="pointer" />
+          {" "}
+          <Settings />
         </div>
         <div className={styles.clock}>
           {clockType === "analog" ? (
