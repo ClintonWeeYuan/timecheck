@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import styles from "./Countdown.module.css";
 type Props = {
-  hours: number;
-  minutes: number;
-  seconds: number;
+  hours: string;
+  minutes: string;
+  seconds: string;
 };
 
 const Countdown: NextPage<Props> = ({ hours, minutes, seconds }) => {

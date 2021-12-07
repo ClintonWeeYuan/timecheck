@@ -25,9 +25,9 @@ function roundSeconds(number: number) {
 
 const Taskbar: NextPage<Props> = (props) => {
   const time: number = useTime();
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(0);
+  const [hours, setHours] = useState<string>("00");
+  const [minutes, setMinutes] = useState<string>("00");
+  const [seconds, setSeconds] = useState<string>("00");
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
 
@@ -38,18 +38,28 @@ const Taskbar: NextPage<Props> = (props) => {
     timeLeft = endTime - time;
     duration = endTime - startTime;
 
-    if (timeLeft >= duration) {
-      setSeconds(Math.floor((duration % (60 * 1000)) / 1000));
-      setMinutes(Math.floor((duration % (60 * 60 * 1000)) / (60 * 1000)));
-      setHours(Math.floor(duration / (60 * 60 * 1000)));
+    function calculateSeconds(time: number) {
+      return Math.floor((time % (60 * 1000)) / 1000 + 100);
+    }
+    function calculateMinutes(time: number) {
+      return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
+    }
+    function calculateHours(time: number) {
+      return Math.floor(time / (60 * 60 * 1000) + 100);
+    }
+
+    if (timeLeft >= duration && duration > 0) {
+      setSeconds(calculateSeconds(duration).toString().slice(-2));
+      setMinutes(calculateMinutes(duration).toString().slice(-2));
+      setHours(calculateHours(duration).toString().slice(-2));
     } else if (timeLeft < 0 || duration < 0) {
-      setSeconds(0);
-      setMinutes(0);
-      setHours(0);
+      setSeconds("00");
+      setMinutes("00");
+      setHours("00");
     } else {
-      setSeconds(Math.floor((timeLeft % (60 * 1000)) / 1000));
-      setMinutes(Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000)));
-      setHours(Math.floor(timeLeft / (60 * 60 * 1000)));
+      setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
+      setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
+      setHours(calculateHours(timeLeft).toString().slice(-2));
     }
   }, [time]);
 
