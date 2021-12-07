@@ -11,6 +11,9 @@ import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 
 interface Props {
   time: number | undefined;
+  hours: string;
+  minutes: string;
+  seconds: string;
 }
 
 const MainClock: NextPage<Props> = (props) => {
@@ -92,7 +95,11 @@ const MainClock: NextPage<Props> = (props) => {
               ticking={true}
             />
           ) : (
-            <Countdown hours="00" minutes="00" seconds="00" />
+            <Countdown
+              hours={props.hours}
+              minutes={props.minutes}
+              seconds={props.seconds}
+            />
           )}
         </div>
         <Button

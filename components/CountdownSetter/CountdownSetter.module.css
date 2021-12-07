@@ -1,0 +1,14 @@
+.setTime {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
+}
+
+@media (max-width: 900px) {
+  .setTime {
+    flex-direction: row;
+    width: 70vw;
+    justify-content: space-between;
+  }
+}
