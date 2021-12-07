@@ -1,5 +1,12 @@
 import { NextPage } from "next";
-import { Header, Modal, Segment, Menu, Grid } from "semantic-ui-react";
+import {
+  Header,
+  Modal,
+  Segment,
+  Menu,
+  Grid,
+  MenuItemProps,
+} from "semantic-ui-react";
 import React, { useState } from "react";
 import { IoMdSettings } from "react-icons/io";
 import { MenuClassKey } from "@mui/material";
@@ -11,8 +18,11 @@ const Settings: NextPage = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("General");
 
-  function handleItemClick(e, { name }) {
-    setActiveItem(name);
+  function handleItemClick(
+    event: React.MouseEvent<HTMLAnchorElement>,
+    data: MenuItemProps
+  ) {
+    data.name && setActiveItem(data.name);
   }
   return (
     <Segment textAlign="center" basic vertical>
@@ -28,7 +38,7 @@ const Settings: NextPage = () => {
         <Modal.Content>
           <Grid stackable columns={2}>
             <Grid.Column width={4}>
-              <Menu fluid tabular vertical>
+              <Menu fluid secondary pointing tabular vertical>
                 <Menu.Item
                   name="General"
                   active={activeItem === "General"}
@@ -44,6 +54,7 @@ const Settings: NextPage = () => {
                 />
 
                 <Menu.Item
+                  position="right"
                   name="About"
                   active={activeItem === "About"}
                   content="About"
