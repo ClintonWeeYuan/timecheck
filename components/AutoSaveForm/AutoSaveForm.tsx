@@ -63,7 +63,7 @@ const AutoSaveForm: NextPage = () => {
   );
 
   useEffect(() => {
-    if ({ eventName } !== null) {
+    if (eventName !== undefined) {
       debouncedSave({ eventName, startTime, endTime, eventId });
     }
   }, [eventName]);

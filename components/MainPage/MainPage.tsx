@@ -114,14 +114,11 @@ const MainPage: NextPage<Props> = (props) => {
             ) : (
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
-            {hours}
-            {minutes}
             <CountdownSetter
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
             />
             <RetrieveTask />
-            <FormModal />
           </Grid.Column>
         </Grid>
       </TimeProvider>
