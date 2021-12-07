@@ -1,14 +1,5 @@
 import { NextPage } from "next";
-import {
-  Button,
-  Header,
-  Icon,
-  Modal,
-  Segment,
-  Container,
-  Menu,
-  Grid,
-} from "semantic-ui-react";
+import { Header, Modal, Segment, Menu, Grid } from "semantic-ui-react";
 import React, { useState } from "react";
 import { IoMdSettings } from "react-icons/io";
 import { MenuClassKey } from "@mui/material";
