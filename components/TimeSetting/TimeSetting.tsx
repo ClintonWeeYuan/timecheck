@@ -72,7 +72,7 @@ const TimeSetting: NextPage = () => {
           <h4>24 Hour</h4>
         </Grid.Column>
         <Grid.Column width={12}>
-          <Radio label="24 Hour" />
+          <Radio toggle />
         </Grid.Column>
       </Grid>
     </Form>
