@@ -31,7 +31,9 @@ const MainClock: NextPage<Props> = (props) => {
   //Update clock time, by adding 1 second each second
 
   useEffect(() => {
-    const interval = setInterval(() => newTime(), 1000);
+    const interval = setInterval(() => {
+      newTime();
+    }, 1000);
     return () => {
       clearInterval(interval);
     };

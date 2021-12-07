@@ -119,7 +119,6 @@ const MainPage: NextPage<Props> = (props) => {
               changeStartTime={changeStartTime}
             />
             <RetrieveTask />
-            <FormModal />
           </Grid.Column>
         </Grid>
       </TimeProvider>
