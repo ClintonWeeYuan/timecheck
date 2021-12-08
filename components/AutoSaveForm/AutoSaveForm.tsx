@@ -66,7 +66,7 @@ const AutoSaveForm: NextPage = () => {
     if (eventName !== undefined) {
       debouncedSave({ eventName, startTime, endTime, eventId });
     }
-  }, [eventName]);
+  }, [eventName, startTime, endTime]);
 
   return (
     <>
@@ -79,10 +79,9 @@ const AutoSaveForm: NextPage = () => {
           onChange={changeEvent}
         />
         <div className={styles.autosave_details}>
-          <Dimmer active={isSaving} inverted>
-            <Loader>Saving</Loader>
-          </Dimmer>
-          <Button onClick={handleCopy}>Copy Link</Button>
+          <Button loading={isSaving} onClick={handleCopy}>
+            Copy Link
+          </Button>
           <Ref innerRef={textAreaRef}>
             <TextArea
               placeholder="Your Link"
