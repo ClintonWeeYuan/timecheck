@@ -16,7 +16,7 @@ export default async function handleRequest(
       const params: GetItemCommandInput = {
         TableName: "events",
         Key: {
-          eventId: { S: "SOMETHING WRONG" },
+          eventId: { S: req.query.eventId },
         },
         ProjectionExpression: "startTime, endTime, eventName",
       };
