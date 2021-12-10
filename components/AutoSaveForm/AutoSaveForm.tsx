@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Form, Button, Loader, Dimmer, TextArea, Ref } from "semantic-ui-react";
+import { Form, Button, Input, TextArea, Ref, Icon } from "semantic-ui-react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
@@ -31,14 +31,23 @@ const AutoSaveForm: NextPage = () => {
     return number - (number % (1000 * 60)) + 1000;
   }
 
-  const [copySuccess, setCopySuccess] = useState("");
-  const textAreaRef = useRef<HTMLInputElement>(null);
+  // const textAreaRef = useRef<HTMLInputElement>(null);
 
-  function handleCopy(e: React.MouseEvent<HTMLButtonElement>) {
-    if (textAreaRef.current !== null) {
-      textAreaRef.current.select();
-      document.execCommand("copy");
-    }
+  // function handleCopy(e: React.MouseEvent<HTMLButtonElement>) {
+  //   if (textAreaRef.current !== null) {
+  //     textAreaRef.current.select();
+  //     document.execCommand("copy");
+  //   }
+  // }
+
+  const [link, setLink] = useState(`${process.env.APP_URL}/${eventId}`);
+
+  async function handleClick() {
+    await navigator.clipboard.writeText(link);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setLink(e.target.value);
   }
 
   const debouncedSave = useCallback(
@@ -66,7 +75,7 @@ const AutoSaveForm: NextPage = () => {
     if (eventName !== undefined) {
       debouncedSave({ eventName, startTime, endTime, eventId });
     }
-  }, [eventName]);
+  }, [eventName, startTime, endTime]);
 
   return (
     <>
@@ -79,16 +88,27 @@ const AutoSaveForm: NextPage = () => {
           onChange={changeEvent}
         />
         <div className={styles.autosave_details}>
-          <Dimmer active={isSaving} inverted>
-            <Loader>Saving</Loader>
-          </Dimmer>
-          <Button onClick={handleCopy}>Copy Link</Button>
+          <Input
+            action={{
+              color: "teal",
+              labelPosition: "right",
+              icon: "copy",
+              content: "Copy",
+              onClick: handleClick,
+            }}
+            defaultValue={link}
+            onChange={handleChange}
+          />
+
+          {/* <Button loading={isSaving} onClick={handleCopy}>
+            Copy Link
+          </Button>
           <Ref innerRef={textAreaRef}>
             <TextArea
               placeholder="Your Link"
               value={`${process.env.APP_URL}/${eventId}`}
             />
-          </Ref>
+          </Ref> */}
         </div>
         <h4>Start Time</h4>
         <TimeInput
@@ -104,7 +124,16 @@ const AutoSaveForm: NextPage = () => {
         />
         <br />
 
-        <Button type="submit">Submit</Button>
+        <Button
+          content="Submit"
+          primary
+          loading={isSaving}
+          icon="save"
+          type="submit"
+          onClick={() =>
+            debouncedSave({ eventId, eventName, startTime, endTime })
+          }
+        />
       </Form>
     </>
   );
