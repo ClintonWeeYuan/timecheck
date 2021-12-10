@@ -1,14 +1,14 @@
-import { NextPage, GetServerSideProps } from "next";
-import { ParsedUrlQuery } from "querystring";
+import { NextPage } from "next";
 import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
-import FormModal from "../FormModal/FormModal";
+
 import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
+import { format, toDate, intervalToDuration } from "date-fns";
 
 interface Props {
   eventName?: string;
@@ -56,36 +56,68 @@ const MainPage: NextPage<Props> = (props) => {
     };
   }, []);
 
-  let timeLeft: number;
-  let duration: number;
+  // let timeLeft: number;
+  // let duration: number;
 
   useEffect(() => {
-    timeLeft = endTime - time;
-    duration = endTime - startTime;
+    // timeLeft = endTime - time;
+    // duration = endTime - startTime;
+    let duration: Duration = intervalToDuration({
+      start: toDate(startTime),
+      end: toDate(endTime),
+    });
 
-    function calculateSeconds(time: number) {
-      return Math.floor((time % (60 * 1000)) / 1000 + 100);
-    }
-    function calculateMinutes(time: number) {
-      return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
-    }
-    function calculateHours(time: number) {
-      return Math.floor(time / (60 * 60 * 1000) + 100);
-    }
+    let timeLeft = intervalToDuration({
+      start: toDate(time),
+      end: toDate(endTime),
+    });
 
-    if (timeLeft >= duration && duration > 0) {
-      setSeconds(calculateSeconds(duration).toString().slice(-2));
-      setMinutes(calculateMinutes(duration).toString().slice(-2));
-      setHours(calculateHours(duration).toString().slice(-2));
-    } else if (timeLeft < 0 || duration < 0) {
+    if (startTime - time > 0) {
+      duration.seconds &&
+        setSeconds((duration.seconds + 100).toString().slice(-2));
+      duration.minutes &&
+        setMinutes((duration.minutes + 100).toString().slice(-2));
+      duration.hours && setHours((duration.hours + 100).toString().slice(-2));
+    } else if (endTime - time < 0 || endTime - startTime < 0) {
       setSeconds("00");
       setMinutes("00");
       setHours("00");
     } else {
-      setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
-      setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
-      setHours(calculateHours(timeLeft).toString().slice(-2));
+      timeLeft.seconds &&
+        setSeconds((timeLeft.seconds + 100).toString().slice(-2));
+      timeLeft.minutes &&
+        setMinutes((timeLeft.minutes + 100).toString().slice(-2));
+      timeLeft.hours && setHours((timeLeft.hours + 100).toString().slice(-2));
     }
+
+    // function calculateSeconds(time: number) {
+    //   return Math.floor((time % (60 * 1000)) / 1000 + 100);
+    // }
+    // function calculateMinutes(time: number) {
+    //   return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
+    // }
+    // function calculateHours(time: number) {
+    //   return Math.floor(time / (60 * 60 * 1000) + 100);
+    // }
+
+    // if (timeLeft >= duration && duration > 0) {
+    //   setSeconds(calculateSeconds(duration).toString().slice(-2));
+    //   setMinutes(calculateMinutes(duration).toString().slice(-2));
+    //   setHours(calculateHours(duration).toString().slice(-2));
+    // } else if (timeLeft < 0 || duration < 0) {
+    //   setSeconds("00");
+    //   setMinutes("00");
+    //   setHours("00");
+    // } else {
+    //   setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
+    //   setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
+    //   setHours(calculateHours(timeLeft).toString().slice(-2));
+    // }
+
+    // setSeconds(format(new Date(timeLeft), "ss"));
+    // setMinutes(format(new Date(timeLeft), "mm"));
+    // setHours(format(new Date(timeLeft), "HH"));
+    // console.log(toDate(timeLeft));
   }, [time]);
 
   return (
