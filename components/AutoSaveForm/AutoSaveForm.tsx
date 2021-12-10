@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Form, Button, Input, TextArea, Ref } from "semantic-ui-react";
+import { Form, Button, Input, TextArea, Ref, Icon } from "semantic-ui-react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
@@ -124,7 +124,16 @@ const AutoSaveForm: NextPage = () => {
         />
         <br />
 
-        <Button type="submit">Submit</Button>
+        <Button
+          content="Submit"
+          primary
+          loading={isSaving}
+          icon="save"
+          type="submit"
+          onClick={() =>
+            debouncedSave({ eventId, eventName, startTime, endTime })
+          }
+        />
       </Form>
     </>
   );
