@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
+const util = require("util");
 
 import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
@@ -9,6 +10,7 @@ import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 import { format, toDate, intervalToDuration } from "date-fns";
+import { duration } from "@mui/material";
 
 interface Props {
   eventName?: string;
@@ -71,23 +73,21 @@ const MainPage: NextPage<Props> = (props) => {
       start: toDate(time),
       end: toDate(endTime),
     });
+    console.log("duration" + duration.minutes);
+    console.log("timeLeft" + timeLeft.seconds);
 
-    if (startTime - time > 0) {
-      duration.seconds &&
-        setSeconds((duration.seconds + 100).toString().slice(-2));
-      duration.minutes &&
-        setMinutes((duration.minutes + 100).toString().slice(-2));
-      duration.hours && setHours((duration.hours + 100).toString().slice(-2));
+    if (startTime - time > 0 && endTime - startTime > 0) {
+      setSeconds(util.format("%s%s", "0", duration.seconds).slice(-2));
+      setMinutes(util.format("%s%s", "0", duration.minutes).slice(-2));
+      setHours(util.format("%s%s", "0", duration.hours).slice(-2));
     } else if (endTime - time < 0 || endTime - startTime < 0) {
       setSeconds("00");
       setMinutes("00");
       setHours("00");
     } else {
-      timeLeft.seconds &&
-        setSeconds((timeLeft.seconds + 100).toString().slice(-2));
-      timeLeft.minutes &&
-        setMinutes((timeLeft.minutes + 100).toString().slice(-2));
-      timeLeft.hours && setHours((timeLeft.hours + 100).toString().slice(-2));
+      setSeconds(util.format("%s%s", "0", timeLeft.seconds).slice(-2));
+      setMinutes(util.format("%s%s", "0", timeLeft.minutes).slice(-2));
+      setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
     }
 
     // function calculateSeconds(time: number) {
