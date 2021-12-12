@@ -10,7 +10,7 @@ import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 import { format, toDate, intervalToDuration } from "date-fns";
-import { duration } from "@mui/material";
+import { useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
   eventName?: string;
@@ -24,15 +24,17 @@ const MainPage: NextPage<Props> = (props) => {
   const [hours, setHours] = useState<string>("00");
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
-  const [startTime, setStartTime] = useState<number>(Date.now());
-  const [endTime, setEndTime] = useState<number>(Date.now());
 
-  function changeStartTime(value: number) {
-    setStartTime(value);
+  function handleSeconds(number: string) {
+    setSeconds(number);
   }
 
-  function changeEndTime(value: number) {
-    setEndTime(value);
+  function handleMinutes(number: string) {
+    setMinutes(number);
+  }
+
+  function handleHours(number: string) {
+    setHours(number);
   }
 
   useEffect(() => {
@@ -51,74 +53,67 @@ const MainPage: NextPage<Props> = (props) => {
     getTime();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => setTime((prev) => prev + 1000), 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   // let timeLeft: number;
   // let duration: number;
 
-  useEffect(() => {
-    // timeLeft = endTime - time;
-    // duration = endTime - startTime;
-    let duration: Duration = intervalToDuration({
-      start: toDate(startTime),
-      end: toDate(endTime),
-    });
+  // useEffect(() => {
+  //   // timeLeft = endTime - time;
+  //   // duration = endTime - startTime;
+  //   let duration: Duration = intervalToDuration({
+  //     start: toDate(startTime),
+  //     end: toDate(endTime),
+  //   });
 
-    let timeLeft = intervalToDuration({
-      start: toDate(time),
-      end: toDate(endTime),
-    });
-    console.log("duration" + duration.minutes);
-    console.log("timeLeft" + timeLeft.seconds);
+  //   let timeLeft = intervalToDuration({
+  //     start: toDate(updatedTime),
+  //     end: toDate(endTime),
+  //   });
+  //   console.log("duration" + duration.minutes);
+  //   console.log("timeLeft" + timeLeft.seconds);
 
-    if (startTime - time > 0 && endTime - startTime > 0) {
-      setSeconds(util.format("%s%s", "0", duration.seconds).slice(-2));
-      setMinutes(util.format("%s%s", "0", duration.minutes).slice(-2));
-      setHours(util.format("%s%s", "0", duration.hours).slice(-2));
-    } else if (endTime - time < 0 || endTime - startTime < 0) {
-      setSeconds("00");
-      setMinutes("00");
-      setHours("00");
-    } else {
-      setSeconds(util.format("%s%s", "0", timeLeft.seconds).slice(-2));
-      setMinutes(util.format("%s%s", "0", timeLeft.minutes).slice(-2));
-      setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
-    }
+  //   if (startTime - updatedTime > 0 && endTime - startTime > 0) {
+  //     setSeconds(util.format("%s%s", "0", duration.seconds).slice(-2));
+  //     setMinutes(util.format("%s%s", "0", duration.minutes).slice(-2));
+  //     setHours(util.format("%s%s", "0", duration.hours).slice(-2));
+  //   } else if (endTime - updatedTime < 0 || endTime - startTime < 0) {
+  //     setSeconds("00");
+  //     setMinutes("00");
+  //     setHours("00");
+  //   } else {
+  //     setSeconds(util.format("%s%s", "0", timeLeft.seconds).slice(-2));
+  //     setMinutes(util.format("%s%s", "0", timeLeft.minutes).slice(-2));
+  //     setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
+  //   }
 
-    // function calculateSeconds(time: number) {
-    //   return Math.floor((time % (60 * 1000)) / 1000 + 100);
-    // }
-    // function calculateMinutes(time: number) {
-    //   return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
-    // }
-    // function calculateHours(time: number) {
-    //   return Math.floor(time / (60 * 60 * 1000) + 100);
-    // }
+  // function calculateSeconds(time: number) {
+  //   return Math.floor((time % (60 * 1000)) / 1000 + 100);
+  // }
+  // function calculateMinutes(time: number) {
+  //   return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
+  // }
+  // function calculateHours(time: number) {
+  //   return Math.floor(time / (60 * 60 * 1000) + 100);
+  // }
 
-    // if (timeLeft >= duration && duration > 0) {
-    //   setSeconds(calculateSeconds(duration).toString().slice(-2));
-    //   setMinutes(calculateMinutes(duration).toString().slice(-2));
-    //   setHours(calculateHours(duration).toString().slice(-2));
-    // } else if (timeLeft < 0 || duration < 0) {
-    //   setSeconds("00");
-    //   setMinutes("00");
-    //   setHours("00");
-    // } else {
-    //   setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
-    //   setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
-    //   setHours(calculateHours(timeLeft).toString().slice(-2));
-    // }
+  // if (timeLeft >= duration && duration > 0) {
+  //   setSeconds(calculateSeconds(duration).toString().slice(-2));
+  //   setMinutes(calculateMinutes(duration).toString().slice(-2));
+  //   setHours(calculateHours(duration).toString().slice(-2));
+  // } else if (timeLeft < 0 || duration < 0) {
+  //   setSeconds("00");
+  //   setMinutes("00");
+  //   setHours("00");
+  // } else {
+  //   setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
+  //   setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
+  //   setHours(calculateHours(timeLeft).toString().slice(-2));
+  // }
 
-    // setSeconds(format(new Date(timeLeft), "ss"));
-    // setMinutes(format(new Date(timeLeft), "mm"));
-    // setHours(format(new Date(timeLeft), "HH"));
-    // console.log(toDate(timeLeft));
-  }, [time]);
+  // setSeconds(format(new Date(timeLeft), "ss"));
+  // setMinutes(format(new Date(timeLeft), "mm"));
+  // setHours(format(new Date(timeLeft), "HH"));
+  // console.log(toDate(timeLeft));
+  // }, [time]);
 
   return (
     <div className={styles.container}>
@@ -147,8 +142,9 @@ const MainPage: NextPage<Props> = (props) => {
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
             <CountdownSetter
-              changeEndTime={changeEndTime}
-              changeStartTime={changeStartTime}
+              handleSeconds={handleSeconds}
+              handleMinutes={handleMinutes}
+              handleHours={handleHours}
             />
             <RetrieveTask />
           </Grid.Column>
