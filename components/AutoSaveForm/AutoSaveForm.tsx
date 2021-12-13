@@ -5,6 +5,12 @@ import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
 
+interface Event {
+  eventId: string;
+  eventName: string;
+  startTime: Date;
+  endTime: Date;
+}
 const AutoSaveForm: NextPage = () => {
   const [eventName, setEvent] = useState<string>();
   const [eventId, seteventId] = useState(
@@ -31,15 +37,6 @@ const AutoSaveForm: NextPage = () => {
     return number - (number % (1000 * 60)) + 1000;
   }
 
-  // const textAreaRef = useRef<HTMLInputElement>(null);
-
-  // function handleCopy(e: React.MouseEvent<HTMLButtonElement>) {
-  //   if (textAreaRef.current !== null) {
-  //     textAreaRef.current.select();
-  //     document.execCommand("copy");
-  //   }
-  // }
-
   const [link, setLink] = useState(`${process.env.APP_URL}/${eventId}`);
 
   async function handleClick() {
@@ -50,26 +47,25 @@ const AutoSaveForm: NextPage = () => {
     setLink(e.target.value);
   }
 
-  const debouncedSave = useCallback(
-    debounce(async ({ eventName, startTime, endTime, eventId }) => {
-      try {
-        setIsSaving(true);
-        const res = await fetch(`/api/events/${eventId}`, {
-          method: "PUT",
-          body: JSON.stringify({
-            eventId: eventId,
-            eventName: eventName,
-            startTime: roundSeconds(startTime.getTime()).toString(),
-            endTime: roundSeconds(endTime.getTime()).toString(),
-          }),
-        });
-        setIsSaving(false);
-      } catch (err) {
-        console.log(err);
-      }
-    }, 4000),
-    []
-  );
+  async function save({ eventName, startTime, endTime, eventId }: Event) {
+    try {
+      setIsSaving(true);
+      const res = await fetch(`/api/events/${eventId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: eventId,
+          eventName: eventName,
+          startTime: roundSeconds(startTime.getTime()).toString(),
+          endTime: roundSeconds(endTime.getTime()).toString(),
+        }),
+      });
+      setIsSaving(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
     if (eventName !== undefined) {
@@ -99,16 +95,6 @@ const AutoSaveForm: NextPage = () => {
             defaultValue={link}
             onChange={handleChange}
           />
-
-          {/* <Button loading={isSaving} onClick={handleCopy}>
-            Copy Link
-          </Button>
-          <Ref innerRef={textAreaRef}>
-            <TextArea
-              placeholder="Your Link"
-              value={`${process.env.APP_URL}/${eventId}`}
-            />
-          </Ref> */}
         </div>
         <h4>Start Time</h4>
         <TimeInput
@@ -131,7 +117,7 @@ const AutoSaveForm: NextPage = () => {
           icon="save"
           type="submit"
           onClick={() =>
-            debouncedSave({ eventId, eventName, startTime, endTime })
+            eventName && save({ eventId, eventName, startTime, endTime })
           }
         />
       </Form>
