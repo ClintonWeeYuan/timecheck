@@ -64,6 +64,8 @@ const Taskbar: NextPage<Props> = (props) => {
   //   }
   // }, [time]);
   const [eventName, setEventName] = useState(props.eventName);
+
+  //Autosaves the eventName to DynamoDB
   async function save(eventName: string) {
     try {
       const res = await fetch(`/api/events/${props.eventId}`, {
@@ -82,15 +84,21 @@ const Taskbar: NextPage<Props> = (props) => {
 
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setEventName(e.target.value);
+  }
+
   useEffect(() => {
     if (eventName !== undefined) {
       debouncedSave(eventName);
     }
   }, [eventName]);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEventName(e.target.value);
-  }
+  //Updates screen to reflect eventName in DynamoDB where it has been changed
+
+  useEffect(() => {
+    setEventName(props.eventName);
+  }, [props.eventName]);
 
   return (
     <Segment
