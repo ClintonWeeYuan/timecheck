@@ -15,6 +15,7 @@ interface Props {
   startTime?: string;
   endTime?: string;
   time: number;
+  eventId?: string;
 }
 
 const MainPage: NextPage<Props> = (props) => {
@@ -107,6 +108,7 @@ const MainPage: NextPage<Props> = (props) => {
                 startTime={parseInt(props.startTime)}
                 endTime={parseInt(props.endTime)}
                 eventName={props.eventName}
+                eventId={props.eventId}
                 hours={hours}
                 minutes={minutes}
                 seconds={seconds}

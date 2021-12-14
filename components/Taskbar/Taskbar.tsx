@@ -1,10 +1,11 @@
 import { NextPage } from "next";
 import styles from "./Taskbar.module.css";
 import { Input, Divider, Segment } from "semantic-ui-react";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Countdown from "../Countdown/Countdown";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
+import debounce from "@mui/utils/debounce";
 
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
@@ -13,6 +14,7 @@ interface Props {
   eventName?: string | undefined;
   startTime?: number;
   endTime?: number;
+  eventId?: string;
   hours: string;
   minutes: string;
   seconds: string;
@@ -61,6 +63,34 @@ const Taskbar: NextPage<Props> = (props) => {
   //     setHours(calculateHours(timeLeft).toString().slice(-2));
   //   }
   // }, [time]);
+  const [eventName, setEventName] = useState(props.eventName);
+  async function save(eventName: string) {
+    try {
+      const res = await fetch(`/api/events/${props.eventId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: props.eventId,
+          eventName: eventName,
+          startTime: "0",
+          endTime: "0",
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const debouncedSave = useCallback(debounce(save, 3000), []);
+
+  useEffect(() => {
+    if (eventName !== undefined) {
+      debouncedSave(eventName);
+    }
+  }, [eventName]);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setEventName(e.target.value);
+  }
 
   return (
     <Segment
@@ -71,9 +101,13 @@ const Taskbar: NextPage<Props> = (props) => {
       className={styles.description}
     >
       <div className={styles.description}>
-        <Input transparent placeholder="Task" size="massive">
-          {props.eventName}
-        </Input>
+        <Input
+          onChange={handleChange}
+          transparent
+          placeholder="Task"
+          size="massive"
+          value={eventName}
+        ></Input>
         <Divider horizontal>Time Remaining</Divider>
         <Countdown
           hours={props.hours}

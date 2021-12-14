@@ -59,6 +59,7 @@ const Details: NextPage<Props> = (props) => {
       eventName={data.eventName.S}
       endTime={data.endTime.N}
       startTime={data.startTime.N}
+      eventId={data.eventId.S}
     />
   );
 };
