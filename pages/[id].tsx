@@ -2,6 +2,7 @@ import { NextPage, GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import MainPage from "../components/MainPage/MainPage";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
@@ -18,12 +19,26 @@ interface Props {
     eventName: {
       S: "string";
     };
+    eventId: {
+      S: "string";
+    };
   };
+}
+
+async function fetcher(endpoint: string) {
+  const res = await fetch(endpoint, { method: "GET" });
+  return res.json();
 }
 
 const Details: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
-  console.log(props.event.eventName);
+
+  const { data, error } = useSWR(
+    `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
+    fetcher,
+    { fallbackData: props.event }
+  );
+
   useEffect(() => {
     async function getTime() {
       try {
@@ -36,15 +51,14 @@ const Details: NextPage<Props> = (props) => {
         console.log(err);
       }
     }
-
     getTime();
   }, []);
   return (
     <MainPage
       time={time}
-      eventName={props.event.eventName.S}
-      endTime={props.event.endTime.N}
-      startTime={props.event.startTime.N}
+      eventName={data.eventName.S}
+      endTime={data.endTime.N}
+      startTime={data.startTime.N}
     />
   );
 };

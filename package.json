@@ -24,7 +24,8 @@
     "react-time-picker": "^4.4.4",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
-    "semantic-ui-react-datetimeinput": "^1.0.4"
+    "semantic-ui-react-datetimeinput": "^1.0.4",
+    "swr": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "16.11.9",
