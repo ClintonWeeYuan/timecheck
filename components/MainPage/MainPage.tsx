@@ -119,6 +119,8 @@ const MainPage: NextPage<Props> = (props) => {
             <CountdownSetter
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
+              endTime={props.endTime}
+              startTime={props.startTime}
             />
             <RetrieveTask />
           </Grid.Column>

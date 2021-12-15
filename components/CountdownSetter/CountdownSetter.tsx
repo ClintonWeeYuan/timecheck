@@ -6,7 +6,7 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import styles from "./CountdownSetter.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function roundSeconds(number: number) {
   return number - (number % (1000 * 60)) + 1000;
@@ -15,6 +15,8 @@ function roundSeconds(number: number) {
 interface Props {
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
+  endTime: string | undefined;
+  startTime: string | undefined;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
@@ -30,6 +32,11 @@ const CountdownSetter: NextPage<Props> = (props) => {
     setEndTime(e);
     props.changeEndTime(roundSeconds(e));
   }
+
+  useEffect(() => {
+    props.endTime && setEndTime(parseInt(props.endTime));
+    props.startTime && setStartTime(parseInt(props.startTime));
+  }, [props.endTime, props.startTime]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
