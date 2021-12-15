@@ -122,6 +122,8 @@ const MainPage: NextPage<Props> = (props) => {
               changeStartTime={changeStartTime}
               endTime={props.endTime}
               startTime={props.startTime}
+              eventId={props.eventId}
+              eventName={props.eventName}
             />
             <RetrieveTask />
           </Grid.Column>
