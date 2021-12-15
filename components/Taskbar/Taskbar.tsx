@@ -64,6 +64,10 @@ const Taskbar: NextPage<Props> = (props) => {
   //   }
   // }, [time]);
   const [eventName, setEventName] = useState(props.eventName);
+  // const [startTime, setStartTime] = useState(
+  //   props.startTime ? props.startTime : 0
+  // );
+  // const [endTime, setEndTime] = useState(props.endTime ? props.endTime : 0);
 
   //Autosaves the eventName to DynamoDB
   async function save(eventName: string) {
@@ -73,8 +77,8 @@ const Taskbar: NextPage<Props> = (props) => {
         body: JSON.stringify({
           eventId: props.eventId,
           eventName: eventName,
-          startTime: "0",
-          endTime: "0",
+          startTime: props.startTime && props.startTime.toString(),
+          endTime: props.endTime && props.endTime.toString(),
         }),
       });
     } catch (err) {
