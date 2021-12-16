@@ -10,6 +10,7 @@ import styles from "./MainPage.module.css";
 import { useCallback, useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 import debounce from "@mui/utils/debounce";
+import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
   endTime?: string;
   time: number;
   eventId?: string;
+  alert?: string;
 }
 
 const MainPage: NextPage<Props> = (props) => {
@@ -94,6 +96,7 @@ const MainPage: NextPage<Props> = (props) => {
   return (
     <div className={styles.container}>
       <TimeProvider time={props.time}>
+        {props.alert && <Alert alert={props.alert} />}
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
             <MainClock
@@ -127,7 +130,7 @@ const MainPage: NextPage<Props> = (props) => {
               eventName={props.eventName}
             />
             <RetrieveTask />
-            <Alert />
+            {props.eventId && <AlertSetter eventId={props.eventId} />}
           </Grid.Column>
         </Grid>
       </TimeProvider>

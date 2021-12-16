@@ -36,7 +36,7 @@ const Details: NextPage<Props> = (props) => {
   const { data, error } = useSWR(
     `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
     fetcher,
-    { fallbackData: props.event }
+    { fallbackData: props.event, refreshInterval: 2000 }
   );
 
   useEffect(() => {
@@ -60,6 +60,7 @@ const Details: NextPage<Props> = (props) => {
       endTime={data.endTime.N}
       startTime={data.startTime.N}
       eventId={data.eventId.S}
+      alert={data.alert.S}
     />
   );
 };

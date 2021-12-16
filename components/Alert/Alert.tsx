@@ -1,45 +1,43 @@
 import { NextPage } from "next";
-import { Button, Form, Header, Icon, Modal, TextArea } from "semantic-ui-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  Dimmer,
+  Header,
+  Icon,
+  Modal,
+} from "semantic-ui-react";
 
-const Alert: NextPage = () => {
+interface Props {
+  alert: string;
+}
+
+const Alert: NextPage<Props> = (props) => {
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-  };
-
-  async function handleSubmit() {
-    setOpen(false);
-  }
+  useEffect(() => {
+    setOpen(true);
+  }, [props.alert]);
 
   return (
     <Modal
       basic
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
+      defaultOpen
       open={open}
       size="small"
-      trigger={<Button color="red">Send Alert</Button>}
+      closeIcon
     >
       <Header icon>
         <Icon name="warning" />
-        Your Alert
+        IMPORTANT MESSAGE
       </Header>
       <Modal.Content>
-        <Form>
-          <TextArea onChange={handleChange} placeholder="Type Your Message" />
-        </Form>
+        <h2>{props.alert}</h2>
       </Modal.Content>
-      <Modal.Actions>
-        <Button basic color="red" inverted onClick={() => setOpen(false)}>
-          <Icon name="remove" /> Cancel
-        </Button>
-        <Button color="green" inverted onClick={handleSubmit}>
-          <Icon name="checkmark" /> Send
-        </Button>
-      </Modal.Actions>
+      <Modal.Actions></Modal.Actions>
     </Modal>
   );
 };

@@ -18,7 +18,7 @@ export default async function handleRequest(
         Key: {
           eventId: { S: req.query.eventId },
         },
-        ProjectionExpression: "startTime, endTime, eventName, eventId",
+        ProjectionExpression: "startTime, endTime, eventName, eventId, alert",
       };
 
       try {
@@ -30,11 +30,34 @@ export default async function handleRequest(
       }
     }
   } else if (req.method === "PUT") {
-    const { eventId, eventName, startTime, endTime } = JSON.parse(req.body);
+    const { eventId, eventName, startTime, endTime, alert } = JSON.parse(
+      req.body
+    );
 
     if (req.query.eventId && eventId !== req.query.eventId) {
       res.send("Invalid id");
       res.status(404);
+    } else if (alert) {
+      const params = {
+        TableName: "events",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "set alert = :a",
+        ExpressionAttributeValues: {
+          ":a": { S: alert },
+        },
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
     } else {
       const params = {
         TableName: "events",
