@@ -10,6 +10,7 @@ import styles from "./MainPage.module.css";
 import { useCallback, useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 import debounce from "@mui/utils/debounce";
+import Alert from "../Alert/Alert";
 
 interface Props {
   eventName?: string;
@@ -126,6 +127,7 @@ const MainPage: NextPage<Props> = (props) => {
               eventName={props.eventName}
             />
             <RetrieveTask />
+            <Alert />
           </Grid.Column>
         </Grid>
       </TimeProvider>
