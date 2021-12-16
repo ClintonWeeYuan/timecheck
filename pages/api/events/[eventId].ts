@@ -83,6 +83,26 @@ export default async function handleRequest(
         res.statusCode = 500;
       }
     }
+  } else if (req.method === "DELETE") {
+    const { eventId, alert } = JSON.parse(req.body);
+    const params = {
+      TableName: "events",
+      Action: "DELETE",
+      Key: {
+        eventId: { S: eventId },
+      },
+      UpdateExpression: "remove alert",
+      ReturnValues: "ALL_NEW",
+    };
+    try {
+      const Item: UpdateItemCommandOutput = await db.send(
+        new UpdateItemCommand(params)
+      );
+      res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+    } catch (err) {
+      console.log(err);
+      res.statusCode = 500;
+    }
   }
   return res;
 }

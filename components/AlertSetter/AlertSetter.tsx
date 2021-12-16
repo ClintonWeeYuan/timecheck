@@ -14,6 +14,19 @@ const AlertSetter: NextPage<Props> = (props) => {
     setMessage(e.target.value);
   };
 
+  async function clearMessage() {
+    try {
+      const res = await fetch(`/api/events/${props.eventId}`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          eventId: props.eventId,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function handleSubmit() {
     try {
       const res = await fetch(`/api/events/${props.eventId}`, {
@@ -26,7 +39,14 @@ const AlertSetter: NextPage<Props> = (props) => {
     } catch (err) {
       console.log(err);
     }
+
+    const timer = setTimeout(() => {
+      clearMessage();
+    }, 10000);
+
     setOpen(false);
+
+    return () => clearTimeout(timer);
   }
 
   return (

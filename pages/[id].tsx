@@ -60,7 +60,7 @@ const Details: NextPage<Props> = (props) => {
       endTime={data.endTime.N}
       startTime={data.startTime.N}
       eventId={data.eventId.S}
-      alert={data.alert.S}
+      alert={data.alert ? data.alert.S : null}
     />
   );
 };
