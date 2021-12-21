@@ -23,6 +23,7 @@ export default async function handleRequest(
 
       try {
         const Item = await db.send(new GetItemCommand(params));
+
         res.send(Item.Item);
       } catch (err) {
         console.log(err);

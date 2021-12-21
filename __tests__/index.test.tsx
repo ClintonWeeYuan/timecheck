@@ -49,7 +49,7 @@ describe("Updating and Receiving event data from DynamoDB", () => {
         Key: {
           eventId: { S: "123" },
         },
-        ProjectionExpression: "startTime, endTime, eventName",
+        ProjectionExpression: "startTime, endTime, eventName, eventId, alert",
       })
       .resolves({
         Item: {

@@ -35,3 +35,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+#package-lock
+/package-lock.json
+
+#db.js
+/db.js
