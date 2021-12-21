@@ -7,16 +7,21 @@ const util = require("util");
 import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
+
+import debounce from "@mui/utils/debounce";
+
 import { format, toDate, intervalToDuration } from "date-fns";
-import { useTime } from "../TimeProvider/TimeProvider";
+
+
 
 interface Props {
   eventName?: string;
   startTime?: string;
   endTime?: string;
   time: number;
+  eventId?: string;
 }
 
 const MainPage: NextPage<Props> = (props) => {
@@ -25,16 +30,15 @@ const MainPage: NextPage<Props> = (props) => {
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
 
-  function handleSeconds(number: string) {
-    setSeconds(number);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [endTime, setEndTime] = useState<number>(Date.now());
+
+  function changeStartTime(value: number) {
+    setStartTime(value);
   }
 
-  function handleMinutes(number: string) {
-    setMinutes(number);
-  }
-
-  function handleHours(number: string) {
-    setHours(number);
+  function changeEndTime(value: number) {
+    setEndTime(value);
   }
 
   useEffect(() => {
@@ -134,6 +138,7 @@ const MainPage: NextPage<Props> = (props) => {
                 startTime={parseInt(props.startTime)}
                 endTime={parseInt(props.endTime)}
                 eventName={props.eventName}
+                eventId={props.eventId}
                 hours={hours}
                 minutes={minutes}
                 seconds={seconds}
@@ -142,9 +147,15 @@ const MainPage: NextPage<Props> = (props) => {
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
             <CountdownSetter
-              handleSeconds={handleSeconds}
-              handleMinutes={handleMinutes}
-              handleHours={handleHours}
+
+              changeEndTime={changeEndTime}
+              changeStartTime={changeStartTime}
+              endTime={props.endTime}
+              startTime={props.startTime}
+              eventId={props.eventId}
+              eventName={props.eventName}
+
+
             />
             <RetrieveTask />
           </Grid.Column>

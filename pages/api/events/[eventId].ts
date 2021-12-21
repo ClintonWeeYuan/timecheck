@@ -18,7 +18,7 @@ export default async function handleRequest(
         Key: {
           eventId: { S: req.query.eventId },
         },
-        ProjectionExpression: "startTime, endTime, eventName",
+        ProjectionExpression: "startTime, endTime, eventName, eventId",
       };
 
       try {

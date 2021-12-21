@@ -12,7 +12,7 @@ interface Event {
   endTime: Date;
 }
 const AutoSaveForm: NextPage = () => {
-  const [eventName, setEvent] = useState<string>();
+  const [eventName, setEventName] = useState<string>();
   const [eventId, seteventId] = useState(
     Math.floor(Math.random() * 1000).toString()
   );
@@ -30,7 +30,7 @@ const AutoSaveForm: NextPage = () => {
   }
 
   function changeEvent(e: React.ChangeEvent<HTMLInputElement>) {
-    setEvent(e.target.value);
+    setEventName(e.target.value);
   }
 
   function roundSeconds(number: number) {

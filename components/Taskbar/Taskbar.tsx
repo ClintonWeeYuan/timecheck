@@ -1,10 +1,11 @@
 import { NextPage } from "next";
 import styles from "./Taskbar.module.css";
 import { Input, Divider, Segment } from "semantic-ui-react";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Countdown from "../Countdown/Countdown";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
+import debounce from "@mui/utils/debounce";
 
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
@@ -13,6 +14,7 @@ interface Props {
   eventName?: string | undefined;
   startTime?: number;
   endTime?: number;
+  eventId?: string;
   hours: string;
   minutes: string;
   seconds: string;
@@ -61,6 +63,46 @@ const Taskbar: NextPage<Props> = (props) => {
   //     setHours(calculateHours(timeLeft).toString().slice(-2));
   //   }
   // }, [time]);
+  const [eventName, setEventName] = useState(props.eventName);
+  // const [startTime, setStartTime] = useState(
+  //   props.startTime ? props.startTime : 0
+  // );
+  // const [endTime, setEndTime] = useState(props.endTime ? props.endTime : 0);
+
+  //Autosaves the eventName to DynamoDB
+  async function save(eventName: string) {
+    try {
+      const res = await fetch(`/api/events/${props.eventId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: props.eventId,
+          eventName: eventName,
+          startTime: props.startTime && props.startTime.toString(),
+          endTime: props.endTime && props.endTime.toString(),
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const debouncedSave = useCallback(debounce(save, 3000), []);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setEventName(e.target.value);
+  }
+
+  useEffect(() => {
+    if (eventName !== undefined) {
+      debouncedSave(eventName);
+    }
+  }, [eventName]);
+
+  //Updates screen to reflect eventName in DynamoDB where it has been changed
+
+  useEffect(() => {
+    setEventName(props.eventName);
+  }, [props.eventName]);
 
   return (
     <Segment
@@ -71,9 +113,13 @@ const Taskbar: NextPage<Props> = (props) => {
       className={styles.description}
     >
       <div className={styles.description}>
-        <Input transparent placeholder="Task" size="massive">
-          {props.eventName}
-        </Input>
+        <Input
+          onChange={handleChange}
+          transparent
+          placeholder="Task"
+          size="massive"
+          value={eventName}
+        ></Input>
         <Divider horizontal>Time Remaining</Divider>
         <Countdown
           hours={props.hours}

@@ -6,20 +6,29 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import styles from "./CountdownSetter.module.css";
-import { useEffect, useState } from "react";
+
+import { useCallback, useEffect, useState } from "react";
+import debounce from "@mui/utils/debounce";
+
+
 import { useTime } from "../TimeProvider/TimeProvider";
 const util = require("util");
 import { format, toDate, intervalToDuration } from "date-fns";
 import { duration } from "@mui/material";
+
 
 function roundSeconds(number: number) {
   return number - ((number % (1000 * 60)) + 1000);
 }
 
 interface Props {
-  handleSeconds: (value: string) => void;
-  handleMinutes: (value: string) => void;
-  handleHours: (value: string) => void;
+
+  changeStartTime: (value: number) => void;
+  changeEndTime: (value: number) => void;
+  endTime?: string;
+  startTime?: string;
+  eventId?: string;
+  eventName?: string;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
@@ -31,17 +40,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const [endTime, setEndTime] = useState<number>(Date.now());
   const [time, setTime] = useState(Date.now());
 
-  function handleSeconds() {
-    props.handleSeconds(seconds);
-  }
-
-  function handleMinutes() {
-    props.handleMinutes(minutes);
-  }
-
-  function handleHours() {
-    props.handleHours(hours);
-  }
 
   useEffect(() => {
     updatedTime && setTime(updatedTime);
@@ -72,25 +70,62 @@ const CountdownSetter: NextPage<Props> = (props) => {
       setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
     }
 
-    handleSeconds();
-    handleMinutes();
-    handleHours();
+
   }, [updatedTime]);
 
-  function handleStartTime(e: number) {
-    setStartTime(e);
+
+  function handleStartTime(e: Date) {
+    let newTime = roundSeconds(e.getTime());
+    setStartTime(newTime);
+    props.changeStartTime(newTime);
   }
 
-  function handleEndTime(e: number) {
-    setEndTime(e);
+  function handleEndTime(e: Date) {
+    let newTime = roundSeconds(e.getTime());
+    setEndTime(newTime);
+
+    props.changeEndTime(roundSeconds(newTime));
+
   }
+
+  useEffect(() => {
+    props.endTime && setEndTime(parseInt(props.endTime));
+    props.startTime && setStartTime(parseInt(props.startTime));
+  }, [props.endTime, props.startTime]);
+
+  //AutoUpdates StartTime and EndTime in Database
+
+  async function save(startTime: number, endTime: number) {
+    try {
+      const res = await fetch(`/api/events/${props.eventId}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: props.eventId,
+          eventName: props.eventName,
+          startTime: startTime.toString(),
+          endTime: endTime.toString(),
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const debouncedSave = useCallback(debounce(save, 3000), []);
+
+  useEffect(() => {
+    if (props.eventName !== undefined) {
+      debouncedSave(startTime, endTime);
+    }
+    console.log(startTime);
+  }, [startTime, endTime]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className={styles.setTime}>
         <TimePicker
           label="Start"
-          onChange={(newValue: number | null) => {
+          onChange={(newValue: Date | null) => {
             newValue && handleStartTime(newValue);
           }}
           value={startTime}
@@ -100,7 +135,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
         {seconds}
         <TimePicker
           label="End"
-          onChange={(newValue: number | null) => {
+          onChange={(newValue: Date | null) => {
             newValue && handleEndTime(newValue);
           }}
           value={endTime}
