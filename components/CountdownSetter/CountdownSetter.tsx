@@ -29,10 +29,6 @@ interface Props {
   startTime?: string;
   eventId?: string;
   eventName?: string;
-
-  handleSeconds: (value: string) => void;
-  handleMinutes: (value: string) => void;
-  handleHours: (value: string) => void;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
