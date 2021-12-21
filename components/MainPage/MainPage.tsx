@@ -30,16 +30,15 @@ const MainPage: NextPage<Props> = (props) => {
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
 
-  function handleSeconds(number: string) {
-    setSeconds(number);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [endTime, setEndTime] = useState<number>(Date.now());
+
+  function changeStartTime(value: number) {
+    setStartTime(value);
   }
 
-  function handleMinutes(number: string) {
-    setMinutes(number);
-  }
-
-  function handleHours(number: string) {
-    setHours(number);
+  function changeEndTime(value: number) {
+    setEndTime(value);
   }
 
   useEffect(() => {
