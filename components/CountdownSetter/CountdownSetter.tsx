@@ -40,17 +40,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const [endTime, setEndTime] = useState<number>(Date.now());
   const [time, setTime] = useState(Date.now());
 
-  function handleSeconds() {
-    props.handleSeconds(seconds);
-  }
-
-  function handleMinutes() {
-    props.handleMinutes(minutes);
-  }
-
-  function handleHours() {
-    props.handleHours(hours);
-  }
 
   useEffect(() => {
     updatedTime && setTime(updatedTime);
