@@ -2,21 +2,15 @@ import { NextPage } from "next";
 import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
-const util = require("util");
 
 import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 
-import debounce from "@mui/utils/debounce";
 import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
-
-import { format, toDate, intervalToDuration } from "date-fns";
-
-
 
 interface Props {
   eventName?: string;
@@ -60,68 +54,6 @@ const MainPage: NextPage<Props> = (props) => {
     getTime();
   }, []);
 
-  // let timeLeft: number;
-  // let duration: number;
-
-  // useEffect(() => {
-  //   // timeLeft = endTime - time;
-  //   // duration = endTime - startTime;
-  //   let duration: Duration = intervalToDuration({
-  //     start: toDate(startTime),
-  //     end: toDate(endTime),
-  //   });
-
-  //   let timeLeft = intervalToDuration({
-  //     start: toDate(updatedTime),
-  //     end: toDate(endTime),
-  //   });
-  //   console.log("duration" + duration.minutes);
-  //   console.log("timeLeft" + timeLeft.seconds);
-
-  //   if (startTime - updatedTime > 0 && endTime - startTime > 0) {
-  //     setSeconds(util.format("%s%s", "0", duration.seconds).slice(-2));
-  //     setMinutes(util.format("%s%s", "0", duration.minutes).slice(-2));
-  //     setHours(util.format("%s%s", "0", duration.hours).slice(-2));
-  //   } else if (endTime - updatedTime < 0 || endTime - startTime < 0) {
-  //     setSeconds("00");
-  //     setMinutes("00");
-  //     setHours("00");
-  //   } else {
-  //     setSeconds(util.format("%s%s", "0", timeLeft.seconds).slice(-2));
-  //     setMinutes(util.format("%s%s", "0", timeLeft.minutes).slice(-2));
-  //     setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
-  //   }
-
-  // function calculateSeconds(time: number) {
-  //   return Math.floor((time % (60 * 1000)) / 1000 + 100);
-  // }
-  // function calculateMinutes(time: number) {
-  //   return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
-  // }
-  // function calculateHours(time: number) {
-  //   return Math.floor(time / (60 * 60 * 1000) + 100);
-  // }
-
-  // if (timeLeft >= duration && duration > 0) {
-  //   setSeconds(calculateSeconds(duration).toString().slice(-2));
-  //   setMinutes(calculateMinutes(duration).toString().slice(-2));
-  //   setHours(calculateHours(duration).toString().slice(-2));
-  // } else if (timeLeft < 0 || duration < 0) {
-  //   setSeconds("00");
-  //   setMinutes("00");
-  //   setHours("00");
-  // } else {
-  //   setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
-  //   setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
-  //   setHours(calculateHours(timeLeft).toString().slice(-2));
-  // }
-
-  // setSeconds(format(new Date(timeLeft), "ss"));
-  // setMinutes(format(new Date(timeLeft), "mm"));
-  // setHours(format(new Date(timeLeft), "HH"));
-  // console.log(toDate(timeLeft));
-  // }, [time]);
-
   return (
     <div className={styles.container}>
       <TimeProvider time={props.time}>
@@ -151,15 +83,12 @@ const MainPage: NextPage<Props> = (props) => {
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
             <CountdownSetter
-
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
               endTime={props.endTime}
               startTime={props.startTime}
               eventId={props.eventId}
               eventName={props.eventName}
-
-
             />
             <RetrieveTask />
             {props.eventId && <AlertSetter eventId={props.eventId} />}

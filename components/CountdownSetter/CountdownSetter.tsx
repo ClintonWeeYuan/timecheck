@@ -10,19 +10,15 @@ import styles from "./CountdownSetter.module.css";
 import { useCallback, useEffect, useState } from "react";
 import debounce from "@mui/utils/debounce";
 
-
 import { useTime } from "../TimeProvider/TimeProvider";
 const util = require("util");
-import { format, toDate, intervalToDuration } from "date-fns";
-import { duration } from "@mui/material";
-
+import { toDate, intervalToDuration } from "date-fns";
 
 function roundSeconds(number: number) {
   return number - ((number % (1000 * 60)) + 1000);
 }
 
 interface Props {
-
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
   endTime?: string;
@@ -39,7 +35,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
   const [time, setTime] = useState(Date.now());
-
 
   useEffect(() => {
     updatedTime && setTime(updatedTime);
@@ -69,10 +64,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
       setMinutes(util.format("%s%s", "0", timeLeft.minutes).slice(-2));
       setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
     }
-
-
   }, [updatedTime]);
-
 
   function handleStartTime(e: Date) {
     let newTime = roundSeconds(e.getTime());
@@ -85,7 +77,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
     setEndTime(newTime);
 
     props.changeEndTime(roundSeconds(newTime));
-
   }
 
   useEffect(() => {
