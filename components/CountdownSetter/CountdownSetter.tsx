@@ -70,9 +70,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
       setHours(util.format("%s%s", "0", timeLeft.hours).slice(-2));
     }
 
-    handleSeconds();
-    handleMinutes();
-    handleHours();
+
   }, [updatedTime]);
 
 
