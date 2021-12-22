@@ -35,6 +35,12 @@ const MainPage: NextPage<Props> = (props) => {
     setEndTime(value);
   }
 
+  function handleDuration(value1: string, value2: string, value3: string) {
+    setSeconds(value1);
+    setMinutes(value2);
+    setHours(value3);
+  }
+
   useEffect(() => {
     async function getTime() {
       try {
@@ -69,6 +75,7 @@ const MainPage: NextPage<Props> = (props) => {
             <CountdownSetter
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
+              handleDuration={handleDuration}
             />
             <RetrieveTask />
           </Grid.Column>

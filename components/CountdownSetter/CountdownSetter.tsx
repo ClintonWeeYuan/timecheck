@@ -22,6 +22,7 @@ function roundSeconds(number: number) {
 interface Props {
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
+  handleDuration: (value: string, value: string, value: string) => void;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
@@ -64,6 +65,9 @@ const CountdownSetter: NextPage<Props> = (props) => {
     }
   }, [updatedTime]);
 
+  useEffect(() => {
+    props.handleDuration(seconds, minutes, hours);
+  });
   function handleStartTime(e: Date) {
     let newTime = roundSeconds(e.getTime());
     setStartTime(newTime);
@@ -120,7 +124,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
           value={startTime}
           renderInput={(params) => <TextField {...params} />}
         />
-        {hours}
         <TimePicker
           label="End"
           onChange={(newValue: Date | null) => {
