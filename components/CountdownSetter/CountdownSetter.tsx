@@ -22,7 +22,7 @@ function roundSeconds(number: number) {
 interface Props {
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
-  handleDuration: (value: string, value: string, value: string) => void;
+  handleDuration: (value1: string, value2: string, value3: string) => void;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {

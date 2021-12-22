@@ -60,7 +60,9 @@ const MainPage: NextPage<Props> = (props) => {
   return (
     <div className={styles.container}>
       <TimeProvider time={props.time} event={props.event}>
-        {props.alert && <Alert alert={props.alert} />}
+        {props.event && props.event.alert && (
+          <Alert alert={props.event.alert} />
+        )}
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
             <MainClock hours={hours} minutes={minutes} seconds={seconds} />
