@@ -9,12 +9,9 @@ import debounce from "@mui/utils/debounce";
 
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
+import { useEvent, useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
-  eventName?: string | undefined;
-  startTime?: number;
-  endTime?: number;
-  eventId?: string;
   hours: string;
   minutes: string;
   seconds: string;
@@ -25,60 +22,18 @@ function roundSeconds(number: number) {
 }
 
 const Taskbar: NextPage<Props> = (props) => {
-  // const time: number = useTime();
-  // const [hours, setHours] = useState<string>("00");
-  // const [minutes, setMinutes] = useState<string>("00");
-  // const [seconds, setSeconds] = useState<string>("00");
-  // const [startTime, setStartTime] = useState<number>(Date.now());
-  // const [endTime, setEndTime] = useState<number>(Date.now());
+  const { name, id, startTime, endTime } = useEvent();
 
-  // let timeLeft: number;
-  // let duration: number;
-
-  // useEffect(() => {
-  //   timeLeft = endTime - time;
-  //   duration = endTime - startTime;
-
-  //   function calculateSeconds(time: number) {
-  //     return Math.floor((time % (60 * 1000)) / 1000 + 100);
-  //   }
-  //   function calculateMinutes(time: number) {
-  //     return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
-  //   }
-  //   function calculateHours(time: number) {
-  //     return Math.floor(time / (60 * 60 * 1000) + 100);
-  //   }
-
-  //   if (timeLeft >= duration && duration > 0) {
-  //     setSeconds(calculateSeconds(duration).toString().slice(-2));
-  //     setMinutes(calculateMinutes(duration).toString().slice(-2));
-  //     setHours(calculateHours(duration).toString().slice(-2));
-  //   } else if (timeLeft < 0 || duration < 0) {
-  //     setSeconds("00");
-  //     setMinutes("00");
-  //     setHours("00");
-  //   } else {
-  //     setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
-  //     setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
-  //     setHours(calculateHours(timeLeft).toString().slice(-2));
-  //   }
-  // }, [time]);
-  const [eventName, setEventName] = useState(props.eventName);
-  // const [startTime, setStartTime] = useState(
-  //   props.startTime ? props.startTime : 0
-  // );
-  // const [endTime, setEndTime] = useState(props.endTime ? props.endTime : 0);
-
-  //Autosaves the eventName to DynamoDB
+  const [eventName, setEventName] = useState(name);
   async function save(eventName: string) {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${id}`, {
         method: "PUT",
         body: JSON.stringify({
-          eventId: props.eventId,
+          eventId: id,
           eventName: eventName,
-          startTime: props.startTime && props.startTime.toString(),
-          endTime: props.endTime && props.endTime.toString(),
+          startTime: startTime,
+          endTime: endTime,
         }),
       });
     } catch (err) {
@@ -101,8 +56,8 @@ const Taskbar: NextPage<Props> = (props) => {
   //Updates screen to reflect eventName in DynamoDB where it has been changed
 
   useEffect(() => {
-    setEventName(props.eventName);
-  }, [props.eventName]);
+    setEventName(name);
+  }, [name]);
 
   return (
     <Segment

@@ -6,14 +6,12 @@ import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
-import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
+import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
-import Menu from "../Menu/Menu";
 import AlertSetter from "../AlertSetter/AlertSetter";
 
 interface Props {
-  time: number | undefined;
   hours: string;
   minutes: string;
   seconds: string;
@@ -29,6 +27,7 @@ const MainClock: NextPage<Props> = (props) => {
   );
   const time = useTime();
   const newTime = useUpdateTime();
+  const event = useEvent();
 
   //Update clock time, by adding 1 second each second
   useEffect(() => {

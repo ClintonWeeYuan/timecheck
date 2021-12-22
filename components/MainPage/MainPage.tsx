@@ -11,14 +11,11 @@ import CountdownSetter from "../CountdownSetter/CountdownSetter";
 
 import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
+import { EventType } from "../../pages/[id]";
 
 interface Props {
-  eventName?: string;
-  startTime?: string;
-  endTime?: string;
+  event?: EventType;
   time: number;
-  eventId?: string;
-  alert?: string;
 }
 
 const MainPage: NextPage<Props> = (props) => {
@@ -56,39 +53,22 @@ const MainPage: NextPage<Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <TimeProvider time={props.time}>
+      <TimeProvider time={props.time} event={props.event}>
         {props.alert && <Alert alert={props.alert} />}
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
-            <MainClock
-              time={props.time}
-              hours={hours}
-              minutes={minutes}
-              seconds={seconds}
-            />
+            <MainClock hours={hours} minutes={minutes} seconds={seconds} />
           </Grid.Column>
 
           <Grid.Column width={4}>
-            {props.startTime && props.endTime ? (
-              <Taskbar
-                startTime={parseInt(props.startTime)}
-                endTime={parseInt(props.endTime)}
-                eventName={props.eventName}
-                eventId={props.eventId}
-                hours={hours}
-                minutes={minutes}
-                seconds={seconds}
-              />
+            {props.event ? (
+              <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             ) : (
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
             <CountdownSetter
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
-              endTime={props.endTime}
-              startTime={props.startTime}
-              eventId={props.eventId}
-              eventName={props.eventName}
             />
             <RetrieveTask />
           </Grid.Column>

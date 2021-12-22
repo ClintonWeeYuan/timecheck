@@ -1,13 +1,21 @@
 import { constants } from "crypto";
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
+import { EventType } from "../../pages/[id]";
 
 const TimeContext = React.createContext(Date.now());
 const TimeUpdateContext = React.createContext(() => {});
+const EventContext = React.createContext({
+  name: "123",
+  id: "123",
+  startTime: "123",
+  endTime: "123",
+});
 
 interface Props {
   time: number;
+  event?: EventType;
 }
 
 export function useTime() {
@@ -16,6 +24,10 @@ export function useTime() {
 
 export function useUpdateTime() {
   return useContext(TimeUpdateContext);
+}
+
+export function useEvent() {
+  return useContext(EventContext);
 }
 
 export const TimeProvider: NextPage<Props> = (props) => {
@@ -30,7 +42,9 @@ export const TimeProvider: NextPage<Props> = (props) => {
   return (
     <TimeContext.Provider value={time}>
       <TimeUpdateContext.Provider value={updateTime}>
-        {props.children}
+        <EventContext.Provider value={props.event}>
+          {props.children}
+        </EventContext.Provider>
       </TimeUpdateContext.Provider>
     </TimeContext.Provider>
   );
