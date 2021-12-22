@@ -91,7 +91,6 @@ const MainPage: NextPage<Props> = (props) => {
               eventName={props.eventName}
             />
             <RetrieveTask />
-            {props.eventId && <AlertSetter eventId={props.eventId} />}
           </Grid.Column>
         </Grid>
       </TimeProvider>

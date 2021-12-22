@@ -126,26 +126,6 @@ const Taskbar: NextPage<Props> = (props) => {
           minutes={props.minutes}
           seconds={props.seconds}
         />
-        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <div className={styles.setTime}>
-            <TimePicker
-              label="Start"
-              onChange={(newValue: any) => {
-                setStartTime(roundSeconds(newValue));
-              }}
-              value={startTime}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <TimePicker
-              label="End"
-              onChange={(newValue: any) => {
-                setEndTime(roundSeconds(newValue));
-              }}
-              value={endTime}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
-        </LocalizationProvider> */}
       </div>
     </Segment>
   );

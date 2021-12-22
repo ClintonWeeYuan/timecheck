@@ -122,8 +122,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
           value={startTime}
           renderInput={(params) => <TextField {...params} />}
         />
-        {hours}
-        {seconds}
         <TimePicker
           label="End"
           onChange={(newValue: Date | null) => {
