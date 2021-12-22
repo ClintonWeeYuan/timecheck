@@ -42,9 +42,13 @@ export const TimeProvider: NextPage<Props> = (props) => {
   return (
     <TimeContext.Provider value={time}>
       <TimeUpdateContext.Provider value={updateTime}>
-        <EventContext.Provider value={props.event}>
-          {props.children}
-        </EventContext.Provider>
+        {props.event ? (
+          <EventContext.Provider value={props.event}>
+            {props.children}
+          </EventContext.Provider>
+        ) : (
+          props.children
+        )}
       </TimeUpdateContext.Provider>
     </TimeContext.Provider>
   );
