@@ -27,7 +27,6 @@ const MainClock: NextPage<Props> = (props) => {
   );
   const time = useTime();
   const newTime = useUpdateTime();
-  const event = useEvent();
 
   //Update clock time, by adding 1 second each second
   useEffect(() => {

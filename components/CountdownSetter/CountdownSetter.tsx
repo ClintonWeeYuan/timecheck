@@ -82,9 +82,11 @@ const CountdownSetter: NextPage<Props> = (props) => {
   }
 
   useEffect(() => {
-    event.endTime && setEndTime(parseInt(event.endTime));
-    event.startTime && setStartTime(parseInt(event.startTime));
-  }, [event.endTime, event.startTime]);
+    if (event && event.endTime && event.startTime) {
+      setEndTime(parseInt(event.endTime));
+      setStartTime(parseInt(event.startTime));
+    }
+  }, [event]);
 
   //AutoUpdates StartTime and EndTime in Database
 
@@ -107,7 +109,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (event.name !== undefined) {
+    if (event && event.name !== undefined) {
       debouncedSave(startTime, endTime);
     }
     console.log(startTime);
