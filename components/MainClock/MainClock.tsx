@@ -9,7 +9,6 @@ import { Button, Icon } from "semantic-ui-react";
 import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
-import Menu from "../Menu/Menu";
 import AlertSetter from "../AlertSetter/AlertSetter";
 
 interface Props {
