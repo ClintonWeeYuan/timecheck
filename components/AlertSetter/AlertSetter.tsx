@@ -19,10 +19,12 @@ const AlertSetter: NextPage<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
+  //Changes message value based on the input field
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
+  //Clears alert message from database
   async function clearMessage() {
     try {
       const res = await fetch(`/api/events/${props.eventId}`, {
@@ -35,6 +37,8 @@ const AlertSetter: NextPage<Props> = (props) => {
       console.log(err);
     }
   }
+
+  //Sends alert message to database, while also creating timeout which triggers the clearMessage function above
 
   async function handleSubmit() {
     try {
