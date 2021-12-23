@@ -9,10 +9,10 @@ import { EventType } from "../../pages/[id]";
 const TimeContext = React.createContext(Date.now());
 const TimeUpdateContext = React.createContext(() => {});
 const EventContext = React.createContext({
-  name: "123",
-  id: "123",
-  startTime: "123",
-  endTime: "123",
+  name: "",
+  id: "",
+  startTime: "",
+  endTime: "",
 });
 
 //Object type for Props with time and event, passed in from MainPage

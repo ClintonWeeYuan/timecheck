@@ -11,10 +11,13 @@ interface Event {
   startTime: Date;
   endTime: Date;
 }
+
+const randomWords = require("random-words");
+
 const AutoSaveForm: NextPage = () => {
   const [eventName, setEventName] = useState<string>();
   const [eventId, seteventId] = useState(
-    Math.floor(Math.random() * 1000).toString()
+    randomWords({ exactly: 3, join: "-" })
   );
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
