@@ -9,6 +9,7 @@ interface Event {
   eventId: string;
   eventName: string;
   startTime: Date;
+  password?: string;
   endTime: Date;
 }
 
@@ -16,6 +17,7 @@ const randomWords = require("random-words");
 
 const AutoSaveForm: NextPage = () => {
   const [eventName, setEventName] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const [eventId, seteventId] = useState(
     randomWords({ exactly: 3, join: "-" })
   );
@@ -36,6 +38,10 @@ const AutoSaveForm: NextPage = () => {
     setEventName(e.target.value);
   }
 
+  function changePassword(e: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(e.target.value);
+  }
+
   function roundSeconds(number: number) {
     return number - (number % (1000 * 60)) + 1000;
   }
@@ -50,7 +56,13 @@ const AutoSaveForm: NextPage = () => {
     setLink(e.target.value);
   }
 
-  async function save({ eventName, startTime, endTime, eventId }: Event) {
+  async function save({
+    eventName,
+    password,
+    startTime,
+    endTime,
+    eventId,
+  }: Event) {
     try {
       setIsSaving(true);
       const res = await fetch(`/api/events/${eventId}`, {
@@ -60,6 +72,7 @@ const AutoSaveForm: NextPage = () => {
           eventName: eventName,
           startTime: roundSeconds(startTime.getTime()).toString(),
           endTime: roundSeconds(endTime.getTime()).toString(),
+          password: password,
         }),
       });
       setIsSaving(false);
@@ -72,9 +85,9 @@ const AutoSaveForm: NextPage = () => {
 
   useEffect(() => {
     if (eventName !== undefined) {
-      debouncedSave({ eventName, startTime, endTime, eventId });
+      debouncedSave({ eventName, password, startTime, endTime, eventId });
     }
-  }, [eventName, startTime, endTime]);
+  }, [eventName, startTime, endTime, password]);
 
   return (
     <>
@@ -85,6 +98,14 @@ const AutoSaveForm: NextPage = () => {
           placeholder="Event"
           value={eventName}
           onChange={changeEvent}
+        />
+        <Form.Input
+          fluid
+          label="Password (optional)"
+          placeholder="Password"
+          value={password}
+          onChange={changePassword}
+          type="password"
         />
         <div className={styles.autosave_details}>
           <Input
