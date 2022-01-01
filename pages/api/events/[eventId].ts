@@ -6,6 +6,7 @@ import {
   UpdateItemCommand,
   UpdateItemCommandOutput,
 } from "@aws-sdk/client-dynamodb";
+const bcrypt = require("bcrypt");
 
 export default async function handleRequest(
   req: NextApiRequest,
@@ -59,6 +60,9 @@ export default async function handleRequest(
         res.statusCode = 500;
       }
     } else if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
       const params = {
         TableName: "events",
         Key: {
@@ -70,7 +74,7 @@ export default async function handleRequest(
           ":n": { S: eventName },
           ":s": { N: startTime },
           ":e": { N: endTime },
-          ":p": { S: password },
+          ":p": { S: hashedPassword },
         },
         ReturnValues: "ALL_NEW",
       };

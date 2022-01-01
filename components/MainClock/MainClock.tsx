@@ -117,8 +117,20 @@ const MainClock: NextPage<Props> = (props) => {
           color="yellow"
           size={buttonSize}
         >
-          <Icon name={clockType === "analog" ? "clock" : "draft2digital"} />
-          {clockType === "analog" ? "Analog" : "Digital"}
+          <Icon
+            name={
+              clockType === "analog"
+                ? "clock"
+                : clockType === "digital"
+                ? "draft2digital"
+                : "bomb"
+            }
+          />
+          {clockType === "analog"
+            ? "Analog"
+            : clockType === "digital"
+            ? "Digital"
+            : "Countdown"}
         </Button>
       </div>
     </div>
