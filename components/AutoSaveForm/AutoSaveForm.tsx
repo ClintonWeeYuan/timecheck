@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
+import { useEvent } from "../TimeProvider/TimeProvider";
+import { toDate } from "date-fns";
 
 interface Event {
   eventId: string;
@@ -16,13 +18,18 @@ interface Event {
 const randomWords = require("random-words");
 
 const AutoSaveForm: NextPage = () => {
-  const [eventName, setEventName] = useState<string>();
+  const event = useEvent();
+  const [eventName, setEventName] = useState<string>(event ? event.name : "");
   const [password, setPassword] = useState<string>();
   const [eventId, seteventId] = useState(
-    randomWords({ exactly: 3, join: "-" })
+    event ? event.id : randomWords({ exactly: 3, join: "-" })
   );
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(
+    event ? toDate(parseInt(event.startTime)) : new Date()
+  );
+  const [endTime, setEndTime] = useState(
+    event ? toDate(parseInt(event.endTime)) : new Date()
+  );
   const [isSaving, setIsSaving] = useState(false);
 
   function changeStartTimeValue(newTimeValue: Date) {
