@@ -142,7 +142,7 @@ const AutoSaveForm: NextPage = () => {
         <br />
 
         <Button
-          content="Submit"
+          content="Save"
           primary
           loading={isSaving}
           icon="save"

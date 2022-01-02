@@ -15,11 +15,14 @@ import { MenuClassKey } from "@mui/material";
 import AutoSaveForm from "../AutoSaveForm/AutoSaveForm";
 import TimeSetting from "../TimeSetting/TimeSetting";
 import styles from "./Settings.module.css";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 const Settings: NextPage = () => {
+  const event = useEvent();
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("General");
   const [password, setPassword] = useState<string>();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   function handleItemClick(
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -45,6 +48,7 @@ const Settings: NextPage = () => {
         <Header icon="settings" content="Settings" />
         <Modal.Content>
           <Container>
+            <p>{isAuthenticated ? "Logged in" : "Error"}</p>
             <Form>
               <Form.Input
                 fluid

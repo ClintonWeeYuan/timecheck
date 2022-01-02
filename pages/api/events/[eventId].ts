@@ -113,6 +113,32 @@ export default async function handleRequest(
         res.statusCode = 500;
       }
     }
+  } else if (req.method === "POST") {
+    if (typeof req.query.eventId === "string") {
+      const params: GetItemCommandInput = {
+        TableName: "events",
+        Key: {
+          eventId: { S: req.query.eventId },
+        },
+        ProjectionExpression:
+          "startTime, endTime, eventName, eventId, alert, password",
+      };
+
+      try {
+        const Item = await db.send(new GetItemCommand(params));
+
+        const validPassword = await bcrypt.compare(
+          req.body.password,
+          Item.Item && Item.Item.password.S
+        );
+        !validPassword && res.status(400).json("wrong passsword");
+
+        res.status(200).json("Successful");
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    }
   } else if (req.method === "DELETE") {
     const { eventId, alert } = JSON.parse(req.body);
     const params = {
