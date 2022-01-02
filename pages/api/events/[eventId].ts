@@ -114,6 +114,7 @@ export default async function handleRequest(
       }
     }
   } else if (req.method === "POST") {
+    //Checks Password
     if (typeof req.query.eventId === "string") {
       const params: GetItemCommandInput = {
         TableName: "events",
@@ -126,14 +127,18 @@ export default async function handleRequest(
 
       try {
         const Item = await db.send(new GetItemCommand(params));
+        const { password } = JSON.parse(req.body);
 
         const validPassword = await bcrypt.compare(
-          req.body.password,
+          password,
           Item.Item && Item.Item.password.S
         );
-        !validPassword && res.status(400).json("wrong passsword");
 
-        res.status(200).json("Successful");
+        if (!validPassword) {
+          res.status(400).json("wrong passsword");
+        } else {
+          res.status(200).json("Successful");
+        }
       } catch (err) {
         console.log(err);
         res.statusCode = 500;

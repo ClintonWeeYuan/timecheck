@@ -8,6 +8,7 @@ import {
   MenuItemProps,
   Container,
   Form,
+  Button,
 } from "semantic-ui-react";
 import React, { useState } from "react";
 import { IoMdSettings } from "react-icons/io";
@@ -35,6 +36,19 @@ const Settings: NextPage = () => {
     setPassword(e.target.value);
   }
 
+  async function verifyPassword() {
+    const res = await fetch(`${process.env.APP_URL}/api/events/${event.id}`, {
+      method: "POST",
+      body: JSON.stringify({ password: password }),
+    });
+
+    if (res.status === 200) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }
+
   return (
     <Segment textAlign="center" basic vertical>
       <Modal
@@ -57,6 +71,9 @@ const Settings: NextPage = () => {
                 value={password}
                 onChange={changePassword}
               />
+              <Button onClick={verifyPassword} type="submit">
+                Submit
+              </Button>
             </Form>
           </Container>
           <Grid stackable columns={2}>
