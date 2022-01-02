@@ -22,13 +22,13 @@ const AutoSaveForm: NextPage = () => {
   const [eventName, setEventName] = useState<string>(event ? event.name : "");
   const [password, setPassword] = useState<string>();
   const [eventId, seteventId] = useState(
-    event ? event.id : randomWords({ exactly: 3, join: "-" })
+    event.id ? event.id : randomWords({ exactly: 3, join: "-" })
   );
   const [startTime, setStartTime] = useState(
-    event ? toDate(parseInt(event.startTime)) : new Date()
+    event.startTime ? toDate(parseInt(event.startTime)) : new Date()
   );
   const [endTime, setEndTime] = useState(
-    event ? toDate(parseInt(event.endTime)) : new Date()
+    event.endTime ? toDate(parseInt(event.endTime)) : new Date()
   );
   const [isSaving, setIsSaving] = useState(false);
 

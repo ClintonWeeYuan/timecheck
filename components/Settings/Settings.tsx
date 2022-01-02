@@ -6,6 +6,8 @@ import {
   Menu,
   Grid,
   MenuItemProps,
+  Container,
+  Form,
 } from "semantic-ui-react";
 import React, { useState } from "react";
 import { IoMdSettings } from "react-icons/io";
@@ -17,6 +19,7 @@ import styles from "./Settings.module.css";
 const Settings: NextPage = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("General");
+  const [password, setPassword] = useState<string>();
 
   function handleItemClick(
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -24,6 +27,11 @@ const Settings: NextPage = () => {
   ) {
     data.name && setActiveItem(data.name);
   }
+
+  function changePassword(e: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(e.target.value);
+  }
+
   return (
     <Segment textAlign="center" basic vertical>
       <Modal
@@ -36,6 +44,17 @@ const Settings: NextPage = () => {
       >
         <Header icon="settings" content="Settings" />
         <Modal.Content>
+          <Container>
+            <Form>
+              <Form.Input
+                fluid
+                label="Password"
+                placeholder="Password"
+                value={password}
+                onChange={changePassword}
+              />
+            </Form>
+          </Container>
           <Grid stackable columns={2}>
             <Grid.Column width={4}>
               <Menu fluid secondary pointing tabular vertical>
