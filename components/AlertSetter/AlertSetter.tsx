@@ -33,6 +33,7 @@ const AlertSetter: NextPage<Props> = (props) => {
         method: "DELETE",
         body: JSON.stringify({
           eventId: event.id,
+          alert: message,
         }),
       });
     } catch (err) {
