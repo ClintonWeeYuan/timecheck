@@ -9,8 +9,9 @@ import {
   Container,
   Form,
   Button,
+  Input,
 } from "semantic-ui-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoMdSettings } from "react-icons/io";
 import { MenuClassKey } from "@mui/material";
 import AutoSaveForm from "../AutoSaveForm/AutoSaveForm";
@@ -21,9 +22,16 @@ import { useEvent } from "../TimeProvider/TimeProvider";
 const Settings: NextPage = () => {
   const event = useEvent();
   const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(event.password ? true : false);
   const [activeItem, setActiveItem] = useState("General");
   const [password, setPassword] = useState<string>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (event.password && !isAuthenticated) {
+      setDisabled(true);
+    }
+  }, [disabled, event.password]);
 
   function handleItemClick(
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -41,11 +49,14 @@ const Settings: NextPage = () => {
       method: "POST",
       body: JSON.stringify({ password: password }),
     });
+    console.log(disabled);
 
     if (res.status === 200) {
       setIsAuthenticated(true);
+      setDisabled(false);
     } else {
       setIsAuthenticated(false);
+      setDisabled(true);
     }
   }
 
@@ -62,7 +73,8 @@ const Settings: NextPage = () => {
         <Header icon="settings" content="Settings" />
         <Modal.Content>
           <Container>
-            <p>{isAuthenticated ? "Logged in" : "Error"}</p>
+            <p>You must enter your password to edit settings</p>
+
             <Form>
               <Form.Input
                 fluid
@@ -105,7 +117,7 @@ const Settings: NextPage = () => {
             <Grid.Column stretched width={12}>
               <Segment padded="very" className={styles.mainSettings}>
                 {activeItem === "General" ? (
-                  <AutoSaveForm />
+                  <AutoSaveForm disabled={disabled} />
                 ) : activeItem === "Time" ? (
                   <TimeSetting />
                 ) : (

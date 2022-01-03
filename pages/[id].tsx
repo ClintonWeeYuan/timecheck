@@ -35,6 +35,7 @@ export interface EventType {
   startTime: string;
   endTime: string;
   alert?: string;
+  password?: string;
 }
 
 //Fetchcer function to be used in SWR hook below
@@ -71,6 +72,16 @@ const Details: NextPage<Props> = (props) => {
         endTime: data.endTime.N,
         alert: data.alert.S,
       });
+    } else if (data.password) {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        password: data.password.S,
+      });
+
+      console.log(event.password);
     } else {
       setEvent({
         name: data.eventName.S,

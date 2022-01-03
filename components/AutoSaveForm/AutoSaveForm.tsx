@@ -15,9 +15,12 @@ interface Event {
   endTime: Date;
 }
 
+interface Props {
+  disabled: boolean;
+}
 const randomWords = require("random-words");
 
-const AutoSaveForm: NextPage = () => {
+const AutoSaveForm: NextPage<Props> = (props) => {
   const event = useEvent();
   const [eventName, setEventName] = useState<string>(event ? event.name : "");
   const [password, setPassword] = useState<string>();
@@ -91,7 +94,7 @@ const AutoSaveForm: NextPage = () => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (eventName !== undefined) {
+    if (eventName !== undefined && !props.disabled) {
       debouncedSave({ eventName, password, startTime, endTime, eventId });
     }
   }, [eventName, startTime, endTime, password]);
@@ -105,6 +108,7 @@ const AutoSaveForm: NextPage = () => {
           placeholder="Event"
           value={eventName}
           onChange={changeEvent}
+          disabled={props.disabled}
         />
         <Form.Input
           fluid
@@ -113,6 +117,7 @@ const AutoSaveForm: NextPage = () => {
           value={password}
           onChange={changePassword}
           type="password"
+          disabled={props.disabled}
         />
         <div className={styles.autosave_details}>
           <Input
@@ -147,6 +152,7 @@ const AutoSaveForm: NextPage = () => {
           loading={isSaving}
           icon="save"
           type="submit"
+          disabled={props.disabled}
           onClick={() =>
             eventName && save({ eventId, eventName, startTime, endTime })
           }
