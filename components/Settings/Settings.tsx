@@ -10,6 +10,7 @@ import {
   Form,
   Button,
   Input,
+  Message,
 } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
 import { IoMdSettings } from "react-icons/io";
@@ -26,6 +27,7 @@ const Settings: NextPage = () => {
   const [activeItem, setActiveItem] = useState("General");
   const [password, setPassword] = useState<string>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState(false);
 
   useEffect(() => {
     if (event.password && !isAuthenticated) {
@@ -52,10 +54,12 @@ const Settings: NextPage = () => {
     console.log(disabled);
 
     if (res.status === 200) {
+      setWrongPassword(false);
       setIsAuthenticated(true);
       setDisabled(false);
     } else {
       setIsAuthenticated(false);
+      setWrongPassword(true);
       setDisabled(true);
     }
   }
@@ -72,22 +76,42 @@ const Settings: NextPage = () => {
       >
         <Header icon="settings" content="Settings" />
         <Modal.Content>
-          <Container>
-            <p>You must enter your password to edit settings</p>
+          {event.password && (
+            <Container>
+              <p>You must enter your password to edit settings</p>
 
-            <Form>
-              <Form.Input
-                fluid
-                label="Password"
-                placeholder="Password"
-                value={password}
-                onChange={changePassword}
-              />
-              <Button onClick={verifyPassword} type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Container>
+              <Form
+                onSubmit={verifyPassword}
+                success={isAuthenticated}
+                error={wrongPassword}
+              >
+                <Form.Group widths="equal">
+                  <Form.Input
+                    fluid
+                    placeholder="Password"
+                    value={password}
+                    onChange={changePassword}
+                  />
+
+                  {/* <Form.Button onClick={verifyPassword} type="submit">
+                  Submit
+                </Form.Button> */}
+                  <Form.Button content="Submit" />
+                </Form.Group>
+                <Message
+                  success
+                  header="Password Accepted"
+                  content="You can now edit the settings below"
+                />
+                <Message
+                  error
+                  header="Invalid Password"
+                  content="Please check your password and url, and try again"
+                />
+              </Form>
+            </Container>
+          )}
+
           <Grid stackable columns={2}>
             <Grid.Column width={4}>
               <Menu fluid secondary pointing tabular vertical>
