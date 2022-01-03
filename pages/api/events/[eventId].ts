@@ -59,7 +59,7 @@ export default async function handleRequest(
         console.log(err);
         res.statusCode = 500;
       }
-    } else if (password) {
+    } else if (password && !alert) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -145,7 +145,7 @@ export default async function handleRequest(
       }
     }
   } else if (req.method === "DELETE") {
-    const { eventId, alert } = JSON.parse(req.body);
+    const { eventId } = JSON.parse(req.body);
     const params = {
       TableName: "events",
       Action: "DELETE",
