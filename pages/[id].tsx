@@ -25,6 +25,14 @@ interface Props {
   };
 }
 
+export interface EventType {
+  name: string;
+  id: string;
+  startTime: string;
+  endTime: string;
+  alert?: string;
+}
+
 async function fetcher(endpoint: string) {
   const res = await fetch(endpoint, { method: "GET" });
   return res.json();
@@ -32,12 +40,39 @@ async function fetcher(endpoint: string) {
 
 const Details: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+  const [event, setEvent] = useState<EventType>({
+    name: props.event.eventName.S,
+    id: props.event.eventId.S,
+    startTime: props.event.startTime.N,
+    endTime: props.event.endTime.N,
+  });
 
+  //Gets from Database every 2 seconds
   const { data, error } = useSWR(
     `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
     fetcher,
     { fallbackData: props.event, refreshInterval: 2000 }
   );
+
+  //Updating the Event Object based on database
+  useEffect(() => {
+    if (data.alert) {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        alert: data.alert.S,
+      });
+    } else {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     async function getTime() {
@@ -53,16 +88,7 @@ const Details: NextPage<Props> = (props) => {
     }
     getTime();
   }, []);
-  return (
-    <MainPage
-      time={time}
-      eventName={data.eventName.S}
-      endTime={data.endTime.N}
-      startTime={data.startTime.N}
-      eventId={data.eventId.S}
-      alert={data.alert ? data.alert.S : null}
-    />
-  );
+  return <MainPage event={event} time={time} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

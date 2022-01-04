@@ -6,6 +6,7 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import styles from "./CountdownSetter.module.css";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 import { useCallback, useEffect, useState } from "react";
 import debounce from "@mui/utils/debounce";
@@ -21,14 +22,12 @@ function roundSeconds(number: number) {
 interface Props {
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
-  endTime?: string;
-  startTime?: string;
-  eventId?: string;
-  eventName?: string;
+  handleDuration: (value1: string, value2: string, value3: string) => void;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
   const updatedTime = useTime();
+  const event = useEvent();
   const [hours, setHours] = useState<string>("00");
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
@@ -66,6 +65,9 @@ const CountdownSetter: NextPage<Props> = (props) => {
     }
   }, [updatedTime]);
 
+  useEffect(() => {
+    props.handleDuration(seconds, minutes, hours);
+  });
   function handleStartTime(e: Date) {
     let newTime = roundSeconds(e.getTime());
     setStartTime(newTime);
@@ -80,19 +82,21 @@ const CountdownSetter: NextPage<Props> = (props) => {
   }
 
   useEffect(() => {
-    props.endTime && setEndTime(parseInt(props.endTime));
-    props.startTime && setStartTime(parseInt(props.startTime));
-  }, [props.endTime, props.startTime]);
+    if (event && event.endTime && event.startTime) {
+      setEndTime(parseInt(event.endTime));
+      setStartTime(parseInt(event.startTime));
+    }
+  }, [event]);
 
   //AutoUpdates StartTime and EndTime in Database
 
   async function save(startTime: number, endTime: number) {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${event.id}`, {
         method: "PUT",
         body: JSON.stringify({
-          eventId: props.eventId,
-          eventName: props.eventName,
+          eventId: event.id,
+          eventName: event.name,
           startTime: startTime.toString(),
           endTime: endTime.toString(),
         }),
@@ -105,7 +109,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (props.eventName !== undefined) {
+    if (event && event.name !== undefined) {
       debouncedSave(startTime, endTime);
     }
     console.log(startTime);
@@ -122,8 +126,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
           value={startTime}
           renderInput={(params) => <TextField {...params} />}
         />
-        {hours}
-        {seconds}
         <TimePicker
           label="End"
           onChange={(newValue: Date | null) => {

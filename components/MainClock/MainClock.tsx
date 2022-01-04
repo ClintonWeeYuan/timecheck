@@ -6,12 +6,12 @@ import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import { Button, Icon } from "semantic-ui-react";
-import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
+import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
+import AlertSetter from "../AlertSetter/AlertSetter";
 
 interface Props {
-  time: number | undefined;
   hours: string;
   minutes: string;
   seconds: string;
@@ -83,8 +83,8 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          {" "}
           <Settings />
+          <AlertSetter />
         </div>
         <div className={styles.clock}>
           {clockType === "analog" ? (
@@ -104,6 +104,7 @@ const MainClock: NextPage<Props> = (props) => {
             />
           )}
         </div>
+
         <Button
           onClick={handleClick}
           icon

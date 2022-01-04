@@ -9,12 +9,9 @@ import debounce from "@mui/utils/debounce";
 
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
+import { useEvent, useTime } from "../TimeProvider/TimeProvider";
 
 interface Props {
-  eventName?: string | undefined;
-  startTime?: number;
-  endTime?: number;
-  eventId?: string;
   hours: string;
   minutes: string;
   seconds: string;
@@ -25,60 +22,17 @@ function roundSeconds(number: number) {
 }
 
 const Taskbar: NextPage<Props> = (props) => {
-  // const time: number = useTime();
-  // const [hours, setHours] = useState<string>("00");
-  // const [minutes, setMinutes] = useState<string>("00");
-  // const [seconds, setSeconds] = useState<string>("00");
-  // const [startTime, setStartTime] = useState<number>(Date.now());
-  // const [endTime, setEndTime] = useState<number>(Date.now());
-
-  // let timeLeft: number;
-  // let duration: number;
-
-  // useEffect(() => {
-  //   timeLeft = endTime - time;
-  //   duration = endTime - startTime;
-
-  //   function calculateSeconds(time: number) {
-  //     return Math.floor((time % (60 * 1000)) / 1000 + 100);
-  //   }
-  //   function calculateMinutes(time: number) {
-  //     return Math.floor((time % (60 * 60 * 1000)) / (60 * 1000) + 100);
-  //   }
-  //   function calculateHours(time: number) {
-  //     return Math.floor(time / (60 * 60 * 1000) + 100);
-  //   }
-
-  //   if (timeLeft >= duration && duration > 0) {
-  //     setSeconds(calculateSeconds(duration).toString().slice(-2));
-  //     setMinutes(calculateMinutes(duration).toString().slice(-2));
-  //     setHours(calculateHours(duration).toString().slice(-2));
-  //   } else if (timeLeft < 0 || duration < 0) {
-  //     setSeconds("00");
-  //     setMinutes("00");
-  //     setHours("00");
-  //   } else {
-  //     setSeconds(calculateSeconds(timeLeft).toString().slice(-2));
-  //     setMinutes(calculateMinutes(timeLeft).toString().slice(-2));
-  //     setHours(calculateHours(timeLeft).toString().slice(-2));
-  //   }
-  // }, [time]);
-  const [eventName, setEventName] = useState(props.eventName);
-  // const [startTime, setStartTime] = useState(
-  //   props.startTime ? props.startTime : 0
-  // );
-  // const [endTime, setEndTime] = useState(props.endTime ? props.endTime : 0);
-
-  //Autosaves the eventName to DynamoDB
+  const event = useEvent();
+  const [eventName, setEventName] = useState(event ? event.name : "");
   async function save(eventName: string) {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${event.id}`, {
         method: "PUT",
         body: JSON.stringify({
-          eventId: props.eventId,
-          eventName: eventName,
-          startTime: props.startTime && props.startTime.toString(),
-          endTime: props.endTime && props.endTime.toString(),
+          eventId: event.id,
+          eventName: event.name,
+          startTime: event.startTime,
+          endTime: event.endTime,
         }),
       });
     } catch (err) {
@@ -93,7 +47,7 @@ const Taskbar: NextPage<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (eventName !== undefined) {
+    if (eventName !== undefined && event) {
       debouncedSave(eventName);
     }
   }, [eventName]);
@@ -101,8 +55,8 @@ const Taskbar: NextPage<Props> = (props) => {
   //Updates screen to reflect eventName in DynamoDB where it has been changed
 
   useEffect(() => {
-    setEventName(props.eventName);
-  }, [props.eventName]);
+    event && setEventName(event.name);
+  }, [event]);
 
   return (
     <Segment
@@ -126,26 +80,6 @@ const Taskbar: NextPage<Props> = (props) => {
           minutes={props.minutes}
           seconds={props.seconds}
         />
-        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <div className={styles.setTime}>
-            <TimePicker
-              label="Start"
-              onChange={(newValue: any) => {
-                setStartTime(roundSeconds(newValue));
-              }}
-              value={startTime}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <TimePicker
-              label="End"
-              onChange={(newValue: any) => {
-                setEndTime(roundSeconds(newValue));
-              }}
-              value={endTime}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
-        </LocalizationProvider> */}
       </div>
     </Segment>
   );
