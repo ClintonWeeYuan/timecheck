@@ -47,7 +47,7 @@ const Settings: NextPage = () => {
   }
 
   async function verifyPassword() {
-    const res = await fetch(`${process.env.APP_URL}/api/events/${event.id}`, {
+    const res = await fetch(`/api/events/${event.id}`, {
       method: "POST",
       body: JSON.stringify({ password: password }),
     });
