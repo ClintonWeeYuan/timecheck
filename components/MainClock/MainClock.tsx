@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import AnalogClock from "analog-clock-react";
-import { IoMdSettings } from "react-icons/io";
 import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
@@ -10,6 +9,7 @@ import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
 import AlertSetter from "../AlertSetter/AlertSetter";
+import { getSeconds, getMinutes, getHours } from "date-fns";
 
 interface Props {
   hours: string;
@@ -48,7 +48,7 @@ const MainClock: NextPage<Props> = (props) => {
 
     if (window.innerWidth > 900) {
       setDigitalSize("10vw");
-      setAnalogSize("450px");
+      setAnalogSize("400px");
       setButtonSize("massive");
     }
   });
@@ -67,9 +67,9 @@ const MainClock: NextPage<Props> = (props) => {
       minute: "#ffffff",
       hour: "#ffffff",
     },
-    seconds: Math.floor((time % (60 * 1000)) / 1000),
-    minutes: Math.floor((time % (60 * 60 * 1000)) / (60 * 1000)),
-    hours: Math.floor(time / (60 * 60 * 1000)),
+    seconds: getSeconds(time),
+    minutes: getMinutes(time),
+    hours: getHours(time),
   };
 
   //Function to change clock type upon pressing button
