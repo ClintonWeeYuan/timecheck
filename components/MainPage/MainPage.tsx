@@ -13,6 +13,8 @@ import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
 import { EventType } from "../../pages/[id]";
 
+//Object type for Props, containing both event and time
+
 interface Props {
   event?: EventType;
   time: number;
@@ -20,6 +22,7 @@ interface Props {
 
 const MainPage: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+
   const [hours, setHours] = useState<string>("00");
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
@@ -27,6 +30,9 @@ const MainPage: NextPage<Props> = (props) => {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
 
+  {
+    /*Function to change start times, triggered by changes to CountdownSetter*/
+  }
   function changeStartTime(value: number) {
     setStartTime(value);
   }
@@ -35,10 +41,18 @@ const MainPage: NextPage<Props> = (props) => {
     setEndTime(value);
   }
 
+  {
+    /*Function to change the duration of the Countdown, which are calcualted in CountdownSetter, and ultimately the values of seconds, minutes and hours are passed to Countdown*/
+  }
+
   function handleDuration(value1: string, value2: string, value3: string) {
     setSeconds(value1);
     setMinutes(value2);
     setHours(value3);
+  }
+
+  {
+    /*Gets time from Server --> THIS MIGHT NOT BE NEEDED ANY MORE*/
   }
 
   useEffect(() => {

@@ -4,19 +4,25 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { EventType } from "../../pages/[id]";
 
+//Create context with useless data
+
 const TimeContext = React.createContext(Date.now());
 const TimeUpdateContext = React.createContext(() => {});
 const EventContext = React.createContext({
-  name: "123",
-  id: "123",
-  startTime: "123",
-  endTime: "123",
+  name: "",
+  id: "",
+  startTime: "",
+  endTime: "",
 });
+
+//Object type for Props with time and event, passed in from MainPage
 
 interface Props {
   time: number;
   event?: EventType;
 }
+
+//Export the functions to be called for the various contexts
 
 export function useTime() {
   return useContext(TimeContext);
@@ -31,10 +37,12 @@ export function useEvent() {
 }
 
 export const TimeProvider: NextPage<Props> = (props) => {
+  //Using server time from props, to find offset with the system time
   const [time, setTime] = useState(props.time);
 
   let offset = time ? time - Date.now() : 0;
 
+  //Updates time by adding offset to system time, so that it accords with server time
   function updateTime() {
     setTime(Date.now() + offset);
   }

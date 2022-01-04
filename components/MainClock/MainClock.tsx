@@ -28,7 +28,7 @@ const MainClock: NextPage<Props> = (props) => {
   const time = useTime();
   const newTime = useUpdateTime();
 
-  //Update clock time, by adding 1 second each second
+  //Update clock time, by calling updateTime from TimeProvider Context
   useEffect(() => {
     const interval = setInterval(() => {
       newTime();
@@ -37,6 +37,8 @@ const MainClock: NextPage<Props> = (props) => {
       clearInterval(interval);
     };
   }, []);
+
+  //Sets different sizes depending on window size
   useEffect(() => {
     if (window.innerWidth <= 900) {
       setDigitalSize("60px");
@@ -51,6 +53,7 @@ const MainClock: NextPage<Props> = (props) => {
     }
   });
 
+  //Settings for the Analog Clock
   let options = {
     useCustomTime: true,
     width: analogSize,
@@ -68,6 +71,8 @@ const MainClock: NextPage<Props> = (props) => {
     minutes: Math.floor((time % (60 * 60 * 1000)) / (60 * 1000)),
     hours: Math.floor(time / (60 * 60 * 1000)),
   };
+
+  //Function to change clock type upon pressing button
 
   function handleClick() {
     let index = clockTypes.indexOf(clockType);

@@ -8,6 +8,8 @@ interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
+//Object type for Event Props
+
 interface Props {
   event: {
     endTime: {
@@ -25,6 +27,8 @@ interface Props {
   };
 }
 
+//Object type for Event Object to be passed down into Context Provider
+
 export interface EventType {
   name: string;
   id: string;
@@ -32,6 +36,8 @@ export interface EventType {
   endTime: string;
   alert?: string;
 }
+
+//Fetchcer function to be used in SWR hook below
 
 async function fetcher(endpoint: string) {
   const res = await fetch(endpoint, { method: "GET" });
@@ -47,7 +53,8 @@ const Details: NextPage<Props> = (props) => {
     endTime: props.event.endTime.N,
   });
 
-  //Gets from Database every 2 seconds
+  //SWR Hook Gets from Database every 2 seconds
+
   const { data, error } = useSWR(
     `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
     fetcher,
@@ -74,6 +81,8 @@ const Details: NextPage<Props> = (props) => {
     }
   }, [data]);
 
+  //Get time from Server via API call
+
   useEffect(() => {
     async function getTime() {
       try {
@@ -90,6 +99,8 @@ const Details: NextPage<Props> = (props) => {
   }, []);
   return <MainPage event={event} time={time} />;
 };
+
+//Get Events from Database
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
