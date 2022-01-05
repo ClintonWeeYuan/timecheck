@@ -57,7 +57,7 @@ const Details: NextPage<Props> = (props) => {
   //SWR Hook Gets from Database every 2 seconds
 
   const { data, error } = useSWR(
-    `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
+    `/api/events/${props.event.eventId.S}`,
     fetcher,
     { fallbackData: props.event, refreshInterval: 2000 }
   );
@@ -98,7 +98,7 @@ const Details: NextPage<Props> = (props) => {
   useEffect(() => {
     async function getTime() {
       try {
-        const res = await fetch(`${process.env.APP_URL}/api/time`, {
+        const res = await fetch(`/api/time`, {
           method: "GET",
         });
         const newTime = await res.json();
