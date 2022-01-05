@@ -80,6 +80,7 @@ const Details: NextPage<Props> = (props) => {
         endTime: data.endTime.N,
         password: data.password.S,
       });
+      console.log("Password loop: " + event.password);
     } else {
       setEvent({
         name: data.eventName.S,
@@ -87,6 +88,7 @@ const Details: NextPage<Props> = (props) => {
         startTime: data.startTime.N,
         endTime: data.endTime.N,
       });
+      console.log("NO PASSWORD");
     }
   }, [data]);
 
