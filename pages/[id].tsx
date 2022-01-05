@@ -89,6 +89,7 @@ const Details: NextPage<Props> = (props) => {
         endTime: data.endTime.N,
       });
       console.log("NO PASSWORD");
+      console.log(data);
     }
   }, [data]);
 
