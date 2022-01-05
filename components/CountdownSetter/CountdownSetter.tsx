@@ -127,7 +127,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
     if (event && event.name !== undefined) {
       debouncedSave(startTime, endTime);
     }
-    console.log(startTime);
   }, [startTime, endTime]);
 
   return (
