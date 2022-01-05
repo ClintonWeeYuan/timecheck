@@ -19,13 +19,21 @@ export default async function handleRequest(
         Key: {
           eventId: { S: req.query.eventId },
         },
-        ProjectionExpression: "startTime, endTime, eventName, eventId, alert",
+        ProjectionExpression:
+          "startTime, endTime, eventName, eventId, alert, password",
       };
 
       try {
         const Item = await db.send(new GetItemCommand(params));
 
-        res.send(Item.Item);
+        if (Item.Item && Item.Item.password) {
+          Item.Item.password.S = "blank";
+          res.statusCode = 200;
+          res.send(Item.Item);
+        } else {
+          res.statusCode = 200;
+          res.send(Item.Item);
+        }
       } catch (err) {
         console.log(err);
         res.statusCode = 500;
