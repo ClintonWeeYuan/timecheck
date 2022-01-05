@@ -76,42 +76,39 @@ const Settings: NextPage = () => {
       >
         <Header icon="settings" content="Settings" />
         <Modal.Content>
-          {event.password}
-          {event.password && (
-            <Container>
-              <p>You must enter your password to edit settings</p>
+          <Container>
+            <p>You must enter your password to edit settings</p>
 
-              <Form
-                onSubmit={verifyPassword}
-                success={isAuthenticated}
-                error={wrongPassword}
-              >
-                <Form.Group widths="equal">
-                  <Form.Input
-                    fluid
-                    placeholder="Password"
-                    value={password}
-                    onChange={changePassword}
-                  />
+            <Form
+              onSubmit={verifyPassword}
+              success={isAuthenticated}
+              error={wrongPassword}
+            >
+              <Form.Group widths="equal">
+                <Form.Input
+                  fluid
+                  placeholder="Password"
+                  value={password}
+                  onChange={changePassword}
+                />
 
-                  {/* <Form.Button onClick={verifyPassword} type="submit">
+                {/* <Form.Button onClick={verifyPassword} type="submit">
                   Submit
                 </Form.Button> */}
-                  <Form.Button content="Submit" />
-                </Form.Group>
-                <Message
-                  success
-                  header="Password Accepted"
-                  content="You can now edit the settings below"
-                />
-                <Message
-                  error
-                  header="Invalid Password"
-                  content="Please check your password and url, and try again"
-                />
-              </Form>
-            </Container>
-          )}
+                <Form.Button content="Submit" />
+              </Form.Group>
+              <Message
+                success
+                header="Password Accepted"
+                content="You can now edit the settings below"
+              />
+              <Message
+                error
+                header="Invalid Password"
+                content="Please check your password and url, and try again"
+              />
+            </Form>
+          </Container>
 
           <Grid stackable columns={2}>
             <Grid.Column width={4}>
