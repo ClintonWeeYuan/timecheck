@@ -28,7 +28,7 @@ const Settings: NextPage = () => {
   const [password, setPassword] = useState<string>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
-
+  console.log(event);
   useEffect(() => {
     if (event.password && !isAuthenticated) {
       setDisabled(true);

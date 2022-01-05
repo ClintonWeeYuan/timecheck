@@ -80,8 +80,6 @@ const Details: NextPage<Props> = (props) => {
         endTime: data.endTime.N,
         password: data.password.S,
       });
-
-      console.log(event.password);
     } else {
       setEvent({
         name: data.eventName.S,
