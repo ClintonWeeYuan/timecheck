@@ -76,6 +76,7 @@ const Settings: NextPage = () => {
       >
         <Header icon="settings" content="Settings" />
         <Modal.Content>
+          {event.password}
           {event.password && (
             <Container>
               <p>You must enter your password to edit settings</p>
