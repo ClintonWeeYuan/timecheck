@@ -8,8 +8,6 @@ import {
   MenuItemProps,
   Container,
   Form,
-  Button,
-  Input,
   Message,
 } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
@@ -33,7 +31,7 @@ const Settings: NextPage = () => {
     if (event.password && !isAuthenticated) {
       setDisabled(true);
     }
-  }, [disabled, event.password]);
+  }, [disabled]);
 
   function handleItemClick(
     event: React.MouseEvent<HTMLAnchorElement>,

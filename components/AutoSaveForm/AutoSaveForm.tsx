@@ -1,11 +1,20 @@
 import { NextPage } from "next";
-import { Form, Button, Input, TextArea, Ref, Icon } from "semantic-ui-react";
+import {
+  Form,
+  Button,
+  Input,
+  TextArea,
+  Ref,
+  Icon,
+  Popup,
+} from "semantic-ui-react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
 import { useEvent } from "../TimeProvider/TimeProvider";
 import { toDate } from "date-fns";
+import { flexbox } from "@mui/system";
 
 interface Event {
   eventId: string;
@@ -34,6 +43,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
     event.endTime ? toDate(parseInt(event.endTime)) : new Date()
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   function changeStartTimeValue(newTimeValue: Date) {
     setStartTime(newTimeValue);
@@ -94,30 +104,71 @@ const AutoSaveForm: NextPage<Props> = (props) => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (eventName !== undefined && !props.disabled) {
+    if (eventName !== undefined && !props.disabled && !passwordError) {
       debouncedSave({ eventName, password, startTime, endTime, eventId });
     }
   }, [eventName, startTime, endTime, password]);
 
+  function handleSubmit() {
+    if (eventName) {
+      const strongRegex = new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"
+      );
+      if (!password) {
+        save({ eventId, eventName, startTime, endTime });
+      } else if (password?.match(strongRegex)) {
+        console.log("Successful password");
+        setPasswordError(false);
+        save({ eventId, eventName, startTime, endTime });
+      } else {
+        console.log("Inadequate password");
+        setPasswordError(true);
+      }
+    }
+  }
   return (
     <>
       <Form>
+        <p>Name of Event</p>
         <Form.Input
           fluid
-          label="Name of Event"
           placeholder="Event"
           value={eventName}
           onChange={changeEvent}
           disabled={props.disabled}
         />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <p>Password (optional)</p>
+          <Popup trigger={<Icon circular name="info" />}>
+            <h5>Requirements</h5>
+
+            <ul>
+              <li>At least 8 characters</li>
+              <li>At least 1 Uppercase Letter</li>
+              <li>At least 1 Lowercase Letter</li>
+              <li>At least 1 Special Character</li>
+              <li>At least 1 Number</li>
+            </ul>
+          </Popup>
+          <Popup>
+            <h5>Requirements</h5>
+            <ul>
+              <li>At least 8 characters</li>
+              <li>At least 1 Uppercase Letter</li>
+              <li>At least 1 Lowercase Letter</li>
+              <li>At least 1 Special Character</li>
+              <li>At least 1 Number</li>
+            </ul>
+          </Popup>
+        </div>
         <Form.Input
           fluid
-          label="Password (optional)"
           placeholder="Password"
           value={password}
           onChange={changePassword}
           type="password"
           disabled={props.disabled}
+          error={passwordError && { content: "Weak Password" }}
         />
         <div className={styles.autosave_details}>
           <Input
@@ -145,7 +196,6 @@ const AutoSaveForm: NextPage<Props> = (props) => {
           valueType="end"
         />
         <br />
-
         <Button
           content="Save"
           primary
@@ -153,9 +203,10 @@ const AutoSaveForm: NextPage<Props> = (props) => {
           icon="save"
           type="submit"
           disabled={props.disabled}
-          onClick={() =>
-            eventName && save({ eventId, eventName, startTime, endTime })
-          }
+          onClick={handleSubmit}
+          // onClick={() =>
+          //   eventName && save({ eventId, eventName, startTime, endTime })
+          // }
         />
       </Form>
     </>
