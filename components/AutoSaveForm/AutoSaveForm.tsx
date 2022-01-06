@@ -14,7 +14,6 @@ import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
 import { useEvent } from "../TimeProvider/TimeProvider";
 import { toDate } from "date-fns";
-import { flexbox } from "@mui/system";
 
 interface Event {
   eventId: string;
