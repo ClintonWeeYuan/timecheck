@@ -35,6 +35,7 @@ export interface EventType {
   startTime: string;
   endTime: string;
   alert?: string;
+  password?: string;
 }
 
 //Fetchcer function to be used in SWR hook below
@@ -56,7 +57,7 @@ const Details: NextPage<Props> = (props) => {
   //SWR Hook Gets from Database every 2 seconds
 
   const { data, error } = useSWR(
-    `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
+    `/api/events/${props.event.eventId.S}`,
     fetcher,
     { fallbackData: props.event, refreshInterval: 2000 }
   );
@@ -70,6 +71,14 @@ const Details: NextPage<Props> = (props) => {
         startTime: data.startTime.N,
         endTime: data.endTime.N,
         alert: data.alert.S,
+      });
+    } else if (data.password) {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        password: data.password.S,
       });
     } else {
       setEvent({
@@ -86,7 +95,7 @@ const Details: NextPage<Props> = (props) => {
   useEffect(() => {
     async function getTime() {
       try {
-        const res = await fetch(`${process.env.APP_URL}/api/time`, {
+        const res = await fetch(`/api/time`, {
           method: "GET",
         });
         const newTime = await res.json();

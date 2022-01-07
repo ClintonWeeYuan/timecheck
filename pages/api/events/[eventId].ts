@@ -6,6 +6,7 @@ import {
   UpdateItemCommand,
   UpdateItemCommandOutput,
 } from "@aws-sdk/client-dynamodb";
+const bcrypt = require("bcrypt");
 
 export default async function handleRequest(
   req: NextApiRequest,
@@ -18,23 +19,29 @@ export default async function handleRequest(
         Key: {
           eventId: { S: req.query.eventId },
         },
-        ProjectionExpression: "startTime, endTime, eventName, eventId, alert",
+        ProjectionExpression:
+          "startTime, endTime, eventName, eventId, alert, password",
       };
 
       try {
         const Item = await db.send(new GetItemCommand(params));
 
-        res.send(Item.Item);
+        if (Item.Item && Item.Item.password) {
+          Item.Item.password.S = "blank";
+          res.statusCode = 200;
+          res.send(Item.Item);
+        } else {
+          res.statusCode = 200;
+          res.send(Item.Item);
+        }
       } catch (err) {
         console.log(err);
         res.statusCode = 500;
       }
     }
   } else if (req.method === "PUT") {
-    const { eventId, eventName, startTime, endTime, alert } = JSON.parse(
-      req.body
-    );
-
+    const { eventId, eventName, startTime, endTime, alert, password } =
+      JSON.parse(req.body);
     if (req.query.eventId && eventId !== req.query.eventId) {
       res.send("Invalid id");
       res.status(404);
@@ -50,6 +57,35 @@ export default async function handleRequest(
         },
         ReturnValues: "ALL_NEW",
       };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    } else if (password && !alert) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const params = {
+        TableName: "events",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression:
+          "set eventName = :n, startTime = :s, endTime = :e, password = :p",
+        ExpressionAttributeValues: {
+          ":n": { S: eventName },
+          ":s": { N: startTime },
+          ":e": { N: endTime },
+          ":p": { S: hashedPassword },
+        },
+        ReturnValues: "ALL_NEW",
+      };
+
       try {
         const Item: UpdateItemCommandOutput = await db.send(
           new UpdateItemCommand(params)
@@ -84,25 +120,78 @@ export default async function handleRequest(
         res.statusCode = 500;
       }
     }
+  } else if (req.method === "POST") {
+    //Checks Password
+    if (typeof req.query.eventId === "string") {
+      const params: GetItemCommandInput = {
+        TableName: "events",
+        Key: {
+          eventId: { S: req.query.eventId },
+        },
+        ProjectionExpression:
+          "startTime, endTime, eventName, eventId, alert, password",
+      };
+
+      try {
+        const Item = await db.send(new GetItemCommand(params));
+        const { password } = JSON.parse(req.body);
+
+        const validPassword = await bcrypt.compare(
+          password,
+          Item.Item && Item.Item.password.S
+        );
+
+        if (!validPassword) {
+          res.status(400).json("wrong passsword");
+        } else {
+          res.status(200).json("Successful");
+        }
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    }
   } else if (req.method === "DELETE") {
     const { eventId, alert } = JSON.parse(req.body);
-    const params = {
-      TableName: "events",
-      Action: "DELETE",
-      Key: {
-        eventId: { S: eventId },
-      },
-      UpdateExpression: "remove alert",
-      ReturnValues: "ALL_NEW",
-    };
-    try {
-      const Item: UpdateItemCommandOutput = await db.send(
-        new UpdateItemCommand(params)
-      );
-      res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
-    } catch (err) {
-      console.log(err);
-      res.statusCode = 500;
+
+    if (alert) {
+      const params = {
+        TableName: "events",
+        Action: "DELETE",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "remove alert",
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    } else {
+      const params = {
+        TableName: "events",
+        Action: "DELETE",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "remove password",
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
     }
   }
   return res;

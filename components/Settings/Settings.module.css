@@ -1,3 +1,4 @@
 .mainSettings {
   height: 65vh;
+  overflow: scroll;
 }

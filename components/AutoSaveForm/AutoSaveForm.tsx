@@ -1,27 +1,48 @@
 import { NextPage } from "next";
-import { Form, Button, Input, TextArea, Ref, Icon } from "semantic-ui-react";
+import {
+  Form,
+  Button,
+  Input,
+  TextArea,
+  Ref,
+  Icon,
+  Popup,
+} from "semantic-ui-react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
 import debounce from "@mui/utils/debounce";
 import styles from "./AutoSaveForm.module.css";
+import { useEvent } from "../TimeProvider/TimeProvider";
+import { toDate } from "date-fns";
 
 interface Event {
   eventId: string;
   eventName: string;
   startTime: Date;
+  password?: string;
   endTime: Date;
 }
 
+interface Props {
+  disabled: boolean;
+}
 const randomWords = require("random-words");
 
-const AutoSaveForm: NextPage = () => {
-  const [eventName, setEventName] = useState<string>();
+const AutoSaveForm: NextPage<Props> = (props) => {
+  const event = useEvent();
+  const [eventName, setEventName] = useState<string>(event ? event.name : "");
+  const [password, setPassword] = useState<string>();
   const [eventId, seteventId] = useState(
-    randomWords({ exactly: 3, join: "-" })
+    event.id ? event.id : randomWords({ exactly: 3, join: "-" })
   );
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(
+    event.startTime ? toDate(parseInt(event.startTime)) : new Date()
+  );
+  const [endTime, setEndTime] = useState(
+    event.endTime ? toDate(parseInt(event.endTime)) : new Date()
+  );
   const [isSaving, setIsSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   function changeStartTimeValue(newTimeValue: Date) {
     setStartTime(newTimeValue);
@@ -34,6 +55,10 @@ const AutoSaveForm: NextPage = () => {
 
   function changeEvent(e: React.ChangeEvent<HTMLInputElement>) {
     setEventName(e.target.value);
+  }
+
+  function changePassword(e: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(e.target.value);
   }
 
   function roundSeconds(number: number) {
@@ -50,7 +75,13 @@ const AutoSaveForm: NextPage = () => {
     setLink(e.target.value);
   }
 
-  async function save({ eventName, startTime, endTime, eventId }: Event) {
+  async function save({
+    eventName,
+    password,
+    startTime,
+    endTime,
+    eventId,
+  }: Event) {
     try {
       setIsSaving(true);
       const res = await fetch(`/api/events/${eventId}`, {
@@ -60,6 +91,7 @@ const AutoSaveForm: NextPage = () => {
           eventName: eventName,
           startTime: roundSeconds(startTime.getTime()).toString(),
           endTime: roundSeconds(endTime.getTime()).toString(),
+          password: password,
         }),
       });
       setIsSaving(false);
@@ -71,20 +103,71 @@ const AutoSaveForm: NextPage = () => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (eventName !== undefined) {
-      debouncedSave({ eventName, startTime, endTime, eventId });
+    if (eventName !== undefined && !props.disabled && !passwordError) {
+      debouncedSave({ eventName, password, startTime, endTime, eventId });
     }
-  }, [eventName, startTime, endTime]);
+  }, [eventName, startTime, endTime, password]);
 
+  function handleSubmit() {
+    if (eventName) {
+      const strongRegex = new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"
+      );
+      if (!password) {
+        save({ eventId, eventName, startTime, endTime });
+      } else if (password?.match(strongRegex)) {
+        console.log("Successful password");
+        setPasswordError(false);
+        save({ eventId, eventName, startTime, endTime });
+      } else {
+        console.log("Inadequate password");
+        setPasswordError(true);
+      }
+    }
+  }
   return (
     <>
       <Form>
+        <p>Name of Event</p>
         <Form.Input
           fluid
-          label="Name of Event"
           placeholder="Event"
           value={eventName}
           onChange={changeEvent}
+          disabled={props.disabled}
+        />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <p>Password (optional)</p>
+          <Popup trigger={<Icon circular name="info" />}>
+            <h5>Requirements</h5>
+
+            <ul>
+              <li>At least 8 characters</li>
+              <li>At least 1 Uppercase Letter</li>
+              <li>At least 1 Lowercase Letter</li>
+              <li>At least 1 Special Character</li>
+              <li>At least 1 Number</li>
+            </ul>
+          </Popup>
+          <Popup>
+            <h5>Requirements</h5>
+            <ul>
+              <li>At least 8 characters</li>
+              <li>At least 1 Uppercase Letter</li>
+              <li>At least 1 Lowercase Letter</li>
+              <li>At least 1 Special Character</li>
+              <li>At least 1 Number</li>
+            </ul>
+          </Popup>
+        </div>
+        <Form.Input
+          fluid
+          placeholder="Password"
+          value={password}
+          onChange={changePassword}
+          type="password"
+          disabled={props.disabled}
+          error={passwordError && { content: "Weak Password" }}
         />
         <div className={styles.autosave_details}>
           <Input
@@ -112,16 +195,17 @@ const AutoSaveForm: NextPage = () => {
           valueType="end"
         />
         <br />
-
         <Button
-          content="Submit"
+          content="Save"
           primary
           loading={isSaving}
           icon="save"
           type="submit"
-          onClick={() =>
-            eventName && save({ eventId, eventName, startTime, endTime })
-          }
+          disabled={props.disabled}
+          onClick={handleSubmit}
+          // onClick={() =>
+          //   eventName && save({ eventId, eventName, startTime, endTime })
+          // }
         />
       </Form>
     </>
