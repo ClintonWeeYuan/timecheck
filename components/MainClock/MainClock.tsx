@@ -4,8 +4,12 @@ import AnalogClock from "analog-clock-react";
 import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
-import { Button, Icon } from "semantic-ui-react";
+
+import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
+
+
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
+
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
 import AlertSetter from "../AlertSetter/AlertSetter";
@@ -88,8 +92,23 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          <Settings />
-          <AlertSetter />
+          {/* <Settings />
+          <AlertSetter /> */}
+
+          <Dropdown
+            style={{ fontSize: "40px", margin: "20px" }}
+            item
+            icon="content"
+          >
+            <Dropdown.Menu direction="right">
+              <Dropdown.Item>
+                <Settings />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <AlertSetter />
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <div className={styles.clock}>
           {clockType === "analog" ? (
