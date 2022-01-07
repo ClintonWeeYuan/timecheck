@@ -86,22 +86,21 @@ const MainClock: NextPage<Props> = (props) => {
         <div className={styles.settings}>
           {/* <Settings />
           <AlertSetter /> */}
-          <Menu vertical>
-            <Dropdown
-              item
-              icon="content"
-              style={{ fontSize: "40px", margin: "20px" }}
-            >
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Settings />
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <AlertSetter />
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Menu>
+
+          <Dropdown
+            style={{ fontSize: "40px", margin: "20px" }}
+            item
+            icon="content"
+          >
+            <Dropdown.Menu direction="right">
+              <Dropdown.Item>
+                <Settings />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <AlertSetter />
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <div className={styles.clock}>
           {clockType === "analog" ? (
