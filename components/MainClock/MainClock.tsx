@@ -5,7 +5,7 @@ import { IoMdSettings } from "react-icons/io";
 import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 import { useTime, useUpdateTime } from "../TimeProvider/TimeProvider";
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
@@ -84,8 +84,24 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          <Settings />
-          <AlertSetter />
+          {/* <Settings />
+          <AlertSetter /> */}
+          <Menu vertical>
+            <Dropdown
+              item
+              icon="content"
+              style={{ fontSize: "40px", margin: "20px" }}
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Settings />
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <AlertSetter />
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Menu>
         </div>
         <div className={styles.clock}>
           {clockType === "analog" ? (

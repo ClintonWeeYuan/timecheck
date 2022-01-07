@@ -6,6 +6,7 @@ import {
   Menu,
   Grid,
   MenuItemProps,
+  Button,
 } from "semantic-ui-react";
 import React, { useState } from "react";
 import { IoMdSettings } from "react-icons/io";
@@ -29,7 +30,7 @@ const Settings: NextPage = () => {
       <Modal
         closeIcon
         open={open}
-        trigger={<IoMdSettings size="50px" cursor="pointer" />}
+        trigger={<p>Settings</p>}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         centered={true}

@@ -59,14 +59,14 @@ const AlertSetter: NextPage<Props> = (props) => {
   }
 
   return (
-    <Segment textAlign="center" basic vertical>
+    <Segment style={{ padding: "20px" }} textAlign="center" basic vertical>
       <Modal
         basic
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
         size="small"
-        trigger={<MdOutlineAddAlert size="50px" cursor="pointer" />}
+        trigger={<p>Send Alert</p>}
         centered={true}
       >
         <Header icon>
