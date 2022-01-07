@@ -11,18 +11,18 @@ import CountdownSetter from "../CountdownSetter/CountdownSetter";
 
 import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
+import { EventType } from "../../pages/[id]";
+
+//Object type for Props, containing both event and time
 
 interface Props {
-  eventName?: string;
-  startTime?: string;
-  endTime?: string;
+  event?: EventType;
   time: number;
-  eventId?: string;
-  alert?: string;
 }
 
 const MainPage: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+
   const [hours, setHours] = useState<string>("00");
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
@@ -30,12 +30,29 @@ const MainPage: NextPage<Props> = (props) => {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
 
+  {
+    /*Function to change start times, triggered by changes to CountdownSetter*/
+  }
   function changeStartTime(value: number) {
     setStartTime(value);
   }
 
   function changeEndTime(value: number) {
     setEndTime(value);
+  }
+
+  {
+    /*Function to change the duration of the Countdown, which are calcualted in CountdownSetter, and ultimately the values of seconds, minutes and hours are passed to Countdown*/
+  }
+
+  function handleDuration(value1: string, value2: string, value3: string) {
+    setSeconds(value1);
+    setMinutes(value2);
+    setHours(value3);
+  }
+
+  {
+    /*Gets time from Server --> THIS MIGHT NOT BE NEEDED ANY MORE*/
   }
 
   useEffect(() => {
@@ -56,39 +73,25 @@ const MainPage: NextPage<Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <TimeProvider time={props.time}>
-        {props.alert && <Alert alert={props.alert} />}
+      <TimeProvider time={props.time} event={props.event}>
+        {props.event && props.event.alert && (
+          <Alert alert={props.event.alert} />
+        )}
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
-            <MainClock
-              time={props.time}
-              hours={hours}
-              minutes={minutes}
-              seconds={seconds}
-            />
+            <MainClock hours={hours} minutes={minutes} seconds={seconds} />
           </Grid.Column>
 
           <Grid.Column width={4}>
-            {props.startTime && props.endTime ? (
-              <Taskbar
-                startTime={parseInt(props.startTime)}
-                endTime={parseInt(props.endTime)}
-                eventName={props.eventName}
-                eventId={props.eventId}
-                hours={hours}
-                minutes={minutes}
-                seconds={seconds}
-              />
+            {props.event ? (
+              <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             ) : (
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             )}
             <CountdownSetter
               changeEndTime={changeEndTime}
               changeStartTime={changeStartTime}
-              endTime={props.endTime}
-              startTime={props.startTime}
-              eventId={props.eventId}
-              eventName={props.eventName}
+              handleDuration={handleDuration}
             />
             <RetrieveTask />
           </Grid.Column>

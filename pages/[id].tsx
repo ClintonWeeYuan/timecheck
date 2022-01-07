@@ -8,6 +8,8 @@ interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
+//Object type for Event Props
+
 interface Props {
   event: {
     endTime: {
@@ -25,6 +27,19 @@ interface Props {
   };
 }
 
+//Object type for Event Object to be passed down into Context Provider
+
+export interface EventType {
+  name: string;
+  id: string;
+  startTime: string;
+  endTime: string;
+  alert?: string;
+  password?: string;
+}
+
+//Fetchcer function to be used in SWR hook below
+
 async function fetcher(endpoint: string) {
   const res = await fetch(endpoint, { method: "GET" });
   return res.json();
@@ -32,17 +47,55 @@ async function fetcher(endpoint: string) {
 
 const Details: NextPage<Props> = (props) => {
   const [time, setTime] = useState<number>(Date.now());
+  const [event, setEvent] = useState<EventType>({
+    name: props.event.eventName.S,
+    id: props.event.eventId.S,
+    startTime: props.event.startTime.N,
+    endTime: props.event.endTime.N,
+  });
+
+  //SWR Hook Gets from Database every 2 seconds
 
   const { data, error } = useSWR(
-    `${process.env.APP_URL}/api/events/${props.event.eventId.S}`,
+    `/api/events/${props.event.eventId.S}`,
     fetcher,
     { fallbackData: props.event, refreshInterval: 2000 }
   );
 
+  //Updating the Event Object based on database
+  useEffect(() => {
+    if (data.alert) {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        alert: data.alert.S,
+      });
+    } else if (data.password) {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        password: data.password.S,
+      });
+    } else {
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+      });
+    }
+  }, [data]);
+
+  //Get time from Server via API call
+
   useEffect(() => {
     async function getTime() {
       try {
-        const res = await fetch(`${process.env.APP_URL}/api/time`, {
+        const res = await fetch(`/api/time`, {
           method: "GET",
         });
         const newTime = await res.json();
@@ -53,17 +106,10 @@ const Details: NextPage<Props> = (props) => {
     }
     getTime();
   }, []);
-  return (
-    <MainPage
-      time={time}
-      eventName={data.eventName.S}
-      endTime={data.endTime.N}
-      startTime={data.startTime.N}
-      eventId={data.eventId.S}
-      alert={data.alert ? data.alert.S : null}
-    />
-  );
+  return <MainPage event={event} time={time} />;
 };
+
+//Get Events from Database
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;

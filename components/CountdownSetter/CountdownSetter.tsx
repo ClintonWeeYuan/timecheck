@@ -6,6 +6,7 @@ import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import styles from "./CountdownSetter.module.css";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 import { useCallback, useEffect, useState } from "react";
 import debounce from "@mui/utils/debounce";
@@ -14,32 +15,38 @@ import { useTime } from "../TimeProvider/TimeProvider";
 const util = require("util");
 import { toDate, intervalToDuration } from "date-fns";
 
+//Function that rounds Date number to nearest minute, removing the seconds for the startime and endtime
+
 function roundSeconds(number: number) {
   return number - ((number % (1000 * 60)) + 1000);
 }
 
+//Object type for Props, including function to change the start time, end time, and duration.
+
 interface Props {
   changeStartTime: (value: number) => void;
   changeEndTime: (value: number) => void;
-  endTime?: string;
-  startTime?: string;
-  eventId?: string;
-  eventName?: string;
+  handleDuration: (value1: string, value2: string, value3: string) => void;
 }
 
 const CountdownSetter: NextPage<Props> = (props) => {
+  //Time and Event from context
   const updatedTime = useTime();
+  const event = useEvent();
+
+  //Numbers to be used in Countdown
   const [hours, setHours] = useState<string>("00");
   const [minutes, setMinutes] = useState<string>("00");
   const [seconds, setSeconds] = useState<string>("00");
+
+  //Times used
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
   const [time, setTime] = useState(Date.now());
 
+  //Calculate relevant durations, and setting the numbers for the countdown
   useEffect(() => {
     updatedTime && setTime(updatedTime);
-    // timeLeft = endTime - time;
-    // duration = endTime    - startTime;
 
     let duration: Duration = intervalToDuration({
       start: toDate(roundSeconds(startTime)),
@@ -66,6 +73,14 @@ const CountdownSetter: NextPage<Props> = (props) => {
     }
   }, [updatedTime]);
 
+  //Once number for countdown has been calculated, upload these values into the parent component, i.e. the MainPage.tsx
+
+  useEffect(() => {
+    props.handleDuration(seconds, minutes, hours);
+  });
+
+  //These functions are linked to the timesetters below, and help to change the start and end times of this components and the parent component
+
   function handleStartTime(e: Date) {
     let newTime = roundSeconds(e.getTime());
     setStartTime(newTime);
@@ -79,20 +94,24 @@ const CountdownSetter: NextPage<Props> = (props) => {
     props.changeEndTime(roundSeconds(newTime));
   }
 
+  //If change is made to the start or end time in the database, this updates the current page to reflect the new values
+
   useEffect(() => {
-    props.endTime && setEndTime(parseInt(props.endTime));
-    props.startTime && setStartTime(parseInt(props.startTime));
-  }, [props.endTime, props.startTime]);
+    if (event && event.endTime && event.startTime) {
+      setEndTime(parseInt(event.endTime));
+      setStartTime(parseInt(event.startTime));
+    }
+  }, [event]);
 
   //AutoUpdates StartTime and EndTime in Database
 
   async function save(startTime: number, endTime: number) {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${event.id}`, {
         method: "PUT",
         body: JSON.stringify({
-          eventId: props.eventId,
-          eventName: props.eventName,
+          eventId: event.id,
+          eventName: event.name,
           startTime: startTime.toString(),
           endTime: endTime.toString(),
         }),
@@ -105,10 +124,9 @@ const CountdownSetter: NextPage<Props> = (props) => {
   const debouncedSave = useCallback(debounce(save, 3000), []);
 
   useEffect(() => {
-    if (props.eventName !== undefined) {
+    if (event && event.name !== undefined) {
       debouncedSave(startTime, endTime);
     }
-    console.log(startTime);
   }, [startTime, endTime]);
 
   return (

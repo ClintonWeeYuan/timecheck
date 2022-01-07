@@ -10,25 +10,30 @@ import {
 } from "semantic-ui-react";
 import { useState } from "react";
 import { MdOutlineAddAlert } from "react-icons/md";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 interface Props {
   eventId?: string;
 }
 
 const AlertSetter: NextPage<Props> = (props) => {
+  const event = useEvent();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
+  //Changes message value based on the input field
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
+  //Clears alert message from database
   async function clearMessage() {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${event.id}`, {
         method: "DELETE",
         body: JSON.stringify({
-          eventId: props.eventId,
+          eventId: event.id,
+          alert: message,
         }),
       });
     } catch (err) {
@@ -36,12 +41,14 @@ const AlertSetter: NextPage<Props> = (props) => {
     }
   }
 
+  //Sends alert message to database, while also creating timeout which triggers the clearMessage function above
+
   async function handleSubmit() {
     try {
-      const res = await fetch(`/api/events/${props.eventId}`, {
+      const res = await fetch(`/api/events/${event.id}`, {
         method: "PUT",
         body: JSON.stringify({
-          eventId: props.eventId,
+          eventId: event.id,
           alert: message,
         }),
       });
