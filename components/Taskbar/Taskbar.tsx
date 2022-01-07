@@ -23,14 +23,14 @@ function roundSeconds(number: number) {
 
 const Taskbar: NextPage<Props> = (props) => {
   const event = useEvent();
-  const [eventName, setEventName] = useState(event ? event.name : "");
+  const [eventName, setEventName] = useState("");
   async function save(eventName: string) {
     try {
       const res = await fetch(`/api/events/${event.id}`, {
         method: "PUT",
         body: JSON.stringify({
           eventId: event.id,
-          eventName: event.name,
+          eventName: eventName,
           startTime: event.startTime,
           endTime: event.endTime,
         }),
@@ -47,16 +47,16 @@ const Taskbar: NextPage<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (eventName !== undefined && event) {
+    event && setEventName(event.name);
+  }, [event.name]);
+
+  useEffect(() => {
+    if (event && eventName !== undefined) {
       debouncedSave(eventName);
     }
   }, [eventName]);
 
   //Updates screen to reflect eventName in DynamoDB where it has been changed
-
-  useEffect(() => {
-    event && setEventName(event.name);
-  }, [event]);
 
   return (
     <Segment
@@ -67,6 +67,7 @@ const Taskbar: NextPage<Props> = (props) => {
       className={styles.description}
     >
       <div className={styles.description}>
+        {event.name}
         <Input
           onChange={handleChange}
           transparent

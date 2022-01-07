@@ -42,6 +42,7 @@ export default async function handleRequest(
   } else if (req.method === "PUT") {
     const { eventId, eventName, startTime, endTime, alert, password } =
       JSON.parse(req.body);
+
     if (req.query.eventId && eventId !== req.query.eventId) {
       res.send("Invalid id");
       res.status(404);
@@ -114,7 +115,7 @@ export default async function handleRequest(
         const Item: UpdateItemCommandOutput = await db.send(
           new UpdateItemCommand(params)
         );
-        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+        res.send(Item.Attributes?.eventId.S);
       } catch (err) {
         console.log(err);
         res.statusCode = 500;
