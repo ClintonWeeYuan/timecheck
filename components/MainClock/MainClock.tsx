@@ -7,7 +7,6 @@ import styles from "./MainClock.module.css";
 
 import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 
-
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
@@ -92,21 +91,20 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          {/* <Settings />
-          <AlertSetter /> */}
-
           <Dropdown
             style={{ fontSize: "40px", margin: "20px" }}
             item
             icon="content"
           >
-            <Dropdown.Menu direction="right">
-              <Dropdown.Item>
-                <Settings />
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <AlertSetter />
-              </Dropdown.Item>
+            <Dropdown.Menu
+              direction="right"
+              style={{
+                width: "200px",
+                padding: "0",
+              }}
+            >
+              <Settings />
+              <AlertSetter />
             </Dropdown.Menu>
           </Dropdown>
         </div>
