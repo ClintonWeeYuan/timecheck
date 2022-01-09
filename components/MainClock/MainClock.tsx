@@ -4,6 +4,7 @@ import AnalogClock from "analog-clock-react";
 import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
+import Link from "next/link";
 
 import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 
@@ -94,6 +95,16 @@ const MainClock: NextPage<Props> = (props) => {
             >
               <Settings />
               <AlertSetter />
+              <Link href="/">
+                <Dropdown.Item
+                  text="New Event"
+                  style={{
+                    padding: "20px !important",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                />
+              </Link>
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown
