@@ -93,18 +93,9 @@ const MainClock: NextPage<Props> = (props) => {
                 padding: "0",
               }}
             >
-              <Link href="/">
-                <a href="/" target="_blank">
-                  <Dropdown.Item
-                    text="New Event"
-                    style={{
-                      padding: "20px !important",
-                      fontSize: "20px",
-                      textAlign: "center",
-                    }}
-                  />
-                </a>
-              </Link>
+              <a href="/" target="_blank">
+                <Dropdown.Item text="New Event" className={styles.dropdown} />
+              </a>
               <AlertSetter />
               <Settings />
             </Dropdown.Menu>
