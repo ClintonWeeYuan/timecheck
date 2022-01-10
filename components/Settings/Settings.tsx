@@ -33,7 +33,7 @@ const Settings: NextPage = () => {
     if (event.password && !isAuthenticated) {
       setDisabled(true);
     }
-  }, [event]);
+  }, [event.password]);
 
   function handleItemClick(
     event: React.MouseEvent<HTMLAnchorElement>,
