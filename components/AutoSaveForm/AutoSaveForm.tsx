@@ -180,6 +180,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
             }}
             defaultValue={link}
             onChange={handleChange}
+            readOnly
           />
         </div>
         <h4>Start Time</h4>
