@@ -7,8 +7,13 @@ import styles from "./MainClock.module.css";
 
 import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 
-
-import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
+import {
+  useTime,
+  useUpdateTime,
+  useEvent,
+  useTheme,
+  useUpdateTheme,
+} from "../TimeProvider/TimeProvider";
 
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
@@ -31,6 +36,8 @@ const MainClock: NextPage<Props> = (props) => {
   );
   const time = useTime();
   const newTime = useUpdateTime();
+  const { primary, secondary, neutral } = useTheme();
+  const updateTheme = useUpdateTheme();
 
   //Update clock time, by calling updateTime from TimeProvider Context
   useEffect(() => {
@@ -89,7 +96,7 @@ const MainClock: NextPage<Props> = (props) => {
   }
 
   return (
-    <div>
+    <div style={{ backgroundColor: primary }}>
       <div className={styles.time}>
         <div className={styles.settings}>
           {/* <Settings />
