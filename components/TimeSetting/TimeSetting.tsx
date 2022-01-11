@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { Dropdown, Form, Grid, Radio } from "semantic-ui-react";
-import { useUpdateTheme } from "../TimeProvider/TimeProvider";
+import { useUpdateTheme } from "../ThemeProvider/ThemeProvider";
 import { useEffect, useState } from "react";
 
 interface Theme {
@@ -74,7 +74,11 @@ const TimeSetting: NextPage = () => {
   useEffect(() => {
     switch (theme) {
       case "Light":
-        newTheme({ primary: "blue", secondary: "green", neutral: "yellow" });
+        newTheme({
+          primary: "whitesmoke",
+          secondary: "gray",
+          neutral: "yellow",
+        });
         break;
       case "Dark":
         newTheme({ primary: "pink", secondary: "green", neutral: "yellow" });

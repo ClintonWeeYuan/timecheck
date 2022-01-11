@@ -1,9 +1,8 @@
 import { NextPage } from "next";
 import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
-import { Grid } from "semantic-ui-react";
+import { Grid, Sidebar } from "semantic-ui-react";
 
-import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
@@ -11,6 +10,8 @@ import CountdownSetter from "../CountdownSetter/CountdownSetter";
 import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
 import { EventType } from "../../pages/[id]";
+import { useTheme } from "../ThemeProvider/ThemeProvider";
+import { TimeProvider } from "../TimeProvider/TimeProvider";
 
 //Object type for Props, containing both event and time
 
@@ -28,6 +29,7 @@ const MainPage: NextPage<Props> = (props) => {
 
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
+  const { primary, secondary, neutral } = useTheme();
 
   {
     /*Function to change start times, triggered by changes to CountdownSetter*/
@@ -71,11 +73,12 @@ const MainPage: NextPage<Props> = (props) => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div style={{ backgroundColor: primary }}>
       <TimeProvider time={props.time} event={props.event}>
         {props.event && props.event.alert && (
           <Alert alert={props.event.alert} />
         )}
+
         <Grid stackable divided columns={2} className={styles.main}>
           <Grid.Column width={12}>
             <MainClock hours={hours} minutes={minutes} seconds={seconds} />

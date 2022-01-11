@@ -6,6 +6,7 @@ import Countdown from "../Countdown/Countdown";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import debounce from "@mui/utils/debounce";
+import { useTheme } from "../ThemeProvider/ThemeProvider";
 
 import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
@@ -22,6 +23,7 @@ function roundSeconds(number: number) {
 }
 
 const Taskbar: NextPage<Props> = (props) => {
+  const { primary, secondary, neutral } = useTheme();
   const event = useEvent();
   const [eventName, setEventName] = useState("");
   async function save(eventName: string) {
