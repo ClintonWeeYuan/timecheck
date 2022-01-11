@@ -73,15 +73,7 @@ const Settings: NextPage = () => {
       <Modal
         closeIcon
         open={open}
-        trigger={
-          <Dropdown.Item
-            text="Settings"
-            className={styles.dropdown}
-            style={{
-              "&:hover": { color: "yellow" },
-            }}
-          />
-        }
+        trigger={<Dropdown.Item text="Settings" className={styles.dropdown} />}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         centered={true}
