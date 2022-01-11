@@ -7,7 +7,6 @@ import styles from "./MainClock.module.css";
 
 import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 
-
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
@@ -22,8 +21,7 @@ interface Props {
 }
 
 const MainClock: NextPage<Props> = (props) => {
-  const clockTypes = ["digital", "analog", "countdown"];
-  const [clockType, setClockType] = useState(clockTypes[0]);
+  const [clockType, setClockType] = useState("digital");
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
@@ -46,13 +44,13 @@ const MainClock: NextPage<Props> = (props) => {
   useEffect(() => {
     if (window.innerWidth <= 900) {
       setDigitalSize("60px");
-      setAnalogSize("250px");
+      setAnalogSize("40vw");
       setButtonSize("large");
     }
 
     if (window.innerWidth > 900) {
       setDigitalSize("10vw");
-      setAnalogSize("400px");
+      setAnalogSize("35vw");
       setButtonSize("massive");
     }
   });
@@ -78,38 +76,54 @@ const MainClock: NextPage<Props> = (props) => {
 
   //Function to change clock type upon pressing button
 
-  function handleClick() {
-    let index = clockTypes.indexOf(clockType);
-
-    if (index === 2) {
-      setClockType(clockTypes[0]);
-    } else {
-      setClockType(clockTypes[index + 1]);
-    }
-  }
-
   return (
     <div>
       <div className={styles.time}>
         <div className={styles.settings}>
-          {/* <Settings />
-          <AlertSetter /> */}
-
           <Dropdown
             style={{ fontSize: "40px", margin: "20px" }}
             item
             icon="content"
           >
-            <Dropdown.Menu direction="right">
-              <Dropdown.Item>
-                <Settings />
+            <Dropdown.Menu
+              direction="right"
+              style={{
+                width: "200px",
+                padding: "0",
+              }}
+            >
+              <Settings />
+              <AlertSetter />
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown
+            style={{ fontSize: "20px", margin: "20px" }}
+            item
+            text="Clock Type"
+          >
+            <Dropdown.Menu
+              direction="right"
+              style={{
+                width: "200px",
+                padding: "0",
+              }}
+            >
+              <Dropdown.Item onClick={() => setClockType("analog")}>
+                <Icon name="clock" />
+                <span>Analog</span>
               </Dropdown.Item>
-              <Dropdown.Item>
-                <AlertSetter />
+              <Dropdown.Item onClick={() => setClockType("digital")}>
+                <Icon name="draft2digital" />
+                <span>Digital</span>
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setClockType("countdown")}>
+                <Icon name="bomb" />
+                <span>Countdown</span>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
         <div className={styles.clock}>
           {clockType === "analog" ? (
             <AnalogClock {...options} />
@@ -128,29 +142,6 @@ const MainClock: NextPage<Props> = (props) => {
             />
           )}
         </div>
-
-        <Button
-          onClick={handleClick}
-          icon
-          labelPosition="left"
-          color="yellow"
-          size={buttonSize}
-        >
-          <Icon
-            name={
-              clockType === "analog"
-                ? "clock"
-                : clockType === "digital"
-                ? "draft2digital"
-                : "bomb"
-            }
-          />
-          {clockType === "analog"
-            ? "Analog"
-            : clockType === "digital"
-            ? "Digital"
-            : "Countdown"}
-        </Button>
       </div>
     </div>
   );

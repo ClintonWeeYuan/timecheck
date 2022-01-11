@@ -10,6 +10,7 @@ import {
   Container,
   Form,
   Message,
+  Dropdown,
 } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
 import { IoMdSettings } from "react-icons/io";
@@ -63,11 +64,24 @@ const Settings: NextPage = () => {
   }
 
   return (
-    <Segment textAlign="center" basic vertical>
+    <div
+      style={{
+        width: "100%",
+        textAlign: "center",
+      }}
+    >
       <Modal
         closeIcon
         open={open}
-        trigger={<p>Settings</p>}
+        trigger={
+          <Dropdown.Item
+            text="Settings"
+            className={styles.dropdown}
+            style={{
+              "&:hover": { color: "yellow" },
+            }}
+          />
+        }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         centered={true}
@@ -150,7 +164,7 @@ const Settings: NextPage = () => {
           </Grid>
         </Modal.Content>
       </Modal>
-    </Segment>
+    </div>
   );
 };
 

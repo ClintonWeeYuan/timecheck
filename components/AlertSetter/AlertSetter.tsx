@@ -7,10 +7,12 @@ import {
   Modal,
   TextArea,
   Segment,
+  Dropdown,
 } from "semantic-ui-react";
 import { useState } from "react";
 import { MdOutlineAddAlert } from "react-icons/md";
 import { useEvent } from "../TimeProvider/TimeProvider";
+import styles from "./AlertSetter.module.css";
 
 interface Props {
   eventId?: string;
@@ -66,14 +68,21 @@ const AlertSetter: NextPage<Props> = (props) => {
   }
 
   return (
-    <Segment style={{ padding: "20px" }} textAlign="center" basic vertical>
+    <div
+      style={{
+        width: "100%",
+        textAlign: "center",
+      }}
+    >
       <Modal
         basic
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
         size="small"
-        trigger={<p>Send Alert</p>}
+        trigger={
+          <Dropdown.Item className={styles.dropdown} text="Send Alert" />
+        }
         centered={true}
       >
         <Header icon>
@@ -94,7 +103,7 @@ const AlertSetter: NextPage<Props> = (props) => {
           </Button>
         </Modal.Actions>
       </Modal>
-    </Segment>
+    </div>
   );
 };
 

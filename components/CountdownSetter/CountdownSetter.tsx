@@ -134,6 +134,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
       <div className={styles.setTime}>
         <TimePicker
           label="Start"
+          readOnly
           onChange={(newValue: Date | null) => {
             newValue && handleStartTime(newValue);
           }}
@@ -145,6 +146,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
           onChange={(newValue: Date | null) => {
             newValue && handleEndTime(newValue);
           }}
+          readOnly
           value={endTime}
           renderInput={(params) => <TextField {...params} />}
         />

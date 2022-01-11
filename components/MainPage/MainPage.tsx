@@ -3,7 +3,6 @@ import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
 import { Grid } from "semantic-ui-react";
 
-import RetrieveTask from "../RetrieveTask/RetrieveTask";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
 import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
@@ -93,7 +92,6 @@ const MainPage: NextPage<Props> = (props) => {
               changeStartTime={changeStartTime}
               handleDuration={handleDuration}
             />
-            <RetrieveTask />
           </Grid.Column>
         </Grid>
       </TimeProvider>
