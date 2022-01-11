@@ -5,7 +5,7 @@ export async function middleware(req, ev) {
   const { pathname } = req.nextUrl;
   if (pathname == "/") {
     const newEvent = randomWords({ exactly: 3, join: "-" });
-    const res = await fetch(`/api/events/${newEvent}`, {
+    const res = await fetch(`${process.env.APP_URL}/api/events/${newEvent}`, {
       method: "PUT",
       body: JSON.stringify({
         eventId: newEvent,
