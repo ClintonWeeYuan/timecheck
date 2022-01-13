@@ -10,6 +10,8 @@ import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
 
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 
+import { useTheme, useUpdateTheme } from "../ThemeProvider/ThemeProvider";
+
 import { SemanticSIZES } from "semantic-ui-react/dist/commonjs/generic";
 import Settings from "../Settings/Settings";
 import AlertSetter from "../AlertSetter/AlertSetter";
@@ -30,6 +32,8 @@ const MainClock: NextPage<Props> = (props) => {
   );
   const time = useTime();
   const newTime = useUpdateTime();
+  const { primary, secondary, accent } = useTheme();
+  const updateTheme = useUpdateTheme();
 
   //Update clock time, by calling updateTime from TimeProvider Context
   useEffect(() => {
@@ -62,13 +66,13 @@ const MainClock: NextPage<Props> = (props) => {
     width: analogSize,
     border: true,
     borderColor: "#000000",
-    baseColor: "#7c93b2",
+    baseColor: accent,
     centerColor: "#459cff",
     centerBorderColor: "#ffffff",
     handColors: {
       second: "#d81c7a",
-      minute: "#ffffff",
-      hour: "#ffffff",
+      minute: primary,
+      hour: primary,
     },
     seconds: getSeconds(time),
     minutes: getMinutes(time),
@@ -82,7 +86,7 @@ const MainClock: NextPage<Props> = (props) => {
       <div className={styles.time}>
         <div className={styles.settings}>
           <Dropdown
-            style={{ fontSize: "40px", margin: "20px" }}
+            style={{ fontSize: "40px", margin: "20px", color: accent }}
             item
             icon="content"
           >
@@ -95,7 +99,11 @@ const MainClock: NextPage<Props> = (props) => {
             >
               <Link href="/">
                 <a target="_blank">
-                  <Dropdown.Item text="New Event" className={styles.dropdown} />
+                  <Dropdown.Item
+                    text="New Event"
+                    className={styles.dropdown}
+                    style={{ color: accent }}
+                  />
                 </a>
               </Link>
               <AlertSetter />
@@ -137,7 +145,7 @@ const MainClock: NextPage<Props> = (props) => {
             <Clock
               date={time}
               format={"h:mm:ssa"}
-              style={{ fontSize: digitalSize, color: "grey" }}
+              style={{ fontSize: digitalSize, color: secondary }}
               ticking={true}
             />
           ) : (

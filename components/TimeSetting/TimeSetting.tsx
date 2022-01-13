@@ -1,6 +1,33 @@
 import { NextPage } from "next";
 import { Dropdown, Form, Grid, Radio } from "semantic-ui-react";
+import { useUpdateTheme } from "../ThemeProvider/ThemeProvider";
+import { useEffect, useState } from "react";
 
+interface Theme {
+  primary: string;
+  secondary: string;
+  accent: string;
+}
+
+const themeOptions = [
+  {
+    key: "Light",
+    text: "Light",
+    value: "Light",
+  },
+
+  {
+    key: "Dark",
+    text: "Dark",
+    value: "Dark",
+  },
+
+  {
+    key: "Amazon",
+    text: "Amazon",
+    value: "Amazon",
+  },
+];
 const clockOptions = [
   {
     key: "Analog",
@@ -41,6 +68,34 @@ const timezoneOptions = [
   },
 ];
 const TimeSetting: NextPage = () => {
+  const newTheme = useUpdateTheme();
+  const [theme, setTheme] = useState<any>();
+
+  useEffect(() => {
+    switch (theme) {
+      case "Light":
+        newTheme({
+          primary: "whitesmoke",
+          secondary: "#898F9C",
+          accent: "#4267B2",
+        });
+        break;
+      case "Dark":
+        newTheme({
+          primary: "#121212",
+          secondary: "rgba(255, 255, 255, 0.7)",
+          accent: "#5a13a1",
+        });
+        break;
+      case "Amazon":
+        newTheme({
+          primary: "#ffffff",
+          secondary: "#000000",
+          accent: "	#FF9900",
+        });
+        break;
+    }
+  }, [theme]);
   return (
     <Form>
       <Grid columns={2}>
@@ -65,6 +120,20 @@ const TimeSetting: NextPage = () => {
             fluid
             selection
             options={timezoneOptions}
+          />
+        </Grid.Column>
+
+        <Grid.Column width={4}>
+          {theme}
+          <h4>Theme</h4>
+        </Grid.Column>
+        <Grid.Column width={12}>
+          <Dropdown
+            placeholder="Select Theme"
+            fluid
+            selection
+            options={themeOptions}
+            onChange={(e, { value }) => setTheme(value)}
           />
         </Grid.Column>
 

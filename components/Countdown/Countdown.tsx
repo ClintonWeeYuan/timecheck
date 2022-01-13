@@ -5,23 +5,25 @@ type Props = {
   minutes: string;
   seconds: string;
 };
+import { useTheme } from "../ThemeProvider/ThemeProvider";
 
 const Countdown: NextPage<Props> = ({ hours, minutes, seconds }) => {
+  const { primary, secondary, accent } = useTheme();
   return (
-    <div className={styles.countdown}>
+    <div className={styles.countdown} style={{ color: accent }}>
       <section>
         <p>{hours}</p>
-        <small>Hours</small>
+        <small style={{ color: secondary }}>Hours</small>
       </section>
       <span>:</span>
       <section>
         <p>{minutes}</p>
-        <small>Minutes</small>
+        <small style={{ color: secondary }}>Minutes</small>
       </section>
       <span>:</span>
       <section>
         <p>{seconds}</p>
-        <small>Seconds</small>
+        <small style={{ color: secondary }}>Seconds</small>
       </section>
     </div>
   );
