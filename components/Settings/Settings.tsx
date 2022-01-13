@@ -70,7 +70,7 @@ const Settings: NextPage = () => {
       <Modal
         closeIcon
         open={open}
-        trigger={<Dropdown.Item text="Settings" className={styles.dropdown} />}
+        trigger={<p>Settings</p>}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         centered={true}
