@@ -27,9 +27,9 @@ export function useUpdateTheme() {
 export const ThemeProvider: NextPage = (props) => {
   //Sets theme
   const [theme, setTheme] = useState({
-    primary: "#121212",
-    secondary: "rgba(255, 255, 255, 0.7)",
-    accent: "#5a13a1",
+    primary: "whitesmoke",
+    secondary: "#898F9C",
+    accent: "#4267B2",
   });
 
   //Updates Theme

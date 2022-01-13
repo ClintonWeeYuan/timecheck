@@ -99,7 +99,11 @@ const MainClock: NextPage<Props> = (props) => {
             >
               <Link href="/">
                 <a target="_blank">
-                  <Dropdown.Item text="New Event" className={styles.dropdown} />
+                  <Dropdown.Item
+                    text="New Event"
+                    className={styles.dropdown}
+                    style={{ color: accent }}
+                  />
                 </a>
               </Link>
               <AlertSetter />
