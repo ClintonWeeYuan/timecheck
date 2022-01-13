@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 interface Theme {
   primary: string;
   secondary: string;
-  neutral: string;
+  accent: string;
 }
 
 const themeOptions = [
@@ -76,15 +76,23 @@ const TimeSetting: NextPage = () => {
       case "Light":
         newTheme({
           primary: "whitesmoke",
-          secondary: "gray",
-          neutral: "yellow",
+          secondary: "#898F9C",
+          accent: "#4267B2",
         });
         break;
       case "Dark":
-        newTheme({ primary: "pink", secondary: "green", neutral: "yellow" });
+        newTheme({
+          primary: "#121212",
+          secondary: "rgba(255, 255, 255, 0.7)",
+          accent: "#5a13a1",
+        });
         break;
       case "Amazon":
-        newTheme({ primary: "orange", secondary: "green", neutral: "yellow" });
+        newTheme({
+          primary: "#ffffff",
+          secondary: "#000000",
+          accent: "	#FF9900",
+        });
         break;
     }
   }, [theme]);

@@ -32,7 +32,7 @@ const MainClock: NextPage<Props> = (props) => {
   );
   const time = useTime();
   const newTime = useUpdateTime();
-  const { primary, secondary, neutral } = useTheme();
+  const { primary, secondary, accent } = useTheme();
   const updateTheme = useUpdateTheme();
 
   //Update clock time, by calling updateTime from TimeProvider Context
@@ -66,13 +66,13 @@ const MainClock: NextPage<Props> = (props) => {
     width: analogSize,
     border: true,
     borderColor: "#000000",
-    baseColor: "#7c93b2",
+    baseColor: accent,
     centerColor: "#459cff",
     centerBorderColor: "#ffffff",
     handColors: {
       second: "#d81c7a",
-      minute: "#ffffff",
-      hour: "#ffffff",
+      minute: primary,
+      hour: primary,
     },
     seconds: getSeconds(time),
     minutes: getMinutes(time),
@@ -99,7 +99,7 @@ const MainClock: NextPage<Props> = (props) => {
           <AlertSetter /> */}
 
           <Dropdown
-            style={{ fontSize: "40px", margin: "20px" }}
+            style={{ fontSize: "40px", margin: "20px", color: accent }}
             item
             icon="content"
           >
@@ -120,7 +120,7 @@ const MainClock: NextPage<Props> = (props) => {
             <Clock
               date={time}
               format={"h:mm:ssa"}
-              style={{ fontSize: digitalSize, color: "grey" }}
+              style={{ fontSize: digitalSize, color: secondary }}
               ticking={true}
             />
           ) : (

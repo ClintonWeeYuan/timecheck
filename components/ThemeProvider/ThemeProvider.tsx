@@ -5,14 +5,14 @@ import { useState, useContext } from "react";
 interface Theme {
   primary: string;
   secondary: string;
-  neutral: string;
+  accent: string;
 }
 //Create context with useless data
 
 const ThemeContext = React.createContext<Theme>({
   primary: "green",
   secondary: "blue",
-  neutral: "white",
+  accent: "white",
 });
 const ThemeUpdateContext = React.createContext((theme: Theme) => {});
 
@@ -27,9 +27,9 @@ export function useUpdateTheme() {
 export const ThemeProvider: NextPage = (props) => {
   //Sets theme
   const [theme, setTheme] = useState({
-    primary: "green",
-    secondary: "blue",
-    neutral: "black",
+    primary: "#121212",
+    secondary: "rgba(255, 255, 255, 0.7)",
+    accent: "#5a13a1",
   });
 
   //Updates Theme

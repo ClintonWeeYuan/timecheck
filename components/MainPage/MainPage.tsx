@@ -29,7 +29,7 @@ const MainPage: NextPage<Props> = (props) => {
 
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number>(Date.now());
-  const { primary, secondary, neutral } = useTheme();
+  const { primary, secondary, accent } = useTheme();
 
   {
     /*Function to change start times, triggered by changes to CountdownSetter*/
