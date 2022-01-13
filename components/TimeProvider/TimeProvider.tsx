@@ -4,11 +4,6 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { EventType } from "../../pages/[id]";
 
-interface Theme {
-  primary: string;
-  secondary: string;
-  neutral: string;
-}
 //Create context with useless data
 
 const TimeContext = React.createContext(Date.now());

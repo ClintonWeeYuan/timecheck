@@ -23,7 +23,7 @@ function roundSeconds(number: number) {
 }
 
 const Taskbar: NextPage<Props> = (props) => {
-  const { primary, secondary, neutral } = useTheme();
+  const { primary, secondary, accent } = useTheme();
   const event = useEvent();
   const [eventName, setEventName] = useState("");
   async function save(eventName: string) {
