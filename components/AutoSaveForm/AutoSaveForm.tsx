@@ -128,7 +128,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
   return (
     <>
       <Form>
-        <p>Name of Event</p>
+        <p style={{ fontWeight: "bold" }}> Event Name</p>
         <Form.Input
           fluid
           placeholder="Event"
@@ -137,7 +137,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
           disabled={props.disabled}
         />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <p>Password (optional)</p>
+          <p style={{ fontWeight: "bold" }}>Password (optional)</p>
           <Popup trigger={<Icon circular name="info" />}>
             <h5>Requirements</h5>
 
@@ -175,7 +175,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
               color: "teal",
               labelPosition: "right",
               icon: "copy",
-              content: "Copy",
+              content: "Copy Link",
               onClick: handleClick,
             }}
             defaultValue={link}

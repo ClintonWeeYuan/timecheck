@@ -6,15 +6,12 @@ import {
   Menu,
   Grid,
   MenuItemProps,
-  Button,
   Container,
   Form,
   Message,
   Dropdown,
 } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
-import { IoMdSettings } from "react-icons/io";
-import { MenuClassKey } from "@mui/material";
 import AutoSaveForm from "../AutoSaveForm/AutoSaveForm";
 import TimeSetting from "../TimeSetting/TimeSetting";
 import styles from "./Settings.module.css";
@@ -24,7 +21,7 @@ const Settings: NextPage = () => {
   const event = useEvent();
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(event.password ? true : false);
-  const [activeItem, setActiveItem] = useState("General");
+  const [activeItem, setActiveItem] = useState("Event");
   const [password, setPassword] = useState<string>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -118,35 +115,38 @@ const Settings: NextPage = () => {
 
           <Grid stackable columns={2}>
             <Grid.Column width={4}>
-              <Menu fluid secondary pointing tabular vertical>
+              <Menu fluid secondary pointing tabular vertical size="massive">
                 <Menu.Item
-                  name="General"
-                  active={activeItem === "General"}
-                  content="General"
+                  name="Event"
+                  active={activeItem === "Event"}
+                  content="Event"
                   onClick={handleItemClick}
+                  style={{ paddingTop: "40px" }}
                 />
 
                 <Menu.Item
-                  name="Time"
-                  active={activeItem === "Time"}
-                  content="Time"
+                  name="Display"
+                  active={activeItem === "Display"}
+                  content="Display"
                   onClick={handleItemClick}
+                  style={{ paddingTop: "40px" }}
                 />
 
                 <Menu.Item
                   position="right"
-                  name="About"
-                  active={activeItem === "About"}
-                  content="About"
+                  name="About Us"
+                  active={activeItem === "About Us"}
+                  content="About Us"
                   onClick={handleItemClick}
+                  style={{ paddingTop: "40px" }}
                 />
               </Menu>
             </Grid.Column>
             <Grid.Column stretched width={12}>
               <Segment padded="very" className={styles.mainSettings}>
-                {activeItem === "General" ? (
+                {activeItem === "Event" ? (
                   <AutoSaveForm disabled={disabled} />
-                ) : activeItem === "Time" ? (
+                ) : activeItem === "Display" ? (
                   <TimeSetting />
                 ) : (
                   <h1>About Us</h1>
