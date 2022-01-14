@@ -1,3 +1,4 @@
+.bigCountdown,
 .countdown {
   display: flex;
   align-items: center;
@@ -5,6 +6,10 @@
   color: blue;
 }
 
+.bigCountdown {
+  margin-top: 80px;
+}
+.bigCountdown section,
 .countdown section {
   display: flex;
   flex-direction: column;
@@ -14,10 +19,33 @@
 
 .countdown section p {
   font-size: 4rem;
+  margin: 0;
+}
 
+.bigCountdown section p {
+  font-size: 8rem;
   margin: 0;
 }
 
 .countdown section small {
   color: grey;
+}
+
+@media (max-width: 1400px) {
+  .countdown section p {
+    font-size: 2rem;
+    margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .countdown section p {
+    font-size: 4rem;
+    margin: 0;
+  }
+
+  .bigCountdown section p {
+    font-size: 6rem;
+    margin: 0;
+  }
 }

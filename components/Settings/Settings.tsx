@@ -19,6 +19,10 @@ import { useEvent } from "../TimeProvider/TimeProvider";
 
 interface Props {
   handleClockType: (value: string) => void;
+
+  clockType: string;
+  handleAmpm: (value: boolean) => void;
+  ampm: boolean;
 }
 
 const Settings: NextPage<Props> = (props) => {
@@ -151,7 +155,12 @@ const Settings: NextPage<Props> = (props) => {
                 {activeItem === "Event" ? (
                   <AutoSaveForm disabled={disabled} />
                 ) : activeItem === "Display" ? (
-                  <TimeSetting handleClockType={props.handleClockType} />
+                  <TimeSetting
+                    handleClockType={props.handleClockType}
+                    clockType={props.clockType}
+                    handleAmpm={props.handleAmpm}
+                    ampm={props.ampm}
+                  />
                 ) : (
                   <h1>About Us</h1>
                 )}
