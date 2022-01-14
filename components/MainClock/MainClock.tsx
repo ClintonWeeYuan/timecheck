@@ -66,6 +66,11 @@ const MainClock: NextPage<Props> = (props) => {
   const { primary, secondary, accent } = useTheme();
   const updateTheme = useUpdateTheme();
 
+  const [ampm, setAmpm] = useState(true);
+  function handleAmpm(value: boolean) {
+    setAmpm(value);
+  }
+
   //Update clock time, by calling updateTime from TimeProvider Context
   useEffect(() => {
     const interval = setInterval(() => {
@@ -148,6 +153,8 @@ const MainClock: NextPage<Props> = (props) => {
                     <Settings
                       handleClockType={(value) => setClockType(value)}
                       clockType={clockType}
+                      handleAmpm={handleAmpm}
+                      ampm={ampm}
                     />
                   </Dropdown.Item>
                 </Dropdown.Menu>
@@ -200,7 +207,7 @@ const MainClock: NextPage<Props> = (props) => {
             //   style={{ fontSize: digitalSize, color: secondary }}
             //   ticking={true}
             // />
-            <DigitalClock />
+            <DigitalClock ampm={ampm} />
           ) : (
             <Countdown
               hours={props.hours}

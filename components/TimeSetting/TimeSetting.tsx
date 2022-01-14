@@ -11,7 +11,10 @@ interface Theme {
 
 interface Props {
   handleClockType: (value: string) => void;
+
   clockType: string;
+  handleAmpm: (value: boolean) => void;
+  ampm: boolean;
 }
 
 const themeOptions = [
@@ -83,6 +86,12 @@ const TimeSetting: NextPage<Props> = (props) => {
       : "Amazon"
   );
   const [clockType, setClockType] = useState(props.clockType);
+  const [ampm, setAmpm] = useState(props.ampm);
+
+  function handleAmpm() {
+    props.handleAmpm(!ampm);
+    setAmpm(!ampm);
+  }
 
   useEffect(() => {
     switch (theme) {
@@ -159,12 +168,12 @@ const TimeSetting: NextPage<Props> = (props) => {
           />
         </Grid.Column>
 
-        {/* <Grid.Column width={4}>
+        <Grid.Column width={4}>
           <h4>24 Hour</h4>
         </Grid.Column>
         <Grid.Column width={12}>
-          <Radio toggle onChange={handleAmpm} checked={checked} />
-        </Grid.Column> */}
+          <Radio toggle onChange={handleAmpm} checked={!ampm} />
+        </Grid.Column>
       </Grid>
     </Form>
   );
