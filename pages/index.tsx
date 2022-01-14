@@ -1,4 +1,5 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
+const randomWords = require("random-words");
 
 import MainPage from "../components/MainPage/MainPage";
 
@@ -9,28 +10,27 @@ interface Props {
 }
 
 const Home: NextPage<Props> = (props) => {
-  const [time, setTime] = useState<number>(Date.now());
-  useEffect(() => {
-    async function getTime() {
-      try {
-        const res = await fetch(`${process.env.APP_URL}/api/time`, {
-          method: "GET",
-        });
-        const newTime = await res.json();
-        setTime(newTime);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+  return <div></div>;
+};
 
-    getTime();
-  }, []);
-
-  return (
-    <div>
-      <MainPage time={props.time} />
-    </div>
-  );
+export const getServerSideProps: GetServerSideProps = async () => {
+  const newEvent = randomWords({ exactly: 3, join: "-" });
+  const res = await fetch(`${process.env.APP_URL}/api/events/${newEvent}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      eventId: newEvent,
+      eventName: "",
+      startTime: Date.now().toString(),
+      endTime: Date.now().toString(),
+    }),
+  });
+  return {
+    redirect: {
+      permanent: false,
+      destination: `/${newEvent}`,
+    },
+    props: {},
+  };
 };
 
 export default Home;
