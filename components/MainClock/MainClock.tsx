@@ -5,6 +5,8 @@ import Clock from "react-live-clock";
 import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import Link from "next/link";
+import DigitalClock from "../DigitalClock/DigitalClock";
+import Head from "next/head";
 
 import { Dropdown, Icon, Menu } from "semantic-ui-react";
 
@@ -110,6 +112,12 @@ const MainClock: NextPage<Props> = (props) => {
 
   return (
     <div>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;400&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <div className={styles.time}>
         <div style={{ width: "100%" }}>
           <Menu
@@ -186,12 +194,13 @@ const MainClock: NextPage<Props> = (props) => {
           {clockType === "Analog" ? (
             <AnalogClock {...options} />
           ) : clockType === "Digital" ? (
-            <Clock
-              date={time}
-              format="hh:mm:ssa"
-              style={{ fontSize: digitalSize, color: secondary }}
-              ticking={true}
-            />
+            // <Clock
+            //   date={time}
+            //   format="hh:mm:ssa"
+            //   style={{ fontSize: digitalSize, color: secondary }}
+            //   ticking={true}
+            // />
+            <DigitalClock />
           ) : (
             <Countdown
               hours={props.hours}
