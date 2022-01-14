@@ -80,9 +80,7 @@ const AlertSetter: NextPage<Props> = (props) => {
         onOpen={() => setOpen(true)}
         open={open}
         size="small"
-        trigger={
-          <Dropdown.Item className={styles.dropdown} text="Send Alert" />
-        }
+        trigger={<p>Send Alert</p>}
         centered={true}
       >
         <Header icon>

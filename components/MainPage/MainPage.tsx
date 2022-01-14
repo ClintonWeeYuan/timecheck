@@ -1,17 +1,18 @@
 import { NextPage } from "next";
 import MainClock from "../MainClock/MainClock";
 import Taskbar from "..//Taskbar/Taskbar";
-import { Grid, Sidebar } from "semantic-ui-react";
+import { Dropdown, Grid, Icon, Menu } from "semantic-ui-react";
 
-import styles from "./MainPage.module.css";
 import { useEffect, useState } from "react";
 import CountdownSetter from "../CountdownSetter/CountdownSetter";
 
-import AlertSetter from "../AlertSetter/AlertSetter";
 import Alert from "../Alert/Alert";
 import { EventType } from "../../pages/[id]";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import { TimeProvider } from "../TimeProvider/TimeProvider";
+import Link from "next/link";
+import AlertSetter from "../AlertSetter/AlertSetter";
+import Settings from "../Settings/Settings";
 
 //Object type for Props, containing both event and time
 
@@ -79,8 +80,8 @@ const MainPage: NextPage<Props> = (props) => {
           <Alert alert={props.event.alert} />
         )}
 
-        <Grid stackable divided columns={2} className={styles.main}>
-          <Grid.Column width={12}>
+        <Grid stackable divided centered columns={2}>
+          <Grid.Column width={12} style={{ padding: "0" }}>
             <MainClock hours={hours} minutes={minutes} seconds={seconds} />
           </Grid.Column>
 

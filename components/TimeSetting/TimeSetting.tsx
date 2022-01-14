@@ -9,6 +9,10 @@ interface Theme {
   accent: string;
 }
 
+interface Props {
+  handleClockType: (value: string) => void;
+}
+
 const themeOptions = [
   {
     key: "Light",
@@ -67,7 +71,7 @@ const timezoneOptions = [
     value: "US (GMT -5)",
   },
 ];
-const TimeSetting: NextPage = () => {
+const TimeSetting: NextPage<Props> = (props) => {
   const newTheme = useUpdateTheme();
   const [theme, setTheme] = useState<any>();
 
@@ -96,6 +100,11 @@ const TimeSetting: NextPage = () => {
         break;
     }
   }, [theme]);
+
+  function handleClockType(value: string) {
+    props.handleClockType(value);
+  }
+
   return (
     <Form>
       <Grid columns={2}>
@@ -108,6 +117,9 @@ const TimeSetting: NextPage = () => {
             fluid
             selection
             options={clockOptions}
+            onChange={(e, { value }) =>
+              typeof value === "string" && handleClockType(value)
+            }
           />
         </Grid.Column>
 
@@ -137,12 +149,12 @@ const TimeSetting: NextPage = () => {
           />
         </Grid.Column>
 
-        <Grid.Column width={4}>
+        {/* <Grid.Column width={4}>
           <h4>24 Hour</h4>
         </Grid.Column>
         <Grid.Column width={12}>
-          <Radio toggle />
-        </Grid.Column>
+          <Radio toggle onChange={handleAmpm} checked={checked} />
+        </Grid.Column> */}
       </Grid>
     </Form>
   );

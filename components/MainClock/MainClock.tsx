@@ -6,7 +6,7 @@ import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import Link from "next/link";
 
-import { Button, Dropdown, Icon, Menu } from "semantic-ui-react";
+import { Dropdown, Icon, Menu } from "semantic-ui-react";
 
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 
@@ -23,13 +23,42 @@ interface Props {
   seconds: string;
 }
 
+interface clockOption {
+  key: string;
+  text: string;
+  value: string;
+  icon: string;
+}
+const clockOptions: clockOption[] = [
+  {
+    key: "Analog",
+    text: "Analog",
+    value: "Analog",
+    icon: "clock",
+  },
+  {
+    key: "Digital",
+    text: "Digital",
+    value: "Digital",
+
+    icon: "draft2digital",
+  },
+  {
+    key: "Countdown",
+    text: "Countdown",
+    value: "Countdown",
+    icon: "bomb",
+  },
+];
+
 const MainClock: NextPage<Props> = (props) => {
-  const [clockType, setClockType] = useState("digital");
+  const [clockType, setClockType] = useState<any>("Digital");
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
     "massive"
   );
+
   const time = useTime();
   const newTime = useUpdateTime();
   const { primary, secondary, accent } = useTheme();
@@ -55,7 +84,7 @@ const MainClock: NextPage<Props> = (props) => {
 
     if (window.innerWidth > 900) {
       setDigitalSize("10vw");
-      setAnalogSize("35vw");
+      setAnalogSize("30vw");
       setButtonSize("massive");
     }
   });
@@ -79,72 +108,78 @@ const MainClock: NextPage<Props> = (props) => {
     hours: getHours(time),
   };
 
-  //Function to change clock type upon pressing button
-
   return (
     <div>
       <div className={styles.time}>
-        <div className={styles.settings}>
-          <Dropdown
-            style={{ fontSize: "40px", margin: "20px", color: accent }}
-            item
-            icon="content"
-          >
-            <Dropdown.Menu
-              direction="right"
-              style={{
-                width: "200px",
-                padding: "0",
-              }}
-            >
-              <Link href="/">
-                <a target="_blank">
-                  <Dropdown.Item
-                    text="New Event"
-                    className={styles.dropdown}
-                    style={{ color: accent }}
-                  />
-                </a>
-              </Link>
-              <AlertSetter />
-              <Settings />
-            </Dropdown.Menu>
-          </Dropdown>
-          <Dropdown
-            style={{ fontSize: "20px", margin: "20px" }}
-            item
-            text="Clock Type"
-          >
-            <Dropdown.Menu
-              direction="right"
-              style={{
-                width: "200px",
-                padding: "0",
-              }}
-            >
-              <Dropdown.Item onClick={() => setClockType("analog")}>
-                <Icon name="clock" />
-                <span>Analog</span>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => setClockType("digital")}>
-                <Icon name="draft2digital" />
-                <span>Digital</span>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => setClockType("countdown")}>
-                <Icon name="bomb" />
-                <span>Countdown</span>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+        <div style={{ width: "100%" }}>
+          <Menu fixed="top" size="massive" style={{ width: "100%" }}>
+            <Menu.Menu position="left">
+              <Dropdown
+                style={{ padding: "30px", fontSize: "30px" }}
+                item
+                icon="content"
+              >
+                <Dropdown.Menu style={{ fontSize: "20px" }}>
+                  <Dropdown.Item>
+                    <Link href="/">
+                      <a target="_blank">New Event</a>
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <AlertSetter />
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Settings
+                      handleClockType={(value) => setClockType(value)}
+                    />
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Menu>
+            <Menu.Menu position="right">
+              {/* <Dropdown
+                selection
+                options={clockOptions}
+                placeholder="Clock Type"
+                onChange={(e, { value }) => value && setClockType(value)}
+              > */}
+              <Dropdown
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "30px",
+                }}
+                placeholder="Clock Type"
+                text={clockType}
+              >
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setClockType("Analog")}>
+                    <Icon name="clock" />
+                    <span>Analog</span>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setClockType("Digital")}>
+                    <Icon name="draft2digital" />
+                    <span>Digital</span>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => setClockType("Countdown")}>
+                    <Icon name="bomb" />
+                    <span>Countdown</span>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              {/* </Dropdown> */}
+            </Menu.Menu>
+          </Menu>
         </div>
 
         <div className={styles.clock}>
-          {clockType === "analog" ? (
+          {clockType === "Analog" ? (
             <AnalogClock {...options} />
-          ) : clockType === "digital" ? (
+          ) : clockType === "Digital" ? (
             <Clock
               date={time}
-              format={"h:mm:ssa"}
+              format="hh:mm:ssa"
               style={{ fontSize: digitalSize, color: secondary }}
               ticking={true}
             />

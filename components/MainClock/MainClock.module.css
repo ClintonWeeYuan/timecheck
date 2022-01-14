@@ -14,6 +14,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0;
 }
 
 .dropdown {
@@ -35,7 +36,6 @@
   padding-right: 20px;
 }
 .clock {
-  margin-bottom: 20px;
   height: 500px;
   display: flex;
   align-items: center;
