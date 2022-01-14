@@ -58,6 +58,7 @@ const MainClock: NextPage<Props> = (props) => {
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
     "massive"
   );
+
   const time = useTime();
   const newTime = useUpdateTime();
   const { primary, secondary, accent } = useTheme();
@@ -107,8 +108,6 @@ const MainClock: NextPage<Props> = (props) => {
     hours: getHours(time),
   };
 
-  //Function to change clock type upon pressing button
-
   return (
     <div>
       <div className={styles.time}>
@@ -130,7 +129,9 @@ const MainClock: NextPage<Props> = (props) => {
                     <AlertSetter />
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Settings />
+                    <Settings
+                      handleClockType={(value) => setClockType(value)}
+                    />
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -178,7 +179,7 @@ const MainClock: NextPage<Props> = (props) => {
           ) : clockType === "Digital" ? (
             <Clock
               date={time}
-              format={"h:mm:ssa"}
+              format="hh:mm:ssa"
               style={{ fontSize: digitalSize, color: secondary }}
               ticking={true}
             />

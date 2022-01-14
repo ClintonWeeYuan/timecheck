@@ -17,7 +17,11 @@ import TimeSetting from "../TimeSetting/TimeSetting";
 import styles from "./Settings.module.css";
 import { useEvent } from "../TimeProvider/TimeProvider";
 
-const Settings: NextPage = () => {
+interface Props {
+  handleClockType: (value: string) => void;
+}
+
+const Settings: NextPage<Props> = (props) => {
   const event = useEvent();
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(event.password ? true : false);
@@ -147,7 +151,7 @@ const Settings: NextPage = () => {
                 {activeItem === "Event" ? (
                   <AutoSaveForm disabled={disabled} />
                 ) : activeItem === "Display" ? (
-                  <TimeSetting />
+                  <TimeSetting handleClockType={props.handleClockType} />
                 ) : (
                   <h1>About Us</h1>
                 )}
