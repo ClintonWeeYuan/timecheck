@@ -85,7 +85,7 @@ const MainPage: NextPage<Props> = (props) => {
             <MainClock hours={hours} minutes={minutes} seconds={seconds} />
           </Grid.Column>
 
-          <Grid.Column width={4}>
+          <Grid.Column width={4} style={{ padding: "20px" }}>
             {props.event ? (
               <Taskbar hours={hours} minutes={minutes} seconds={seconds} />
             ) : (

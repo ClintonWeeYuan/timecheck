@@ -5,10 +5,21 @@
   height: 150px;
 }
 
+.time {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
 @media (max-width: 900px) {
   .setTime {
     flex-direction: row;
     width: 70vw;
     justify-content: space-between;
+  }
+
+  .container {
+    height: 20vh;
   }
 }

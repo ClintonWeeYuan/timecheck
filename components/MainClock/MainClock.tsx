@@ -112,10 +112,18 @@ const MainClock: NextPage<Props> = (props) => {
     <div>
       <div className={styles.time}>
         <div style={{ width: "100%" }}>
-          <Menu fixed="top" size="massive" style={{ width: "100%" }}>
+          <Menu
+            fixed="top"
+            size="massive"
+            style={{ width: "100%", backgroundColor: primary }}
+          >
             <Menu.Menu position="left">
               <Dropdown
-                style={{ padding: "30px", fontSize: "30px" }}
+                style={{
+                  padding: "30px",
+                  fontSize: "30px",
+                  color: accent,
+                }}
                 item
                 icon="content"
               >
