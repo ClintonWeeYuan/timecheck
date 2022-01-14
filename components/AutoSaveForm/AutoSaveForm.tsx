@@ -7,6 +7,7 @@ import {
   Ref,
   Icon,
   Popup,
+  Message,
 } from "semantic-ui-react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DateInput, TimeInput } from "semantic-ui-react-datetimeinput";
@@ -43,6 +44,16 @@ const AutoSaveForm: NextPage<Props> = (props) => {
   );
   const [isSaving, setIsSaving] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  const [isSaved, setIsSaved] = useState(false);
+
+  function handleIsSaved() {
+    setIsSaved(true);
+    const timer = setTimeout(() => {
+      setIsSaved(false);
+    }, 10000);
+    return () => clearTimeout(timer);
+  }
 
   function changeStartTimeValue(newTimeValue: Date) {
     setStartTime(newTimeValue);
@@ -95,6 +106,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
         }),
       });
       setIsSaving(false);
+      handleIsSaved();
     } catch (err) {
       console.log(err);
     }
@@ -127,7 +139,12 @@ const AutoSaveForm: NextPage<Props> = (props) => {
   }
   return (
     <>
-      <Form>
+      <Form success={isSaved}>
+        <Message
+          success
+          header="Event Saved"
+          content="You can access your event via the URL below"
+        />
         <p style={{ fontWeight: "bold" }}> Event Name</p>
         <Form.Input
           fluid
