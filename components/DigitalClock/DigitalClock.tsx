@@ -7,14 +7,11 @@ import { useTheme } from "../ThemeProvider/ThemeProvider";
 import { useEffect, useState } from "react";
 
 interface Props {
-  size?: string;
   ampm: boolean;
 }
 const DigitalClock: NextPage<Props> = (props) => {
   const { primary, secondary, accent } = useTheme();
   const time = useTime();
-
-  const [ampm, setAmpm] = useState(props.ampm);
 
   return (
     <div className={styles.clock} style={{ color: accent }}>

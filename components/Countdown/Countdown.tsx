@@ -4,13 +4,17 @@ type Props = {
   hours: string;
   minutes: string;
   seconds: string;
+  big: boolean;
 };
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 
-const Countdown: NextPage<Props> = ({ hours, minutes, seconds }) => {
+const Countdown: NextPage<Props> = ({ hours, minutes, seconds, big }) => {
   const { primary, secondary, accent } = useTheme();
   return (
-    <div className={styles.countdown} style={{ color: accent }}>
+    <div
+      className={big ? styles.bigCountdown : styles.countdown}
+      style={{ color: accent }}
+    >
       <section>
         <p>{hours}</p>
         <small style={{ color: secondary }}>Hours</small>

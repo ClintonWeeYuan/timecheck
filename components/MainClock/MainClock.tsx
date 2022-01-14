@@ -213,6 +213,7 @@ const MainClock: NextPage<Props> = (props) => {
               hours={props.hours}
               minutes={props.minutes}
               seconds={props.seconds}
+              big={true}
             />
           )}
         </div>

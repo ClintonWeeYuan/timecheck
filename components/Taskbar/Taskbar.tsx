@@ -81,6 +81,7 @@ const Taskbar: NextPage<Props> = (props) => {
           hours={props.hours}
           minutes={props.minutes}
           seconds={props.seconds}
+          big={false}
         />
       </div>
     </Segment>
