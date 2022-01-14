@@ -6,7 +6,7 @@ import Countdown from "../Countdown/Countdown";
 import styles from "./MainClock.module.css";
 import Link from "next/link";
 
-import { Dropdown, Menu } from "semantic-ui-react";
+import { Dropdown, Icon, Menu } from "semantic-ui-react";
 
 import { useTime, useUpdateTime, useEvent } from "../TimeProvider/TimeProvider";
 
@@ -112,11 +112,15 @@ const MainClock: NextPage<Props> = (props) => {
   return (
     <div>
       <div className={styles.time}>
-        <div style={{ width: "100%", margin: "0" }}>
-          <Menu fixed="top" style={{}} size="massive">
+        <div style={{ width: "100%" }}>
+          <Menu fixed="top" size="massive" style={{ width: "100%" }}>
             <Menu.Menu position="left">
-              <Dropdown item icon="content">
-                <Dropdown.Menu>
+              <Dropdown
+                style={{ padding: "30px", fontSize: "30px" }}
+                item
+                icon="content"
+              >
+                <Dropdown.Menu style={{ fontSize: "20px" }}>
                   <Dropdown.Item>
                     <Link href="/">
                       <a target="_blank">New Event</a>
@@ -132,27 +136,38 @@ const MainClock: NextPage<Props> = (props) => {
               </Dropdown>
             </Menu.Menu>
             <Menu.Menu position="right">
-              <Dropdown
+              {/* <Dropdown
                 selection
                 options={clockOptions}
                 placeholder="Clock Type"
                 onChange={(e, { value }) => value && setClockType(value)}
+              > */}
+              <Dropdown
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "30px",
+                }}
+                placeholder="Clock Type"
+                text={clockType}
               >
-                {/* <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setClockType("analog")}>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setClockType("Analog")}>
                     <Icon name="clock" />
                     <span>Analog</span>
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setClockType("digital")}>
+                  <Dropdown.Item onClick={() => setClockType("Digital")}>
                     <Icon name="draft2digital" />
                     <span>Digital</span>
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setClockType("countdown")}>
+                  <Dropdown.Item onClick={() => setClockType("Countdown")}>
                     <Icon name="bomb" />
                     <span>Countdown</span>
                   </Dropdown.Item>
-                </Dropdown.Menu> */}
+                </Dropdown.Menu>
               </Dropdown>
+              {/* </Dropdown> */}
             </Menu.Menu>
           </Menu>
         </div>
