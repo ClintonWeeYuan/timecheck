@@ -69,7 +69,6 @@ const Taskbar: NextPage<Props> = (props) => {
       className={styles.description}
     >
       <div className={styles.description}>
-        {event.name}
         <Input
           onChange={handleChange}
           transparent
