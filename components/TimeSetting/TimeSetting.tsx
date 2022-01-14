@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { Dropdown, Form, Grid, Radio } from "semantic-ui-react";
-import { useUpdateTheme } from "../ThemeProvider/ThemeProvider";
+import { useUpdateTheme, useTheme } from "../ThemeProvider/ThemeProvider";
 import { useEffect, useState } from "react";
 
 interface Theme {
@@ -11,6 +11,7 @@ interface Theme {
 
 interface Props {
   handleClockType: (value: string) => void;
+  clockType: string;
 }
 
 const themeOptions = [
@@ -73,7 +74,15 @@ const timezoneOptions = [
 ];
 const TimeSetting: NextPage<Props> = (props) => {
   const newTheme = useUpdateTheme();
-  const [theme, setTheme] = useState<any>();
+  const { primary, secondary, accent } = useTheme();
+  const [theme, setTheme] = useState<any>(
+    primary === "whitesmoke"
+      ? "Light"
+      : primary === "#121212"
+      ? "Dark"
+      : "Amazon"
+  );
+  const [clockType, setClockType] = useState(props.clockType);
 
   useEffect(() => {
     switch (theme) {
@@ -115,6 +124,7 @@ const TimeSetting: NextPage<Props> = (props) => {
           <Dropdown
             placeholder="Select Clock Type"
             fluid
+            text={clockType}
             selection
             options={clockOptions}
             onChange={(e, { value }) =>
@@ -136,12 +146,12 @@ const TimeSetting: NextPage<Props> = (props) => {
         </Grid.Column>
 
         <Grid.Column width={4}>
-          {theme}
           <h4>Theme</h4>
         </Grid.Column>
         <Grid.Column width={12}>
           <Dropdown
             placeholder="Select Theme"
+            text={theme}
             fluid
             selection
             options={themeOptions}

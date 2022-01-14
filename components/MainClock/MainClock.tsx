@@ -139,6 +139,7 @@ const MainClock: NextPage<Props> = (props) => {
                   <Dropdown.Item>
                     <Settings
                       handleClockType={(value) => setClockType(value)}
+                      clockType={clockType}
                     />
                   </Dropdown.Item>
                 </Dropdown.Menu>
