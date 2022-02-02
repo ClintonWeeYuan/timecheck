@@ -72,8 +72,12 @@ const Details: NextPage<Props> = (props) => {
         ...event,
         alert: data.alert.S,
       });
-    } else if (data.clock) {
+    } else if (data.clock && data.theme) {
+      setEvent({ ...event, clock: data.clock.S, themeType: data.theme.S });
+    } else if (data.clock && !data.theme) {
       setEvent({ ...event, clock: data.clock.S });
+    } else if (!data.clock && data.theme) {
+      setEvent({ ...event, themeType: data.theme.S });
     } else if (data.password) {
       setEvent({
         name: data.eventName.S,
@@ -129,7 +133,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     method: "GET",
   });
   const event = await res.json();
-  console.log(event);
 
   return {
     props: { event: event },

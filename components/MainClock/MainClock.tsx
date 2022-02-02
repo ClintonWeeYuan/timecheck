@@ -54,7 +54,7 @@ const clockOptions: clockOption[] = [
 ];
 
 const MainClock: NextPage<Props> = (props) => {
-  const { id, clock } = useEvent();
+  const { id, clock, themeType } = useEvent();
   const [clockType, setClockType] = useState<any>(clock ? clock : "Digital");
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");

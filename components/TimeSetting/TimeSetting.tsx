@@ -78,17 +78,11 @@ const timezoneOptions = [
   },
 ];
 const TimeSetting: NextPage<Props> = (props) => {
-  const { id, clock } = useEvent();
-  console.log(clock);
+  const { id, clock, themeType } = useEvent();
+
   const newTheme = useUpdateTheme();
   const { primary, secondary, accent } = useTheme();
-  const [theme, setTheme] = useState<any>(
-    primary === "whitesmoke"
-      ? "Light"
-      : primary === "#121212"
-      ? "Dark"
-      : "Amazon"
-  );
+  const [theme, setTheme] = useState<any>(themeType ? themeType : "Amazon");
   const [clockType, setClockType] = useState(clock ? clock : props.clockType);
   const [ampm, setAmpm] = useState(props.ampm);
 

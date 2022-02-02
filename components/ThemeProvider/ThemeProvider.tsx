@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 interface Theme {
   primary: string;
@@ -25,6 +26,8 @@ export function useUpdateTheme() {
 }
 
 export const ThemeProvider: NextPage = (props) => {
+  const { themeType } = useEvent();
+  console.log(themeType);
   //Sets theme
   const [theme, setTheme] = useState({
     primary: "whitesmoke",
