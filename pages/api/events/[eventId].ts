@@ -40,13 +40,23 @@ export default async function handleRequest(
       }
     }
   } else if (req.method === "PUT") {
-    const { eventId, eventName, startTime, endTime, alert, password } =
-      JSON.parse(req.body);
+    const {
+      eventId,
+      eventName,
+      startTime,
+      endTime,
+      alert,
+      password,
+      theme,
+      clock,
+    } = JSON.parse(req.body);
 
+    //Checks to see if eventId matches
     if (req.query.eventId && eventId !== req.query.eventId) {
       res.send("Invalid id");
       res.status(404);
     } else if (alert) {
+      //If alert is present in the request, updates alert values
       const params = {
         TableName: "events",
         Key: {
@@ -62,12 +72,57 @@ export default async function handleRequest(
         const Item: UpdateItemCommandOutput = await db.send(
           new UpdateItemCommand(params)
         );
-        res.send(Item.Attributes ? Item.Attributes.eventId.S : {});
+        res.send(Item.Attributes && Item.Attributes.eventId.S);
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    } else if (clock) {
+      //Checks to see if clock type in request, then updates event appropriately
+      const params = {
+        TableName: "events",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "set clock = :c",
+        ExpressionAttributeValues: {
+          ":c": { S: clock },
+        },
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes && Item.Attributes.eventId.S);
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
+    } else if (theme) {
+      //Checks to see if theme in request, then updates event appropriately
+      const params = {
+        TableName: "events",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "set theme = :t",
+        ExpressionAttributeValues: {
+          ":t": { S: theme },
+        },
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes && Item.Attributes.eventId.S);
       } catch (err) {
         console.log(err);
         res.statusCode = 500;
       }
     } else if (password && !alert) {
+      //If password updated, then this generates encrypted password, and updates/creates new Item accordingly
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -97,6 +152,7 @@ export default async function handleRequest(
         res.statusCode = 500;
       }
     } else {
+      //Updates or Creates Item where there is no password
       const params = {
         TableName: "events",
         Key: {

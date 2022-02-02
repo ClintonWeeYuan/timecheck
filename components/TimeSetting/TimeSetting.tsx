@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import { Dropdown, Form, Grid, Radio } from "semantic-ui-react";
 import { useUpdateTheme, useTheme } from "../ThemeProvider/ThemeProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import debounce from "@mui/utils/debounce";
 
 interface Theme {
   primary: string;
@@ -122,7 +123,30 @@ const TimeSetting: NextPage<Props> = (props) => {
   function handleClockType(value: string) {
     props.handleClockType(value);
   }
+  // async function save() {
+  //   try {
+  //     const res = await fetch(`/api/events/${eventId}`, {
+  //       method: "PUT",
+  //       body: JSON.stringify({
+  //         eventId: eventId,
+  //         eventName: eventName,
+  //         startTime: roundSeconds(startTime.getTime()).toString(),
+  //         endTime: roundSeconds(endTime.getTime()).toString(),
+  //         password: password,
+  //       }),
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
+  // const debouncedSave = useCallback(debounce(save, 3000), []);
+
+  // useEffect(() => {
+  //   if (eventName !== undefined && !props.disabled && !passwordError) {
+  //     debouncedSave({ eventName, password, startTime, endTime, eventId });
+  //   }
+  // }, [eventName, startTime, endTime, password]);
   return (
     <Form>
       <Grid columns={2}>
