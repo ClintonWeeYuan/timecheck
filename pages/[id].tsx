@@ -37,6 +37,8 @@ export interface EventType {
   endTime: string;
   alert?: string;
   password?: string;
+  clock?: string;
+  themeType?: string;
 }
 
 //Fetchcer function to be used in SWR hook below
@@ -67,12 +69,11 @@ const Details: NextPage<Props> = (props) => {
   useEffect(() => {
     if (data.alert) {
       setEvent({
-        name: data.eventName.S,
-        id: data.eventId.S,
-        startTime: data.startTime.N,
-        endTime: data.endTime.N,
+        ...event,
         alert: data.alert.S,
       });
+    } else if (data.clock) {
+      setEvent({ ...event, clock: data.clock.S });
     } else if (data.password) {
       setEvent({
         name: data.eventName.S,
@@ -128,6 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     method: "GET",
   });
   const event = await res.json();
+  console.log(event);
 
   return {
     props: { event: event },
