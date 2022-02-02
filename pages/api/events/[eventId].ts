@@ -77,6 +77,29 @@ export default async function handleRequest(
         console.log(err);
         res.statusCode = 500;
       }
+    } else if (clock && theme) {
+      //Checks to see if clock type in request, then updates event appropriately
+      const params = {
+        TableName: "events",
+        Key: {
+          eventId: { S: eventId },
+        },
+        UpdateExpression: "set clock = :c, theme = :t",
+        ExpressionAttributeValues: {
+          ":c": { S: clock },
+          ":t": { S: theme },
+        },
+        ReturnValues: "ALL_NEW",
+      };
+      try {
+        const Item: UpdateItemCommandOutput = await db.send(
+          new UpdateItemCommand(params)
+        );
+        res.send(Item.Attributes && Item.Attributes.eventId.S);
+      } catch (err) {
+        console.log(err);
+        res.statusCode = 500;
+      }
     } else if (clock) {
       //Checks to see if clock type in request, then updates event appropriately
       const params = {
