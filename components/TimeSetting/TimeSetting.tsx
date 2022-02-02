@@ -143,18 +143,6 @@ const TimeSetting: NextPage<Props> = (props) => {
         </Grid.Column>
 
         <Grid.Column width={4}>
-          <h4>Time Zone</h4>
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <Dropdown
-            placeholder="Select Timezone"
-            fluid
-            selection
-            options={timezoneOptions}
-          />
-        </Grid.Column>
-
-        <Grid.Column width={4}>
           <h4>Theme</h4>
         </Grid.Column>
         <Grid.Column width={12}>

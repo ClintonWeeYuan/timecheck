@@ -117,12 +117,6 @@ const MainClock: NextPage<Props> = (props) => {
 
   return (
     <div>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;400&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <div className={styles.time}>
         <div style={{ width: "100%" }}>
           <Menu

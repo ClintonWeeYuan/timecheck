@@ -13,6 +13,8 @@ import {
   Radio,
   Segment,
   TransitionablePortal,
+  Accordion,
+  Icon,
 } from "semantic-ui-react";
 
 import { useCallback, useEffect, useState } from "react";
@@ -113,57 +115,37 @@ const CountdownSetter: NextPage<Props> = (props) => {
     }
   }, [event]);
 
-  //AutoUpdates StartTime and EndTime in Database
+  //Accordion index
 
-  // async function save(startTime: number, endTime: number) {
-  //   try {
-  //     const res = await fetch(`/api/events/${event.id}`, {
-  //       method: "PUT",
-  //       body: JSON.stringify({
-  //         eventId: event.id,
-  //         eventName: event.name,
-  //         startTime: startTime.toString(),
-  //         endTime: endTime.toString(),
-  //       }),
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  const [activeIndex, setActiveIndex] = useState(-1);
 
-  // const debouncedSave = useCallback(debounce(save, 3000), []);
-
-  // useEffect(() => {
-  //   if (event && event.name !== undefined) {
-  //     debouncedSave(startTime, endTime);
-  //   }
-  // }, [startTime, endTime]);
+  function handleAccordion() {
+    setActiveIndex(activeIndex === 0 ? -1 : 0);
+  }
 
   return (
-    // <LocalizationProvider dateAdapter={AdapterDateFns}>
-    //   <div className={styles.setTime}>
-    //     <TimePicker
-    //       label="Start"
-    //       readOnly
-    //       onChange={(newValue: Date | null) => {
-    //         newValue && handleStartTime(newValue);
-    //       }}
-    //       value={startTime}
-    //       renderInput={(params) => <TextField {...params} />}
-    //     />
-    //     <TimePicker
-    //       label="End"
-    //       onChange={(newValue: Date | null) => {
-    //         newValue && handleEndTime(newValue);
-    //       }}
-    //       readOnly
-    //       value={endTime}
-    //       renderInput={(params) => <TextField {...params} />}
-    //     />
-    //   </div>
-    // </LocalizationProvider>
     <div className={styles.container}>
-      <div style={{ display: "flex" }}>
+      <Accordion className={styles.accordion}>
+        <Accordion.Title
+          active={activeIndex === 0}
+          index={0}
+          onClick={handleAccordion}
+        >
+          <Icon name="dropdown" />
+          Start and End Times
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === 0}>
+          <Label style={{ width: "100%", marginBottom: "10px" }}>
+            START TIME
+            <Label.Detail>{format(startTime, "K : mm : ss aaaa")}</Label.Detail>
+          </Label>
+          <Label style={{ width: "100%" }}>
+            END TIME
+            <Label.Detail>{format(endTime, "K : mm : ss aaaa")}</Label.Detail>
+          </Label>
+        </Accordion.Content>
+      </Accordion>
+      {/* <div style={{ display: "flex" }}>
         <Radio
           style={{ color: "yellow" }}
           toggle
@@ -241,7 +223,7 @@ const CountdownSetter: NextPage<Props> = (props) => {
             </Segment>
           </Segment.Group>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
