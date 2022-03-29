@@ -76,7 +76,9 @@ const Taskbar: NextPage<Props> = (props) => {
           size="massive"
           value={eventName}
         ></Input>
-        <Divider horizontal>Time Remaining</Divider>
+        <Divider horizontal>
+          <span style={{ color: secondary }}>Time Remaining</span>
+        </Divider>
         <Countdown
           hours={props.hours}
           minutes={props.minutes}
