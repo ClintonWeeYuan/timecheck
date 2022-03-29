@@ -45,7 +45,9 @@ export interface EventType {
 
 async function fetcher(endpoint: string) {
   const res = await fetch(endpoint, { method: "GET" });
-  return res.json();
+  console.log("FETCHED");
+  const data = await res.json();
+  return data;
 }
 
 const Details: NextPage<Props> = (props) => {
@@ -73,11 +75,30 @@ const Details: NextPage<Props> = (props) => {
         alert: data.alert.S,
       });
     } else if (data.clock && data.theme) {
-      setEvent({ ...event, clock: data.clock.S, themeType: data.theme.S });
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        clock: data.clock.S,
+        themeType: data.theme.S,
+      });
     } else if (data.clock && !data.theme) {
-      setEvent({ ...event, clock: data.clock.S });
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        clock: data.clock.S,
+      });
     } else if (!data.clock && data.theme) {
-      setEvent({ ...event, themeType: data.theme.S });
+      setEvent({
+        name: data.eventName.S,
+        id: data.eventId.S,
+        startTime: data.startTime.N,
+        endTime: data.endTime.N,
+        themeType: data.theme.S,
+      });
     } else if (data.password) {
       setEvent({
         name: data.eventName.S,
@@ -93,6 +114,7 @@ const Details: NextPage<Props> = (props) => {
         startTime: data.startTime.N,
         endTime: data.endTime.N,
       });
+      console.log(event);
     }
   }, [data]);
 

@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { EventType } from "../../pages/[id]";
+import { toDate, intervalToDuration, format } from "date-fns";
 
 //Create context with useless data
 
@@ -49,7 +50,8 @@ export const TimeProvider: NextPage<Props> = (props) => {
   function updateTime() {
     setTime(Date.now() + offset);
   }
-
+  // props.event && console.log(format(props.event.startTime, "K : mm : ss aaaa"));
+  props.event && console.log(props.event.startTime.toString());
   return (
     <TimeContext.Provider value={time}>
       <TimeUpdateContext.Provider value={updateTime}>
