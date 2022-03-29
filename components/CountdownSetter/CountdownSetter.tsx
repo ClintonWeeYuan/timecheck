@@ -115,9 +115,13 @@ const CountdownSetter: NextPage<Props> = (props) => {
           active={activeIndex === 0}
           index={0}
           onClick={handleAccordion}
+          sx={{ color: "yellow" }}
         >
-          <Icon name="dropdown" />
-          Start and End Times
+          <Icon
+            color={primary == "#121212" ? "purple" : "black"}
+            name="dropdown"
+          />
+          <span style={{ color: secondary }}>Start and End Times</span>
         </Accordion.Title>
         <Accordion.Content active={activeIndex === 0}>
           <Container>
@@ -128,11 +132,15 @@ const CountdownSetter: NextPage<Props> = (props) => {
                 marginRight: "20px",
                 display: "inline-flex ",
                 justifyContent: "center",
+                backgroundColor: accent,
+                color: "whitesmoke",
               }}
             >
               START
             </Label>
-            <span>{format(startTime, "KK : mm : ss aaaa")}</span>
+            <span style={{ color: secondary }}>
+              {format(startTime, "KK : mm : ss aaaa")}
+            </span>
           </Container>
           <Container>
             <Label
@@ -142,13 +150,16 @@ const CountdownSetter: NextPage<Props> = (props) => {
                 marginRight: "20px",
                 display: "inline-flex",
                 justifyContent: "center",
+                backgroundColor: secondary,
+                color: "whitesmoke",
               }}
             >
               END
-              {/* <Label.Detail>{format(startTime, "K : mm : ss aaaa")}</Label.Detail> */}
             </Label>
 
-            <span>{format(endTime, "KK : mm : ss aaaa")}</span>
+            <span style={{ color: secondary }}>
+              {format(endTime, "KK : mm : ss aaaa")}
+            </span>
           </Container>
         </Accordion.Content>
       </Accordion>
