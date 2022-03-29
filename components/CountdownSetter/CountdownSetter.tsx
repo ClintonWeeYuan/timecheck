@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TimePicker from "@mui/lab/TimePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import type {} from "@mui/lab/themeAugmentation";
 import "@mui/lab/themeAugmentation";
 import TextField from "@mui/material/TextField";
 import styles from "./CountdownSetter.module.css";
@@ -15,6 +14,7 @@ import {
   TransitionablePortal,
   Accordion,
   Icon,
+  Grid,
 } from "semantic-ui-react";
 
 import { useCallback, useEffect, useState } from "react";
@@ -62,12 +62,12 @@ const CountdownSetter: NextPage<Props> = (props) => {
 
     let duration: Duration = intervalToDuration({
       start: toDate(roundSeconds(startTime)),
-      end: toDate(roundSeconds(endTime)),
+      end: toDate(roundSeconds(endTime) + 1000),
     });
 
     let timeLeft: Duration = intervalToDuration({
       start: toDate(time),
-      end: toDate(roundSeconds(endTime)),
+      end: toDate(roundSeconds(endTime) + 1000),
     });
 
     if (startTime - time > 0 && endTime - startTime > 0) {
@@ -90,21 +90,6 @@ const CountdownSetter: NextPage<Props> = (props) => {
   useEffect(() => {
     props.handleDuration(seconds, minutes, hours);
   });
-
-  //These functions are linked to the timesetters below, and help to change the start and end times of this components and the parent component
-
-  function handleStartTime(e: Date) {
-    let newTime = roundSeconds(e.getTime());
-    setStartTime(newTime);
-    props.changeStartTime(newTime);
-  }
-
-  function handleEndTime(e: Date) {
-    let newTime = roundSeconds(e.getTime());
-    setEndTime(newTime);
-
-    props.changeEndTime(roundSeconds(newTime));
-  }
 
   //If change is made to the start or end time in the database, this updates the current page to reflect the new values
 
@@ -130,100 +115,54 @@ const CountdownSetter: NextPage<Props> = (props) => {
           active={activeIndex === 0}
           index={0}
           onClick={handleAccordion}
+          sx={{ color: "yellow" }}
         >
-          <Icon name="dropdown" />
-          Start and End Times
+          <Icon
+            color={primary == "#121212" ? "purple" : "black"}
+            name="dropdown"
+          />
+          <span style={{ color: secondary }}>Start and End Times</span>
         </Accordion.Title>
         <Accordion.Content active={activeIndex === 0}>
-          <Label style={{ width: "100%", marginBottom: "10px" }}>
-            START TIME
-            <Label.Detail>{format(startTime, "K : mm : ss aaaa")}</Label.Detail>
-          </Label>
-          <Label style={{ width: "100%" }}>
-            END TIME
-            <Label.Detail>{format(endTime, "K : mm : ss aaaa")}</Label.Detail>
-          </Label>
+          <Container>
+            <Label
+              style={{
+                width: "30%",
+                marginBottom: "10px",
+                marginRight: "20px",
+                display: "inline-flex ",
+                justifyContent: "center",
+                backgroundColor: accent,
+                color: "whitesmoke",
+              }}
+            >
+              START
+            </Label>
+            <span style={{ color: secondary }}>
+              {format(startTime, "KK : mm : ss aaaa")}
+            </span>
+          </Container>
+          <Container>
+            <Label
+              style={{
+                width: "30%",
+                marginBottom: "10px",
+                marginRight: "20px",
+                display: "inline-flex",
+                justifyContent: "center",
+                backgroundColor: secondary,
+                color: "whitesmoke",
+              }}
+            >
+              END
+            </Label>
+
+            <span style={{ color: secondary }}>
+              {format(endTime, "KK : mm : ss aaaa")}
+            </span>
+          </Container>
         </Accordion.Content>
       </Accordion>
-      {/* <div style={{ display: "flex" }}>
-        <Radio
-          style={{ color: "yellow" }}
-          toggle
-          checked={checked}
-          onChange={() => setChecked(!checked)}
-        />
-        <p style={{ marginLeft: "10px", color: secondary }}>
-          Show Start Time and End Time
-        </p>
-      </div>
-      {checked && (
-        <div className={styles.time}>
-          <Segment.Group style={{}}>
-            <Segment
-              raised
-              style={{
-                backgroundColor: primary,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: `1px solid ${secondary}`,
-                borderRadius: "10px",
-              }}
-            >
-              <Label
-                style={{
-                  width: "80px",
-                  backgroundColor: accent,
-                  color: primary,
-                }}
-                horizontal
-              >
-                Start Time
-              </Label>
-              <p
-                style={{
-                  marginLeft: "20px",
-                  color: secondary,
-                  fontWeight: "bold",
-                }}
-              >
-                {format(startTime, "K : mm : ss aaaa")}
-              </p>
-            </Segment>
-            <Segment
-              style={{
-                backgroundColor: primary,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: `1px solid ${secondary}`,
-                borderRadius: "10px",
-              }}
-              raised
-            >
-              <Label
-                style={{
-                  width: "80px",
-                  backgroundColor: accent,
-                  color: primary,
-                }}
-                horizontal
-              >
-                End Time
-              </Label>
-              <p
-                style={{
-                  marginLeft: "20px",
-                  color: secondary,
-                  fontWeight: "bold",
-                }}
-              >
-                {format(endTime, "K : mm : ss aaaa")}
-              </p>
-            </Segment>
-          </Segment.Group>
-        </div>
-      )} */}
     </div>
   );
 };

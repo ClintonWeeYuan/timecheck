@@ -186,6 +186,7 @@ const MainClock: NextPage<Props> = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                   padding: "30px",
+                  color: primary == "#121212" ? "purple" : "black",
                 }}
                 placeholder="Clock Type"
                 text={clockType}

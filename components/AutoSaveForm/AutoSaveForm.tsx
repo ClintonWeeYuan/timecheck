@@ -73,7 +73,7 @@ const AutoSaveForm: NextPage<Props> = (props) => {
   }
 
   function roundSeconds(number: number) {
-    return number - (number % (1000 * 60)) + 1000;
+    return number - (number % (1000 * 60));
   }
 
   const [link, setLink] = useState(`${process.env.APP_URL}/${eventId}`);

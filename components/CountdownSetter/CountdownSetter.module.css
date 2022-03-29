@@ -4,10 +4,9 @@
 }
 
 .accordion {
-  width: 70%;
+  width: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .setTime {
@@ -29,6 +28,10 @@
     flex-direction: row;
     width: 70vw;
     justify-content: space-between;
+  }
+
+  .accordion {
+    align-items: center;
   }
 
   .container {
