@@ -114,7 +114,6 @@ const Details: NextPage<Props> = (props) => {
         startTime: data.startTime.N,
         endTime: data.endTime.N,
       });
-      console.log(event);
     }
   }, [data]);
 

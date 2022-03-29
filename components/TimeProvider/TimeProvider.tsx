@@ -51,7 +51,6 @@ export const TimeProvider: NextPage<Props> = (props) => {
     setTime(Date.now() + offset);
   }
   // props.event && console.log(format(props.event.startTime, "K : mm : ss aaaa"));
-  props.event && console.log(props.event.startTime.toString());
   return (
     <TimeContext.Provider value={time}>
       <TimeUpdateContext.Provider value={updateTime}>
