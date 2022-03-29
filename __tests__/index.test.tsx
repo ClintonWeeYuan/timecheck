@@ -50,7 +50,7 @@ describe("Updating and Receiving event data from DynamoDB", () => {
           eventId: { S: "123" },
         },
         ProjectionExpression:
-          "startTime, endTime, eventName, eventId, alert, password",
+          "startTime, endTime, eventName, eventId, alert, password, clock, theme",
       })
       .resolves({
         Item: {
@@ -59,6 +59,8 @@ describe("Updating and Receiving event data from DynamoDB", () => {
           startTime: { N: "12345" },
           endTime: { N: "12345" },
           password: { S: "1234" },
+          clock: { S: "1234" },
+          theme: { S: "1234" },
         },
       });
     const { req, res } = createMocks({

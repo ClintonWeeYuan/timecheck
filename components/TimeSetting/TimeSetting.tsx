@@ -1,7 +1,9 @@
 import { NextPage } from "next";
 import { Dropdown, Form, Grid, Radio } from "semantic-ui-react";
 import { useUpdateTheme, useTheme } from "../ThemeProvider/ThemeProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import debounce from "@mui/utils/debounce";
+import { useEvent } from "../TimeProvider/TimeProvider";
 
 interface Theme {
   primary: string;
@@ -76,16 +78,12 @@ const timezoneOptions = [
   },
 ];
 const TimeSetting: NextPage<Props> = (props) => {
+  const { id, clock, themeType } = useEvent();
+
   const newTheme = useUpdateTheme();
   const { primary, secondary, accent } = useTheme();
-  const [theme, setTheme] = useState<any>(
-    primary === "whitesmoke"
-      ? "Light"
-      : primary === "#121212"
-      ? "Dark"
-      : "Amazon"
-  );
-  const [clockType, setClockType] = useState(props.clockType);
+  const [theme, setTheme] = useState<any>(themeType ? themeType : "Amazon");
+  const [clockType, setClockType] = useState(clock ? clock : props.clockType);
   const [ampm, setAmpm] = useState(props.ampm);
 
   function handleAmpm() {
@@ -121,8 +119,26 @@ const TimeSetting: NextPage<Props> = (props) => {
 
   function handleClockType(value: string) {
     props.handleClockType(value);
+    setClockType(value);
+  }
+  async function save() {
+    try {
+      const res = await fetch(`/api/events/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: id,
+          clock: clockType,
+          theme: theme,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
+  useEffect(() => {
+    save();
+  }, [clockType, theme]);
   return (
     <Form>
       <Grid columns={2}>

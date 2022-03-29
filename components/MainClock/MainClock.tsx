@@ -54,7 +54,8 @@ const clockOptions: clockOption[] = [
 ];
 
 const MainClock: NextPage<Props> = (props) => {
-  const [clockType, setClockType] = useState<any>("Digital");
+  const { id, clock, themeType } = useEvent();
+  const [clockType, setClockType] = useState<any>(clock ? clock : "Digital");
   const [digitalSize, setDigitalSize] = useState("100px");
   const [analogSize, setAnalogSize] = useState("600px");
   const [buttonSize, setButtonSize] = useState<SemanticSIZES | undefined>(
@@ -115,6 +116,24 @@ const MainClock: NextPage<Props> = (props) => {
     hours: getHours(time),
   };
 
+  //AutoSaves the ClockType
+  async function save() {
+    try {
+      const res = await fetch(`/api/events/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          eventId: id,
+          clock: clockType,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    save();
+  }, [clockType]);
   return (
     <div>
       <div className={styles.time}>

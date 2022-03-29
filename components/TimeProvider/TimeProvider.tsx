@@ -14,6 +14,8 @@ const EventContext = React.createContext<EventType>({
   startTime: "",
   endTime: "",
   password: "",
+  clock: "",
+  themeType: "",
 });
 
 //Object type for Props with time and event, passed in from MainPage
